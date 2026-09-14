@@ -17,3 +17,8 @@ Desktop.ini
 
 # Private SMTP Credentials
 mail_config.php
+
+# Security: GitHub Personal Access Token
+personal_access_token.txt
+personal-access-token.txt
+
