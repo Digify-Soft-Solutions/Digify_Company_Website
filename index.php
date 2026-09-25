@@ -80,37 +80,37 @@
                     <!-- Hero Banner Carousel (100% Complete & Uncropped 1:1 Aspect Ratio) -->
                     <div class="hero-mockup-wrapper mt-4 mt-lg-0 gsap-hero-dashboard">
                         <div class="hero-banner-slider-wrapper">
-                            <div id="heroBannersCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                            <div id="heroBannersCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
                                 <!-- Carousel Slides -->
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active" data-bs-interval="5000">
-                                        <img src="assets/images/hero_banner_1.jpg" class="hero-banner-img" alt="Why Businesses Choose Digify Soft Solutions">
-                                    </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item active" data-bs-interval="4000">
                                         <img src="assets/images/banner_south_africa.jpg" class="hero-banner-img" alt="Digify Soft Solutions South Africa - AI ERP & Supply Chain Solutions">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/banner_kenya.jpg" class="hero-banner-img" alt="Digify Soft Solutions Kenya - Smart POS & Retail Automation">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/banner_uae.jpg" class="hero-banner-img" alt="Digify Soft Solutions UAE - ZATCA E-Invoicing & Enterprise ERP">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
+                                        <img src="assets/images/hero_banner_1.jpg" class="hero-banner-img" alt="Why Businesses Choose Digify Soft Solutions">
+                                    </div>
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/ai_erp_banner_1.jpg" class="hero-banner-img" alt="AI Powered Enterprise ERP">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/ai_erp_banner_2.jpg" class="hero-banner-img" alt="Smart Manufacturing AI ERP">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/ai_crm_banner_1.jpg" class="hero-banner-img" alt="AI Powered CRM & Lead Intelligence">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/hero_banner_2.jpg" class="hero-banner-img" alt="OCR and AI Powered Retail ERP">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/hero_banner_3.jpg" class="hero-banner-img" alt="Garment Boutique ERP Solutions">
                                     </div>
-                                    <div class="carousel-item" data-bs-interval="5000">
+                                    <div class="carousel-item" data-bs-interval="4000">
                                         <img src="assets/images/hero_banner_4.jpg" class="hero-banner-img" alt="Restaurant Management Software">
                                     </div>
                                 </div>

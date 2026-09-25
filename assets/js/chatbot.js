@@ -540,6 +540,12 @@ function initializeDigifyChatbot() {
         })
       }).catch(err => console.error('Chatbot schedule email error:', err));
 
+      // Direct instant WhatsApp Notification to Gautam (+91 7425016636)
+      const waNotifyText = `*Namaste Gautam Sir!* 🙏\n\nNew Strategy Call Booking on Digify Soft Solutions Website:\n\n• *Name:* ${name}\n• *Phone:* ${phone}\n• *Service:* ${service}\n• *Date:* ${selectedDateIso}\n• *Time Slot:* ${selectedTimeSlot}\n• *Notes:* ${notes}\n\nPlease confirm this strategy call booking.`;
+      setTimeout(() => {
+        window.open(`https://wa.me/917425016636?text=${encodeURIComponent(waNotifyText)}`, "_blank");
+      }, 400);
+
       const confMsg = {
         role: "ai",
         content: `🎉 **Strategy Call Request Received!**\n\n- **Service:** ${service}\n- **Date:** ${selectedDateIso}\n- **Time Slot:** ${selectedTimeSlot}\n- **Notes:** ${notes}\n\nThank you **${name}**! Gautam and our solution engineering team have received your request. We will connect with you on **${phone}**.\n\nYou can also connect instantly on WhatsApp with **Gautam**: [ACTION:WHATSAPP]`,
