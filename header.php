@@ -1,4 +1,4 @@
-﻿<?php if (!defined('TOP_INCLUDED')) { ?>
+<?php if (!defined('TOP_INCLUDED')) { ?>
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -314,19 +314,20 @@
 
    <script>
    // WhatsApp number
-   const phone = "91 7425016636";
+   const phone = "917425016636";
    const name = "Website Visitor";
 
    // On click
    document.getElementById('whatsappButton').addEventListener('click', function(e){
        e.preventDefault();
+       const cleanPhone = phone.replace(/\D/g, '');
 
        // --- 1. Call your PHP API ---
        fetch('send_whatsapp_lead.php', {
            method: 'POST',
            headers: {'Content-Type': 'application/json'},
            body: JSON.stringify({
-               phone: phone,
+               phone: cleanPhone,
                lead_name: name,
                message: "Clicked WhatsApp icon"
            })
@@ -335,12 +336,12 @@
        .then(data => {
            console.log("Lead API Response:", data);
            // --- 2. Open WhatsApp chat ---
-           window.open("https://wa.me/" + phone, "_blank");
+           window.open("https://wa.me/" + cleanPhone, "_blank");
        })
        .catch(err => {
            console.error(err);
            // Even if API fails, open WhatsApp
-           window.open("https://wa.me/" + phone, "_blank");
+           window.open("https://wa.me/" + cleanPhone, "_blank");
        });
    });
    </script>
