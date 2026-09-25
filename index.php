@@ -87,6 +87,15 @@
                                         <img src="assets/images/hero_banner_1.jpg" class="hero-banner-img" alt="Why Businesses Choose Digify Soft Solutions">
                                     </div>
                                     <div class="carousel-item" data-bs-interval="5000">
+                                        <img src="assets/images/banner_south_africa.jpg" class="hero-banner-img" alt="Digify Soft Solutions South Africa - AI ERP & Supply Chain Solutions">
+                                    </div>
+                                    <div class="carousel-item" data-bs-interval="5000">
+                                        <img src="assets/images/banner_kenya.jpg" class="hero-banner-img" alt="Digify Soft Solutions Kenya - Smart POS & Retail Automation">
+                                    </div>
+                                    <div class="carousel-item" data-bs-interval="5000">
+                                        <img src="assets/images/banner_uae.jpg" class="hero-banner-img" alt="Digify Soft Solutions UAE - ZATCA E-Invoicing & Enterprise ERP">
+                                    </div>
+                                    <div class="carousel-item" data-bs-interval="5000">
                                         <img src="assets/images/ai_erp_banner_1.jpg" class="hero-banner-img" alt="AI Powered Enterprise ERP">
                                     </div>
                                     <div class="carousel-item" data-bs-interval="5000">
