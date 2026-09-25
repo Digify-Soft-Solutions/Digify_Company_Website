@@ -1,0 +1,48 @@
+# Local PHP server binaries
+php_server/
+
+# Local Windows shortcut files
+*.lnk
+
+# Local test / debug files
+test_response.txt
+
+# OS-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Large media files & heavy assets (causes 185MB git push timeout)
+assets/img/
+assets/images/
+assets/videos/
+assets/fonts/
+*.mp4
+*.zip
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Private SMTP Credentials
+mail_config.php
+
+# Security: GitHub Personal Access Token
+personal_access_token.txt
+personal-access-token.txt
+
+# Scratch folder and working notes
+scratch/
+
+# Word documents and audit reports
+*.docx
+*.doc
+Digify automatex auti of site 11ths ept.docx
+Digify_AutomateX_Audit_Strategy.docx
+us vs vasy site.docx
+
+

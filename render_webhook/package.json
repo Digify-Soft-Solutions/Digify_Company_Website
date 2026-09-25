@@ -1,0 +1,13 @@
+{
+  "name": "digify-whatsapp-webhook-render",
+  "version": "1.0.0",
+  "description": "Render Webhook Service for Digify WhatsApp AI Chatbot",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Digify Soft Solutions",
+  "license": "ISC",
+  "dependencies": {}
+}
