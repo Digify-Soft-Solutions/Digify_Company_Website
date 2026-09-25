@@ -354,7 +354,7 @@
    }
    </style>
 
-   <!-- ChittorTech Style AI Assistant (Kaira) for Digify Soft Solutions -->
+   <!-- Digify AI Assistant (Kaira) for Digify Soft Solutions -->
    <link rel="stylesheet" href="assets/css/chatbot.css?v=<?php echo file_exists(__DIR__ . '/assets/css/chatbot.css') ? filemtime(__DIR__ . '/assets/css/chatbot.css') : '3.0'; ?>" />
    <script src="assets/js/chatbot.js?v=<?php echo file_exists(__DIR__ . '/assets/js/chatbot.js') ? filemtime(__DIR__ . '/assets/js/chatbot.js') : '3.0'; ?>" defer></script>
 

@@ -398,8 +398,11 @@ function initializeDigifyChatbot() {
     let summaryText = "";
 
     if (userMsgs.length > 0) {
-      const lastUserQuery = userMsgs[userMsgs.length - 1].content;
-      summaryText = `Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions.\n\n• My Query: "${lastUserQuery.slice(0, 160)}"\n\nCould you please explain to me more details about your software?`;
+      let rawQuery = userMsgs[userMsgs.length - 1].content || "";
+      if (rawQuery.toLowerCase().includes("chittor")) {
+        rawQuery = "Digify ERP & Smart POS Solutions";
+      }
+      summaryText = `Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions.\n\n• My Query: "${rawQuery.slice(0, 160)}"\n\nCould you please explain to me more details about your software?`;
     } else {
       summaryText = "Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions. Could you please explain to me more details about your software?";
     }
