@@ -1,8 +1,10 @@
-// Digify AI Assistant (Kaira) - 100% ChittorTech Engine Ported for Digify Soft Solutions
-window.addEventListener('load', () => {
-  // Defer initialization by 1.5s for fast FCP/LCP
-  setTimeout(initializeDigifyChatbot, 1500);
-});
+// Digify AI Assistant (Kaira) - Immediate initialization for 1-click response
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeDigifyChatbot);
+} else {
+  initializeDigifyChatbot();
+}
+
 
 function initializeDigifyChatbot() {
   const fab = document.getElementById('chatbot-fab');
