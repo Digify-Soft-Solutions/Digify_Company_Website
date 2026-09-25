@@ -52,7 +52,7 @@ array_unshift($messages, $systemPrompt);
 if (file_exists(__DIR__ . '/mail_config.php')) {
     require_once __DIR__ . '/mail_config.php';
 }
-$apiKey = (defined('CHAT_API_KEY') && CHAT_API_KEY !== '') ? CHAT_API_KEY : getenv('CHAT_API_KEY');
+$apiKey = getenv('CHAT_API_KEY') ?: (getenv('GROQ_API_KEY') ?: (defined('CHAT_API_KEY') ? CHAT_API_KEY : ''));
 $url = "https://api.groq.com/openai/v1/chat/completions";
 
 $data = [

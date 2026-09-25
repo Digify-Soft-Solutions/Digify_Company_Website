@@ -285,18 +285,6 @@
           </div>
       </div>
    </header>
-   <!-- Global Expansion Announcement Bar -->
-   <div id="globalExpansionBanner" class="global-expansion-bar" style="background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a); color: #ffffff; padding: 8px 20px; font-size: 13px; font-weight: 600; text-align: center; border-bottom: 1px solid rgba(251, 193, 69, 0.4); display: flex; align-items: center; justify-content: center; position: relative; z-index: 10001;">
-       <div class="container d-flex align-items-center justify-content-between justify-content-md-center gap-3">
-           <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px;">
-               <span class="badge bg-warning text-dark px-2 py-1 rounded-pill" style="font-size: 10px; font-weight: 800; letter-spacing: 0.5px;">GLOBAL NEWS</span>
-               <span>🌍 <strong>Expanding Globally!</strong> Thank you from <strong>Digify Soft Solutions</strong> for making us a global brand across UAE, South Africa, Kenya &amp; Worldwide!</span>
-           </span>
-           <button type="button" onclick="document.getElementById('globalExpansionBanner').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 15px; cursor: pointer; padding: 0 4px;" title="Close">
-               <i class="fas fa-times"></i>
-           </button>
-       </div>
-   </div>
    <!-- header end -->
 
    <!-- Book A Demo Strip -->
