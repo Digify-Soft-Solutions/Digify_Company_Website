@@ -396,10 +396,17 @@ function initializeDigifyChatbot() {
   function handleWhatsAppSync() {
     const userMsgs = messages.filter((m) => m.role === "user");
     const lastUserQuery = userMsgs.length > 0 ? userMsgs[userMsgs.length - 1].content : "Exploring Digify ERP & POS solutions";
-    const name = userInfo.name || "Visitor";
-    const phone = userInfo.phone || "";
 
-    const summaryText = `*Namaste Gautam Sir!*\n\nI am chatting with *Kaira* on Digify Soft Solutions website (${pathname}).\n\n• *My Inquiry:* "${lastUserQuery.slice(0, 160)}"\n• *Name:* ${name}\n• *Phone:* ${phone}\n\nCan we discuss this further?`;
+    let summaryText = `*Namaste Gautam Sir!* 🙏\n\nI am chatting with *Kaira* on Digify Soft Solutions website.\n\n• *My Query:* "${lastUserQuery.slice(0, 160)}"`;
+
+    if (userInfo.name && userInfo.name.trim() && userInfo.name.toLowerCase() !== 'visitor') {
+      summaryText += `\n• *Name:* ${userInfo.name.trim()}`;
+    }
+    if (userInfo.phone && userInfo.phone.trim()) {
+      summaryText += `\n• *Phone:* ${userInfo.phone.trim()}`;
+    }
+
+    summaryText += `\n\nCould you please assist me with this?`;
 
     window.open(`https://api.whatsapp.com/send?phone=917425016636&text=${encodeURIComponent(summaryText)}`, "_blank");
   }
