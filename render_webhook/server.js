@@ -104,25 +104,41 @@ RULES:
           }
         ];
 
-        // Call Groq API via fetch
-        const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GROQ_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            messages: messages,
-            temperature: 0.7,
-            max_tokens: 500
-          })
-        });
+        // Call Groq API with fallback
+        let replyText = "";
+        const models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"];
+        
+        for (const model of models) {
+          try {
+            const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`
+              },
+              body: JSON.stringify({
+                model: model,
+                messages: messages,
+                temperature: 0.7,
+                max_tokens: 500
+              })
+            });
 
-        const groqData = await groqRes.json();
-        const replyText = (groqData.choices && groqData.choices[0] && groqData.choices[0].message) 
-          ? groqData.choices[0].message.content 
-          : "Thank you for contacting Digify Soft Solutions! How can we assist your business today?";
+            if (groqRes.ok) {
+              const groqData = await groqRes.json();
+              if (groqData.choices && groqData.choices[0] && groqData.choices[0].message) {
+                replyText = groqData.choices[0].message.content;
+                break;
+              }
+            }
+          } catch (e) {
+            console.error(`Error querying Groq model ${model}:`, e);
+          }
+        }
+
+        if (!replyText) {
+          replyText = "Thank you for contacting Digify Soft Solutions! How can we assist your business today? Contact Gautam (+91 7425016636) for live demos.";
+        }
 
         console.log(`Generated AI Reply for ${sender}:`, replyText);
 
