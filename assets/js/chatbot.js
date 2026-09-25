@@ -52,6 +52,24 @@ function initializeDigifyChatbot() {
     const greetingName = name ? ` ${name}` : '';
     const lowPath = path.toLowerCase();
 
+    if (lowPath.includes('android') || lowPath.includes('ios') || lowPath.includes('app')) {
+      return {
+        greeting: `Hello${greetingName}! 👋 I see you are visiting our Android & iOS App Development page. Are you interested in building a custom high-performance mobile app for your business?`,
+        suggestions: ["Mobile App Development Cost", "Android & iOS Tech Stack", "App Maintenance & Support", "Talk to Gautam"]
+      };
+    }
+    if (lowPath.includes('web') || lowPath.includes('responsive') || lowPath.includes('e-commerce')) {
+      return {
+        greeting: `Hello${greetingName}! 🌐 Exploring Digify Web Development Services? We build fast, responsive, high-converting websites tailored to your industry.`,
+        suggestions: ["Website Development Cost", "E-Commerce Web Solutions", "Custom Web Development", "Talk to Gautam"]
+      };
+    }
+    if (lowPath.includes('seo') || lowPath.includes('marketing') || lowPath.includes('social-media')) {
+      return {
+        greeting: `Hello${greetingName}! 📈 Looking to boost your Google rankings and generate high-quality organic business leads with Digify SEO & Growth Services?`,
+        suggestions: ["Free SEO Growth Audit", "On-Page & Technical SEO", "Lead Generation Strategy", "Talk to Gautam"]
+      };
+    }
     if (lowPath.includes('pos')) {
       return {
         greeting: `Hello${greetingName}! 🛒 Exploring Digify Smart POS? I can help you with high-speed barcode billing, offline billing mode, and dual-display setups.`,
@@ -64,9 +82,9 @@ function initializeDigifyChatbot() {
         suggestions: ["Manufacturing ERP Demo", "Production Order Tracker", "Multi-Warehouse ERP", "Get Custom Quote"]
       };
     }
-    if (lowPath.includes('accounting') || lowPath.includes('invoicing')) {
+    if (lowPath.includes('accounting') || lowPath.includes('invoicing') || lowPath.includes('payroll')) {
       return {
-        greeting: `Hello${greetingName}! 🧾 Need seamless GST filing, E-Invoicing, or E-Way Bill automation?`,
+        greeting: `Hello${greetingName}! 🧾 Need seamless GST filing, E-Invoicing, Tally sync, or Saudi ZATCA VAT automation?`,
         suggestions: ["E-Invoicing Automation", "Tally Data Integration", "GST Return Filing", "Accounting Pricing"]
       };
     }
@@ -82,9 +100,15 @@ function initializeDigifyChatbot() {
         suggestions: ["Restaurant POS & KOT", "Table & Menu Management", "Swiggy/Zomato Integration", "Book Live Demo"]
       };
     }
-    if (lowPath.includes('country') || lowPath.includes('city')) {
+    if (lowPath.includes('garment') || lowPath.includes('boutique') || lowPath.includes('readymade') || lowPath.includes('footwear')) {
       return {
-        greeting: `Welcome${greetingName}! 🌐 Exploring Digify Multi-Region Cloud ERP & POS solutions tailored for local tax compliance?`,
+        greeting: `Hello${greetingName}! 👗 Exploring Digify Garments & Apparel ERP? Manage size/color matrices, barcode tags, and store sales seamlessly.`,
+        suggestions: ["Garment ERP Live Demo", "Barcode Tagging System", "Store Inventory Sync", "Pricing Details"]
+      };
+    }
+    if (lowPath.includes('country') || lowPath.includes('city') || lowPath.includes('saudi') || lowPath.includes('uae')) {
+      return {
+        greeting: `Welcome${greetingName}! 🌐 Exploring Digify Multi-Region Cloud ERP & POS solutions tailored for international tax compliance?`,
         suggestions: ["Multi-Tax Compliance", "Global ERP Modules", "ZATCA / GST VAT Ready", "Schedule Consultation"]
       };
     }
@@ -544,7 +568,7 @@ function initializeDigifyChatbot() {
       }).catch(err => console.error('Chatbot schedule email error:', err));
 
       // Direct instant WhatsApp Notification to Gautam (+91 7425016636)
-      const waNotifyText = `*Namaste Gautam Sir!* 🙏\n\nNew Strategy Call Booking on Digify Soft Solutions Website:\n\n• *Name:* ${name}\n• *Phone:* ${phone}\n• *Service:* ${service}\n• *Date:* ${selectedDateIso}\n• *Time Slot:* ${selectedTimeSlot}\n• *Notes:* ${notes}\n\nPlease confirm this strategy call booking.`;
+      const waNotifyText = `Namaste Gautam Sir!\n\nNew Strategy Call Booking on Digify Soft Solutions Website:\n\n- Name: ${name}\n- Phone: ${phone}\n- Service: ${service}\n- Date: ${selectedDateIso}\n- Time Slot: ${selectedTimeSlot}\n- Notes: ${notes}\n\nPlease confirm this strategy call booking.`;
       setTimeout(() => {
         window.open(`https://wa.me/917425016636?text=${encodeURIComponent(waNotifyText)}`, "_blank");
       }, 400);
