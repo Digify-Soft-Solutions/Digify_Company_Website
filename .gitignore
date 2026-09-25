@@ -37,6 +37,9 @@ personal-access-token.txt
 
 # Scratch folder and working notes
 scratch/
+*.tmp
+Dockerfile.staging
+render_staging/
 
 # Word documents and audit reports
 *.docx

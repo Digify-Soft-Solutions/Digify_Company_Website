@@ -1,0 +1,5 @@
+.git
+.gitignore
+scratch/
+personal_access_token.txt
+*.md

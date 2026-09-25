@@ -1,7 +1,11 @@
-FROM node:20-alpine
-WORKDIR /app
-COPY render_webhook/package*.json ./
-RUN npm install --production
-COPY render_webhook/ ./
-EXPOSE 3000
-CMD ["node", "server.js"]
+FROM php:8.2-apache
+
+# Enable Apache mod_rewrite for .htaccess support
+RUN a2enmod rewrite
+
+# Copy website files to Apache web root
+COPY . /var/www/html/
+
+# Expose port 80 for Render
+EXPOSE 80
+
