@@ -16,13 +16,13 @@
             <div class="row align-items-center g-5">
                 <div class="col-lg-6 text-center text-lg-start">
                     <span class="hero-badge gsap-hero-item">
-                        <i class="fas fa-microchip me-1"></i> Unified Business Operating Platform
+                        <i class="fas fa-sparkles me-1 text-warning"></i> Autonomous AI Business Operating Platform
                     </span>
                     <h1 class="hero-title mt-4 gsap-hero-item">
-                        One Platform to Run Your Operations.<br><span>Supercharged by AI.</span>
+                        One Platform to Scale Your Business.<br><span>Supercharged by Autonomous AI.</span>
                     </h1>
                     <p class="hero-subtitle mt-3 mx-auto mx-lg-0 gsap-hero-item">
-                        Built around how your business actually runs. Unify your factory floor, retail outlets, restaurant chains, and warranty service into one intelligent ecosystem with real-time insights.
+                        Empower your entire enterprise with real-time AI intelligence. Unify factory production, multi-store retail, Smart POS billing, inventory forecasting, and auto GST compliance into one seamless, intelligent ecosystem.
                     </p>
 
                     <!-- Transparent Pricing Hook -->
@@ -43,36 +43,36 @@
                         </a>
                     </div>
 
-                    <!-- Digify AI Intelligence Copilot Live Signals Card (Balanced in Left Column) -->
-                    <div class="ai-copilot-floating-card mt-4" style="background: #0f172a !important; border: 1px solid rgba(255,255,255,0.2) !important;">
-                        <div class="copilot-header" style="border-bottom: 1px solid rgba(255,255,255,0.15) !important;">
-                            <div class="copilot-title" style="color: #fbc145 !important; font-size: 13.5px !important; font-weight: 800 !important;">
-                                <i class="fa-solid fa-brain me-1"></i> Digify AI Copilot — Live Signals
+                    <!-- Digify AI Intelligence Command Center Card -->
+                    <div class="ai-copilot-floating-card mt-4 p-3 rounded-4 shadow-lg gsap-hero-item" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.96)) !important; border: 1px solid rgba(59, 130, 246, 0.35) !important; backdrop-filter: blur(12px);">
+                        <div class="d-flex align-items-center justify-content-between pb-2 mb-2" style="border-bottom: 1px solid rgba(255,255,255,0.12) !important;">
+                            <div style="color: #60a5fa !important; font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 7px;">
+                                <i class="fa-solid fa-wand-magic-sparkles text-warning fs-6"></i>
+                                <span>Digify AI Copilot — Real-Time Intelligence</span>
                             </div>
-                            <span class="copilot-badge" style="background: rgba(34,197,94,0.25) !important; color: #4ade80 !important; font-weight: 700 !important; font-size: 11px !important;">
-                                <i class="fas fa-bolt me-1"></i> Active
+                            <span class="badge rounded-pill px-2.5 py-1" style="background: rgba(34, 197, 94, 0.25); color: #4ade80; font-size: 11px; border: 1px solid rgba(34, 197, 94, 0.4); font-weight: 700;">
+                                <i class="fas fa-circle-dot text-success me-1"></i> Engine Active
                             </span>
                         </div>
-                        <div class="ai-copilot-signal-item" style="color: #f8fafc !important; font-size: 13px !important; margin-bottom: 8px;">
-                            <span style="color: #f59e0b !important; font-size: 15px; margin-top: 1px;"><i class="fa-solid fa-triangle-exclamation"></i></span>
-                            <span style="color: #f8fafc !important;">
-                                <strong style="color: #fbc145 !important; font-weight: 800;">Manufacturing:</strong> 
-                                <span style="color: #f1f5f9 !important;">3 Production Orders at delay risk (WO-1024, WO-1056 in Dyeing &amp; QC).</span>
-                            </span>
+                        
+                        <div class="row g-2 text-white" style="font-size: 12.5px;">
+                            <div class="col-6">
+                                <div class="p-2 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+                                    <div class="text-muted small" style="font-size: 11px; color: #94a3b8 !important;"><i class="fas fa-chart-line text-info me-1"></i> Smart Inventory AI</div>
+                                    <div class="fw-bold text-white mt-1" style="font-size: 12.5px; color: #f8fafc !important;">Auto Stock Indents &amp; Reorder Alerts</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-2 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+                                    <div class="text-muted small" style="font-size: 11px; color: #94a3b8 !important;"><i class="fas fa-robot text-warning me-1"></i> Lead &amp; Sales AI</div>
+                                    <div class="fw-bold text-white mt-1" style="font-size: 12.5px; color: #f8fafc !important;">Instant WhatsApp Lead Capture</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="ai-copilot-signal-item" style="color: #f8fafc !important; font-size: 13px !important; margin-bottom: 8px;">
-                            <span style="color: #ef4444 !important; font-size: 15px; margin-top: 1px;"><i class="fa-solid fa-arrow-trend-down"></i></span>
-                            <span style="color: #f8fafc !important;">
-                                <strong style="color: #f87171 !important; font-weight: 800;">Retail &amp; Stock:</strong> 
-                                <span style="color: #f1f5f9 !important;">4 high-demand SKUs below reorder threshold in central warehouse.</span>
-                            </span>
-                        </div>
-                        <div class="ai-copilot-signal-item" style="color: #f8fafc !important; font-size: 13px !important; margin-bottom: 0;">
-                            <span style="color: #22c55e !important; font-size: 15px; margin-top: 1px;"><i class="fa-solid fa-circle-check"></i></span>
-                            <span style="color: #f8fafc !important;">
-                                <strong style="color: #4ade80 !important; font-weight: 800;">Recommended Action:</strong> 
-                                <span style="color: #f1f5f9 !important;">Supplier WhatsApp indent created &amp; awaiting manager 1-click approval.</span>
-                            </span>
+
+                        <div class="d-flex align-items-center justify-content-between mt-2 pt-2" style="border-top: 1px dashed rgba(255,255,255,0.12); font-size: 11.5px; color: #cbd5e1;">
+                            <span style="color: #e2e8f0 !important;"><i class="fas fa-shield-check text-success me-1"></i> Auto GST, E-Invoicing &amp; Tally Sync</span>
+                            <span class="fw-bold" style="color: #38bdf8 !important;"><i class="fas fa-bolt text-warning me-1"></i> Real-Time Insights</span>
                         </div>
                     </div>
                 </div>

@@ -395,20 +395,23 @@ function initializeDigifyChatbot() {
   // 1-Click WhatsApp Sync with Pre-filled Chat Summary to Gautam (+91 7425016636)
   function handleWhatsAppSync() {
     const userMsgs = messages.filter((m) => m.role === "user");
-    const lastUserQuery = userMsgs.length > 0 ? userMsgs[userMsgs.length - 1].content : "Exploring Digify ERP & POS solutions";
+    let summaryText = "";
 
-    let summaryText = `*Namaste Gautam Sir!* 🙏\n\nI am chatting with *Kaira* on Digify Soft Solutions website.\n\n• *My Query:* "${lastUserQuery.slice(0, 160)}"`;
+    if (userMsgs.length > 0) {
+      const lastUserQuery = userMsgs[userMsgs.length - 1].content;
+      summaryText = `Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions.\n\n• My Query: "${lastUserQuery.slice(0, 160)}"\n\nCould you please explain to me more details about your software?`;
+    } else {
+      summaryText = "Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions. Could you please explain to me more details about your software?";
+    }
 
     if (userInfo.name && userInfo.name.trim() && userInfo.name.toLowerCase() !== 'visitor') {
-      summaryText += `\n• *Name:* ${userInfo.name.trim()}`;
+      summaryText += `\n• Name: ${userInfo.name.trim()}`;
     }
     if (userInfo.phone && userInfo.phone.trim()) {
-      summaryText += `\n• *Phone:* ${userInfo.phone.trim()}`;
+      summaryText += `\n• Phone: ${userInfo.phone.trim()}`;
     }
 
-    summaryText += `\n\nCould you please assist me with this?`;
-
-    window.open(`https://api.whatsapp.com/send?phone=917425016636&text=${encodeURIComponent(summaryText)}`, "_blank");
+    window.open(`https://wa.me/917425016636?text=${encodeURIComponent(summaryText)}`, "_blank");
   }
 
   // Embedded Scheduler Setup

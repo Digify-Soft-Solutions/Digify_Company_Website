@@ -321,6 +321,7 @@
    document.getElementById('whatsappButton').addEventListener('click', function(e){
        e.preventDefault();
        const cleanPhone = phone.replace(/\D/g, '');
+       const waMsg = encodeURIComponent("Namaste Gautam Sir! I am interested in taking services from Digify Soft Solutions. Could you please explain to me more details about your software?");
 
        // --- 1. Call your PHP API ---
        fetch('send_whatsapp_lead.php', {
@@ -336,12 +337,12 @@
        .then(data => {
            console.log("Lead API Response:", data);
            // --- 2. Open WhatsApp chat ---
-           window.open("https://wa.me/" + cleanPhone, "_blank");
+           window.open("https://wa.me/" + cleanPhone + "?text=" + waMsg, "_blank");
        })
        .catch(err => {
            console.error(err);
            // Even if API fails, open WhatsApp
-           window.open("https://wa.me/" + cleanPhone, "_blank");
+           window.open("https://wa.me/" + cleanPhone + "?text=" + waMsg, "_blank");
        });
    });
    </script>
