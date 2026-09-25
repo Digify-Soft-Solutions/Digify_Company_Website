@@ -1306,7 +1306,8 @@ ul.navbar-nav li a.active {
 
 
 .nav-wrap {
-  z-: 99;
+  position: relative;
+  z-index: 10000;
 }
 
 .navbar {

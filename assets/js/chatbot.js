@@ -585,6 +585,40 @@ function initializeDigifyChatbot() {
     });
   }
 
+  function getOfflineResponse(query) {
+    const q = query.toLowerCase();
+
+    if (q.includes('android') || q.includes('app') || q.includes('application') || q.includes('mobile')) {
+      return `📱 **Digify Android & Mobile App Development Services**\n\nAt Digify Soft Solutions, we build high-performance, scalable native Android apps, tablet POS software, and cross-platform mobile solutions.\n\n• **Core Capabilities:** Native Kotlin/Java, Flutter, REST API Integration, Offline-First SQLite Sync, UI/UX Design.\n• **Key Offerings:** B2B/B2C mobile apps, salesman order booking apps, Play Store publishing, UI/UX design, app maintenance, and enterprise security.\n• **Support:** 24/7 post-launch maintenance & security updates.\n\nWould you like to discuss your application concept with **Gautam (+91 7425016636)**?\n\n[ACTION:WHATSAPP] [ACTION:SCHEDULE]`;
+    }
+    if (q.includes('ios') || q.includes('iphone') || q.includes('ipad') || q.includes('apple')) {
+      return `🍎 **Digify iOS & Apple App Development Services**\n\nWe craft elegant, high-speed native iOS applications for iPhone and iPad tailored for enterprise and B2C brands.\n\n• **Tech Stack:** Swift, SwiftUI, Xcode, CoreData, REST APIs.\n• **Features:** iPad POS interfaces, Apple App Store deployment, biometric security, cloud synchronization.\n\nConnect with **Gautam** to discuss your iOS app requirements: [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('web') || q.includes('website') || q.includes('e-commerce') || q.includes('ecommerce')) {
+      return `🌐 **Digify Web & E-Commerce Development**\n\nWe create ultra-fast, responsive corporate websites and high-converting e-commerce portals.\n\n• Custom responsive UI/UX design.\n• Shopify & WooCommerce custom integrations.\n• High-speed landing pages & dynamic web applications.\n\n[ACTION:CONTACT] [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('seo') || q.includes('growth') || q.includes('marketing')) {
+      return `📈 **Digify SEO & Digital Growth Services**\n\nBoost your organic Google rankings and generate high-intent business leads.\n\n• **Services:** On-Page SEO, Technical Audits, Keyword Rank Optimization, Local GMB SEO & Backlink Building.\n• **Free Audit:** Request a complimentary SEO audit of your business website today.\n\n[ACTION:CONTACT] [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('pos') || q.includes('billing')) {
+      return `🛒 **Digify Smart POS (3-Sec High Speed Billing)**\n\nLightning-fast POS software designed for retail counters, supermarkets, restaurants, and apparel stores.\n\n• 3-Second barcode scanning & receipt printing.\n• Works 100% offline with auto cloud sync.\n• Weighing scale & dual-display customer screen integration.\n\n[ACTION:DEMO] [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('erp') || q.includes('inventory') || q.includes('manufacturing')) {
+      return `🏭 **Digify Cloud ERP Suite (All-In-One Platform)**\n\nUnify multi-warehouse inventory, factory production BOM, purchase orders, financial accounting, and CRM in real time.\n\n• Multi-branch stock transfers & reorder alerts.\n• Manufacturing BOM costing & job card tracking.\n• Automated GST/VAT return filing & Tally sync.\n\n[ACTION:DEMO] [ACTION:SCHEDULE]`;
+    }
+    if (q.includes('warranty') || q.includes('amc') || q.includes('after-sales')) {
+      return `🛠️ **Digify Warranty & AMC Suite**\n\nEnd-to-end after-sales service management for electronics, machinery, and appliances.\n\n• Customer repair ticket tracking & technician assignment.\n• Annual Maintenance Contract (AMC) renewal notifications.\n• Preventive maintenance visit scheduling.\n\n[ACTION:DEMO] [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('restaurant') || q.includes('cafe') || q.includes('kot')) {
+      return `🍔 **Digify Restaurant & Café POS**\n\nComplete food & hospitality automation system.\n\n• KOT (Kitchen Order Ticket) printing & kitchen displays.\n• Android table ordering app for waiters.\n• Swiggy & Zomato direct order integration.\n\n[ACTION:DEMO] [ACTION:WHATSAPP]`;
+    }
+    if (q.includes('textile') || q.includes('fabric') || q.includes('pharma') || q.includes('garment') || q.includes('jewellery') || q.includes('kirana') || q.includes('supermarket')) {
+      return `🏬 **Digify Specialized Industry ERP Solutions**\n\nWe offer specialized ERP modules designed specifically for your industry vertical with size/color matrices, batch expiry control, and barcode tagging.\n\n• Real-time stock movement & automated GST/VAT billing.\n• Detailed ledger statements & sales analytics.\n\nBook a live personalized demo with **Gautam (+91 7425016636)**: [ACTION:DEMO] [ACTION:WHATSAPP]`;
+    }
+
+    return `Hello! I am **Digify Saathi**, official AI Assistant for Digify Soft Solutions. I can assist you with:\n\n• **Android & iOS App Development**\n• **Connected Web & E-Commerce Solutions**\n• **SEO & Digital Lead Generation**\n• **Digify Cloud ERP & Smart POS**\n• **Warranty & AMC Suite**\n\nPlease reach out to **Gautam** directly at **+91 7425016636** or connect on WhatsApp: [ACTION:WHATSAPP]`;
+  }
+
   // Handle Chat Input & Sending
   async function handleSend() {
     const text = input.value.trim();
@@ -613,12 +647,16 @@ function initializeDigifyChatbot() {
 
       if (!response.ok) throw new Error("API Error");
       const data = await response.json();
-      messages.push({ role: 'ai', content: data.response, timestamp: new Date().toISOString() });
+      if (data && data.response) {
+        messages.push({ role: 'ai', content: data.response, timestamp: new Date().toISOString() });
+      } else {
+        messages.push({ role: 'ai', content: getOfflineResponse(text), timestamp: new Date().toISOString() });
+      }
     } catch (e) {
       console.error(e);
       messages.push({
         role: 'ai',
-        content: "Sorry, I am facing some network issues right now. Please call us at +91 7425016636 for assistance.",
+        content: getOfflineResponse(text),
         timestamp: new Date().toISOString()
       });
     } finally {

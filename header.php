@@ -51,9 +51,16 @@
               }
           }
 
-          /* Global Fix: Ensure navigation dropdowns render on top of sticky promo ribbons */
-          .sub-menu, .mega-menu {
+          /* Global Fix: Ensure header stacks above demo strip and mega-menus never get truncated at top */
+          header {
+              position: relative !important;
               z-index: 10000 !important;
+          }
+          .sub-menu, .mega-menu {
+              z-index: 10005 !important;
+              box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18) !important;
+              border-top: 3px solid #e06930 !important;
+              border-radius: 0 0 12px 12px !important;
           }
       </style>
 
