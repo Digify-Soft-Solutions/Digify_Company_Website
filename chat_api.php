@@ -56,7 +56,7 @@ $apiKey = (defined('CHAT_API_KEY') && CHAT_API_KEY !== '') ? CHAT_API_KEY : gete
 $url = "https://api.groq.com/openai/v1/chat/completions";
 
 $data = [
-    "model" => "llama-3.3-70b-versatile",
+    "model" => "openai/gpt-oss-120b",
     "messages" => $messages,
     "temperature" => 0.7,
     "max_tokens" => 1500
