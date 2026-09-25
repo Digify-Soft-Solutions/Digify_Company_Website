@@ -112,74 +112,79 @@ if (file_exists(__DIR__ . '/mail_config.php')) {
 $apiKey = getenv('CHAT_API_KEY') ?: (getenv('GROQ_API_KEY') ?: (defined('CHAT_API_KEY') ? CHAT_API_KEY : ''));
 $url = "https://api.groq.com/openai/v1/chat/completions";
 
-$data = [
-    "model" => "openai/gpt-oss-120b",
-    "messages" => $messages,
-    "temperature" => 0.7,
-    "max_tokens" => 4000
-];
+// Use active flagship Groq model with fallback
+$primaryModel = "llama-3.3-70b-versatile";
+$fallbackModel = "llama-3.1-8b-instant";
 
-$response = false;
-$httpCode = 0;
-$curlErr = '';
+function callGroqAPI($url, $apiKey, $model, $messages) {
+    if (empty($apiKey)) return false;
 
-if (function_exists('curl_init')) {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'DigifySoft-Chatbot/1.0');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . $apiKey
-    ]);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curlErr = curl_error($ch);
-    curl_close($ch);
-}
-
-if (!$response || $httpCode !== 200) {
-    $options = [
-        'http' => [
-            'method'  => 'POST',
-            'header'  => "Content-Type: application/json\r\n" .
-                         "Authorization: Bearer " . $apiKey . "\r\n",
-            'content' => json_encode($data),
-            'timeout' => 30,
-            'ignore_errors' => true
-        ],
-        'ssl' => [
-            'verify_peer'      => false,
-            'verify_peer_name' => false
-        ]
+    $data = [
+        "model" => $model,
+        "messages" => $messages,
+        "temperature" => 0.7,
+        "max_tokens" => 4000
     ];
-    $context  = stream_context_create($options);
-    $response = @file_get_contents($url, false, $context);
-    if ($response !== false) {
-        $httpCode = 200;
+
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 25);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'DigifySoft-Chatbot/1.0');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $apiKey
+        ]);
+        $res = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && $res) {
+            $json = json_decode($res, true);
+            if (isset($json['choices'][0]['message']['content'])) {
+                return $json['choices'][0]['message']['content'];
+            }
+        }
     }
+    return false;
 }
 
-if (!$response) {
-    // Try to give a graceful fallback response instead of a debug error
-    $errDetail = !empty($curlErr) ? $curlErr : 'Network unreachable from server';
-    echo json_encode(["response" => "I'm having a temporary connection issue. Please try again in a moment, or reach us directly at **+91 7425016636** or on WhatsApp with Gautam. [ACTION:WHATSAPP]"]);
-    exit;
+$reply = callGroqAPI($url, $apiKey, $primaryModel, $messages);
+
+if (!$reply) {
+    // Retry with fallback model
+    $reply = callGroqAPI($url, $apiKey, $fallbackModel, $messages);
 }
 
-$responseData = json_decode($response, true);
-
-if (isset($responseData['choices'][0]['message']['content'])) {
-    $reply = $responseData['choices'][0]['message']['content'];
+if ($reply && trim($reply) !== '') {
     echo json_encode(["response" => $reply]);
 } else {
-    echo json_encode(["response" => "Sorry, I didn't quite catch that. Could you please rephrase?"]);
+    // Return rich solution-aware fallback response instead of robotic generic error
+    $lastUserMsg = '';
+    foreach (array_reverse($messages) as $m) {
+        if (isset($m['role']) && $m['role'] === 'user') {
+            $lastUserMsg = strtolower($m['content']);
+            break;
+        }
+    }
+
+    if (strpos($lastUserMsg, 'android') !== false || strpos($lastUserMsg, 'app') !== false || strpos($lastUserMsg, 'mobile') !== false) {
+        $fallback = "📱 **Digify Android & Mobile App Development Services**\n\nWe design & develop high-performance native Android apps, tablet POS solutions, and custom mobile software.\n\n• Tech Stack: Kotlin, Java, Flutter, Firebase, REST APIs\n• Services: B2B/B2C apps, Play Store publishing, UI/UX design, app maintenance\n\nTalk directly to **Gautam (+91 7425016636)**: [ACTION:WHATSAPP] [ACTION:SCHEDULE]";
+    } elseif (strpos($lastUserMsg, 'pos') !== false || strpos($lastUserMsg, 'billing') !== false) {
+        $fallback = "🛒 **Digify Smart POS Software (3-Sec Billing)**\n\nLightning-fast POS software for retail counters, supermarkets, restaurants, and Kirana stores.\n\n• Features: 3-second barcode billing, offline billing mode, thermal printer & weighing scale sync.\n\n[ACTION:DEMO] [ACTION:WHATSAPP]";
+    } elseif (strpos($lastUserMsg, 'erp') !== false || strpos($lastUserMsg, 'inventory') !== false) {
+        $fallback = "🏭 **Digify Cloud ERP Suite**\n\nUnify multi-warehouse inventory, factory production BOM, purchasing, GST compliance, and CRM in real time.\n\n[ACTION:DEMO] [ACTION:SCHEDULE]";
+    } else {
+        $fallback = "Hello! I am **Digify Saathi**, official AI Assistant for Digify Soft Solutions.\n\nI can assist you with:\n• **Android & iOS App Development**\n• **Connected Web & E-Commerce**\n• **Digify Cloud ERP & Smart POS**\n• **SEO & Lead Generation**\n\nReach out to **Gautam** at **+91 7425016636** or on WhatsApp: [ACTION:WHATSAPP]";
+    }
+
+    echo json_encode(["response" => $fallback]);
 }
 
