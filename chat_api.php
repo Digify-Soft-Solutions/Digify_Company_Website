@@ -116,7 +116,7 @@ $data = [
     "model" => "openai/gpt-oss-120b",
     "messages" => $messages,
     "temperature" => 0.7,
-    "max_tokens" => 1500
+    "max_tokens" => 4000
 ];
 
 $response = false;

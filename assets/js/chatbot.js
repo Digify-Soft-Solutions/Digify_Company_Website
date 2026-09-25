@@ -220,22 +220,20 @@ function initializeDigifyChatbot() {
     return output.join("");
   }
 
-  // Check Registration Status - Direct Instant Chat Enabled via Welcome Screen
+  // Check Registration Status - Persist chat state across all pages
   const savedUserInfo = localStorage.getItem("digify_user_info");
+  const savedMessages = localStorage.getItem("digify_chat_history");
+  const isChatStarted = localStorage.getItem("digify_chat_started");
   let isRegistered = false;
 
   if (savedUserInfo) {
     try {
       const parsed = JSON.parse(savedUserInfo);
-      if (parsed.name && parsed.phone) {
-        userInfo = parsed;
-        isRegistered = true;
-      }
+      if (parsed) userInfo = parsed;
     } catch (e) { console.error(e); }
   }
 
   // Load Saved Chat Messages
-  const savedMessages = localStorage.getItem("digify_chat_history");
   if (savedMessages) {
     try {
       const parsed = JSON.parse(savedMessages);
@@ -243,6 +241,11 @@ function initializeDigifyChatbot() {
         messages = parsed;
       }
     } catch (e) { console.error(e); }
+  }
+
+  // Permanently bypass welcome screen if user already started chat or has chat history
+  if (isChatStarted === "true" || (messages && messages.length > 0)) {
+    isRegistered = true;
   }
 
   function updateViewMode() {
@@ -387,6 +390,7 @@ function initializeDigifyChatbot() {
   function resetChat() {
     localStorage.removeItem("digify_chat_history");
     localStorage.removeItem("digify_user_info");
+    localStorage.removeItem("digify_chat_started");
     isRegistered = false;
     userInfo = { name: '', phone: '' };
     messages = [];
@@ -400,6 +404,7 @@ function initializeDigifyChatbot() {
       e.preventDefault();
       userInfo = { name: '', phone: '' };
       localStorage.setItem("digify_user_info", JSON.stringify(userInfo));
+      localStorage.setItem("digify_chat_started", "true");
       isRegistered = true;
 
       const activeContext = getPageAwareDetails(pathname);
