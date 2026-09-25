@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 
 // Log incoming request for debugging
 $rawInput = file_get_contents('php://input');
-$logData = date('Y-m-d H:i:s') . " - Method: " . $_SERVER['REQUEST_METHOD'] . " - Raw: " . $rawInput . " - POST: " . json_encode($_POST) . "\n";
+$logData = date('Y-m-d H:i:s') . " - Method: " . $_SERVER['REQUEST_METHOD'] . " - Raw: " . $rawInput . "\n";
 @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', $logData, FILE_APPEND);
 
 $input = json_decode($rawInput, true) ?? [];
@@ -30,15 +30,17 @@ if (isset($_GET['challenge'])) {
 $sender = '';
 $userMessage = '';
 
-if (isset($input['from'])) {
+if (!empty($input['sender_id'])) {
+    $sender = $input['sender_id'];
+} elseif (!empty($input['from'])) {
     $sender = is_array($input['from']) ? ($input['from']['number'] ?? '') : $input['from'];
-} elseif (isset($input['sender'])) {
+} elseif (!empty($input['sender'])) {
     $sender = is_array($input['sender']) ? ($input['sender']['number'] ?? '') : $input['sender'];
-} elseif (isset($input['phone'])) {
+} elseif (!empty($input['phone'])) {
     $sender = $input['phone'];
-} elseif (isset($input['mobile'])) {
+} elseif (!empty($input['mobile'])) {
     $sender = $input['mobile'];
-} elseif (isset($input['wa_id'])) {
+} elseif (!empty($input['wa_id'])) {
     $sender = $input['wa_id'];
 } elseif (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
     $sender = $input['entry'][0]['changes'][0]['value']['messages'][0]['from'];
@@ -46,10 +48,10 @@ if (isset($input['from'])) {
 
 $sender = preg_replace('/\D/', '', (string)$sender);
 
-if (isset($input['message'])) {
-    $userMessage = is_array($input['message']) ? ($input['message']['text'] ?? $input['message']['body'] ?? $input['message']['caption'] ?? '') : $input['message'];
-} elseif (isset($input['text'])) {
+if (isset($input['text'])) {
     $userMessage = is_array($input['text']) ? ($input['text']['body'] ?? '') : $input['text'];
+} elseif (isset($input['message'])) {
+    $userMessage = is_array($input['message']) ? ($input['message']['text'] ?? $input['message']['body'] ?? $input['message']['caption'] ?? '') : $input['message'];
 } elseif (isset($input['body'])) {
     $userMessage = $input['body'];
 } elseif (isset($input['msg'])) {
@@ -60,11 +62,13 @@ if (isset($input['message'])) {
 
 // If no valid message or sender found, exit gracefully
 if (empty($sender) || empty($userMessage)) {
-    echo json_encode([
+    $response = [
         "status" => "ignored", 
         "reason" => "No valid message or sender detected",
         "received_keys" => array_keys($input)
-    ]);
+    ];
+    @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Ignored: " . json_encode($response) . "\n", FILE_APPEND);
+    echo json_encode($response);
     exit;
 }
 
@@ -89,25 +93,22 @@ if (file_exists(__DIR__ . '/db.php')) {
 $messages = [
     [
         "role" => "system",
-        "content" => "You are Digify Saathi, the official AI Assistant for Digify Soft Solutions responding directly via WhatsApp (+91 7425016636).
-Keep replies concise, polite, clear, and formatted nicely for WhatsApp mobile screens (use line breaks and emojis).
+        "content" => "You are Digify Saathi, official AI Assistant for Digify Soft Solutions on WhatsApp (+91 7425016636).
+Keep replies concise, polite, clear, and formatted for WhatsApp mobile screens (use short lines and emojis).
 
 COMPANY OVERVIEW & CONTACTS:
-- Company: Digify Soft Solutions (Cloud ERP, Smart POS, Accounting, Mobile App & Web Development Firm).
-- Founder / Director: Gautam (+91 7425016636)
-- Official WhatsApp / Contact: +91 7425016636
+- Company: Digify Soft Solutions (Cloud ERP, Smart POS, Mobile Apps & Web Development).
+- Founder: Gautam (+91 7425016636)
+- Contact / WhatsApp: +91 7425016636
 
 PRODUCTS & SERVICES:
-1. Digify AI Business Platform & ERP: Unified Cloud ERP for Manufacturers, Retail Chains, Supermarkets, Restaurants, Garments, Pharma & Wholesale.
-2. Smart POS Software: Offline-first high-speed billing, thermal printing, GST calculation, weighing scale sync.
-3. Android & iOS App Development: Custom Kotlin/Swift mobile applications, tablet POS, Play Store / App Store publishing.
-4. Accounting & Invoicing: E-Invoicing, E-Way Bill, Tally sync, ZATCA VAT compliance, auto GST filing.
-5. Custom CRM & Lead Automation: Pipeline tracking, automated follow-ups, quotation builder.
+1. Digify AI Business ERP & POS: Cloud ERP for Retail, Manufacturers, Restaurants & Supermarkets.
+2. Android & iOS App Development: Kotlin, Swift, Flutter custom mobile apps.
+3. Accounting & GST: E-Invoicing, E-Way bill, Tally sync.
 
 RULES:
-- Answer ONLY questions strictly related to Digify Soft Solutions, software products, mobile app/web development, pricing, and demos.
-- Keep responses short and easy to read on WhatsApp.
-- If asked for demo, pricing or human call, invite them to speak directly with Gautam on +91 7425016636."
+- Answer ONLY Digify software, mobile app/web development, pricing, and demo questions.
+- Keep replies short. Invite to call/WhatsApp Gautam (+91 7425016636)."
     ],
     [
         "role" => "user",
@@ -115,7 +116,7 @@ RULES:
     ]
 ];
 
-// Function to query Groq API with model fallback
+// Query Groq AI API
 function queryGroqAI($apiKey, $messages) {
     if (empty($apiKey)) return null;
 
@@ -135,6 +136,7 @@ function queryGroqAI($apiKey, $messages) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
@@ -175,18 +177,30 @@ $sendPayload = [
 $chSend = curl_init($goshortApiUrl);
 curl_setopt($chSend, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($chSend, CURLOPT_POST, true);
+curl_setopt($chSend, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($chSend, CURLOPT_SSL_VERIFYHOST, 0);
 curl_setopt($chSend, CURLOPT_HTTPHEADER, [
     "Authorization: $goshortToken",
     "Content-Type: application/json"
 ]);
 curl_setopt($chSend, CURLOPT_POSTFIELDS, json_encode($sendPayload));
 $sendResult = curl_exec($chSend);
+$sendHttpCode = curl_getinfo($chSend, CURLINFO_HTTP_CODE);
+$sendErr = curl_error($chSend);
 curl_close($chSend);
 
-echo json_encode([
-    "status"      => "success",
-    "sender"      => $sender,
-    "reply"       => $replyText,
-    "send_result" => json_decode($sendResult, true)
-]);
+$resultData = [
+    "status"         => "success",
+    "sender"         => $sender,
+    "user_message"   => $userMessage,
+    "reply"          => $replyText,
+    "send_http_code" => $sendHttpCode,
+    "send_error"     => $sendErr,
+    "send_result"    => json_decode($sendResult, true) ?? $sendResult
+];
+
+@file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData) . "\n", FILE_APPEND);
+
+echo json_encode($resultData);
+
 
