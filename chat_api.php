@@ -113,8 +113,8 @@ $apiKey = getenv('CHAT_API_KEY') ?: (getenv('GROQ_API_KEY') ?: (defined('CHAT_AP
 $url = "https://api.groq.com/openai/v1/chat/completions";
 
 // Use active flagship Groq model with fallback
-$primaryModel = "llama-3.3-70b-versatile";
-$fallbackModel = "llama-3.1-8b-instant";
+$primaryModel = "openai/gpt-oss-120b";
+$fallbackModel = "openai/gpt-oss-20b";
 
 function callGroqAPI($url, $apiKey, $model, $messages) {
     if (empty($apiKey)) return false;
