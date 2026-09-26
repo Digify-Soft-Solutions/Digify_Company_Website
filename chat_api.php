@@ -314,8 +314,19 @@ if (!$reply) {
     $reply = callGroqAPI($url, $apiKey, $fallbackModel, $messages);
 }
 
+function processActionTags($text) {
+    if (empty($text)) return $text;
+    $text = preg_replace('/\[\s*ACTION\s*:\s*CONTACT\s*\]/i', '<div class="chat-action-wrapper"><a href="contact-us.php" class="message-action-btn"><i class="fas fa-envelope"></i> Contact Support</a></div>', $text);
+    $text = preg_replace('/\[\s*ACTION\s*:\s*DEMO\s*\]/i', '<div class="chat-action-wrapper"><a href="#" data-bs-toggle="modal" data-bs-target="#trialModal" class="message-action-btn"><i class="fas fa-laptop"></i> Request Free Demo</a></div>', $text);
+    $text = preg_replace('/\[\s*ACTION\s*:\s*SCHEDULE\s*\]/i', '<div class="chat-action-wrapper"><a href="contact-us.php" class="message-action-btn"><i class="fas fa-calendar-check"></i> Book Strategy Meeting</a></div>', $text);
+    $text = preg_replace('/\[\s*ACTION\s*:\s*WHATSAPP\s*\]/i', '<div class="chat-action-wrapper"><a href="https://wa.me/917425016636?text=Namaste%20Gautam%20Sir!%20I%20want%20to%20discuss%20a%20project%20with%20Digify." target="_blank" rel="noopener noreferrer" class="message-action-btn wa-btn"><i class="fab fa-whatsapp"></i> Chat with Gautam</a></div>', $text);
+    // Remove any remaining bracketed ACTION tags completely
+    $text = preg_replace('/\[\s*ACTION\s*:[^\]]*\]/i', '', $text);
+    return trim($text);
+}
+
 if ($reply && trim($reply) !== '') {
-    echo json_encode(["response" => $reply]);
+    echo json_encode(["response" => processActionTags($reply)]);
 } else {
     // Return rich solution-aware fallback response instead of robotic generic error
     $lastUserMsg = '';
@@ -336,6 +347,6 @@ if ($reply && trim($reply) !== '') {
         $fallback = "Hello! I am **Digify Saathi**, official AI Assistant for Digify Soft Solutions.\n\nI can assist you with:\n• **Android & iOS App Development**\n• **Connected Web & E-Commerce**\n• **Digify Cloud ERP & Smart POS**\n• **SEO & Lead Generation**\n\nReach out to **Gautam** at **+91 7425016636** or on WhatsApp: [ACTION:WHATSAPP]";
     }
 
-    echo json_encode(["response" => $fallback]);
+    echo json_encode(["response" => processActionTags($fallback)]);
 }
 
