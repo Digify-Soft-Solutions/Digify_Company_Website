@@ -162,21 +162,23 @@ function initializeDigifyChatbot() {
 
     // Action Triggers
     content = content.replace(
-      /\[ACTION:CONTACT\]/g,
+      /\[\s*ACTION\s*:\s*CONTACT\s*\]/gi,
       '<div class="chat-action-wrapper"><a href="contact-us.php" class="message-action-btn"><i class="fas fa-envelope"></i> Contact Support</a></div>'
     );
     content = content.replace(
-      /\[ACTION:DEMO\]/g,
+      /\[\s*ACTION\s*:\s*DEMO\s*\]/gi,
       '<div class="chat-action-wrapper"><a href="#" data-bs-toggle="modal" data-bs-target="#trialModal" class="message-action-btn"><i class="fas fa-laptop"></i> Request Free Demo</a></div>'
     );
     content = content.replace(
-      /\[ACTION:SCHEDULE\]/g,
+      /\[\s*ACTION\s*:\s*SCHEDULE\s*\]/gi,
       '<div class="chat-action-wrapper"><a href="contact-us.php" class="message-action-btn"><i class="fas fa-calendar-check"></i> Book Strategy Meeting</a></div>'
     );
     content = content.replace(
-      /\[ACTION:WHATSAPP\]/g,
+      /\[\s*ACTION\s*:\s*WHATSAPP\s*\]/gi,
       '<div class="chat-action-wrapper"><a href="https://wa.me/917425016636?text=Namaste%20Gautam%20Sir!%20I%20want%20to%20discuss%20a%20project%20with%20Digify." target="_blank" rel="noopener noreferrer" class="message-action-btn wa-btn"><i class="fab fa-whatsapp"></i> Chat with Gautam</a></div>'
     );
+    // Cleanup any remaining action tags so raw brackets never leak into UI
+    content = content.replace(/\[\s*ACTION\s*:[^\]]+\]/gi, "");
 
     // Auto-link Emails
     content = content.replace(
