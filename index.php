@@ -28,9 +28,9 @@
                     <!-- Transparent Pricing Hook -->
                     <div class="hero-pricing-banner gsap-hero-item">
                         <span class="pricing-tag"><i class="fas fa-bolt me-1"></i> Transparent Pricing</span>
-                        <span>Retail &amp; Restaurant: <strong class="pricing-highlight">₹1,000/mo</strong></span>
+                        <span>Retail &amp; Restaurant: <strong class="pricing-highlight">₹1,000 Onwards / month</strong></span>
                         <span class="d-none d-sm-inline">•</span>
-                        <span>Manufacturing: <strong class="pricing-highlight">₹10,000/mo</strong></span>
+                        <span>Manufacturing: <strong class="pricing-highlight">₹10,000 Onwards / month</strong></span>
                         <span class="text-muted" style="font-size: 11px;">(Up to 100 Users)</span>
                     </div>
 
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹10,000 <small>/ month</small></div>
+                            <div class="choice-price">₹10,000 Onwards <small>/ month</small></div>
                             <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
@@ -184,7 +184,7 @@
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹1,000 <small>/ month</small></div>
+                            <div class="choice-price">₹2,000 Onwards <small>/ month</small></div>
                             <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
@@ -208,7 +208,7 @@
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹1,000 <small>/ month</small></div>
+                            <div class="choice-price">₹1,000 Onwards <small>/ month</small></div>
                             <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
@@ -260,6 +260,143 @@
                             <span class="choice-link-text">Explore AI Platform <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGIFY BUSINESS-FIT PROMISE SECTION -->
+    <section class="business-fit-promise-sec py-5" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); color: #0f172a; position: relative; overflow: hidden; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+        <div class="container position-relative" style="z-index: 2;">
+            <div class="text-center mb-5">
+                <span class="badge rounded-pill px-3.5 py-2 mb-3 shadow-sm" style="background: rgba(224, 105, 48, 0.12); color: #c2410c !important; border: 1px solid rgba(224, 105, 48, 0.3); font-size: 13px; font-weight: 800;">
+                    <i class="fas fa-shield-check me-1.5"></i> OUR CORE USP GUARANTEE
+                </span>
+                <h2 style="font-size: 36px; font-weight: 800; color: #0f172a !important;" class="mb-2">
+                    DIGIFY <span style="background: linear-gradient(135deg, #e06930, #fbc145); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BUSINESS-FIT PROMISE</span>
+                </h2>
+                <p style="color: #1e293b !important; font-weight: 600; font-size: 15px; max-width: 850px; margin: 0 auto 24px; line-height: 1.6;">
+                    Digify ERP Suite — One Integrated Ecosystem. PO / Quote / Multi-Platform Lead Management / Sales Order / Purchase / Production / Customer Engagement / Inventory / Invoicing / Despatches / After-Sales Warranty Management.
+                </p>
+
+                <!-- Tagline Callout -->
+                <div class="d-inline-block p-3.5 px-4 rounded-4 shadow-sm my-2" style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1.5px dashed #f97316;">
+                    <div style="font-size: 17.5px; font-weight: 800; color: #9a3412 !important;">
+                        <i class="fas fa-quote-left me-2 text-warning opacity-75"></i>
+                        Don't just run your business on software. Make your business intelligent.
+                        <i class="fas fa-quote-right ms-2 text-warning opacity-75"></i>
+                    </div>
+                    <div style="font-size: 14px; color: #7c2d12 !important; margin-top: 5px; font-weight: 700;">
+                        <em>Digify digitizes your business. AutomateX makes it intelligent.</em>
+                    </div>
+                </div>
+
+                <!-- Transparent Pricing Buttons Grid -->
+                <div class="d-flex flex-wrap justify-content-center mt-4" style="gap: 16px !important;">
+                    <span class="btn btn-sm rounded-pill px-4 py-2.5 fw-bold shadow-sm" style="background: #dbeafe; border: 1.5px solid #93c5fd; color: #1e40af !important; font-size: 13.5px; cursor: default; margin: 4px;">
+                        <i class="fas fa-bullseye me-1.5 text-primary"></i> ERP that fits your business — not your business forced to fit the ERP
+                    </span>
+                    <span class="btn btn-sm rounded-pill px-4 py-2.5 fw-bold shadow-sm" style="background: #dcfce7; border: 1.5px solid #86efac; color: #166534 !important; font-size: 13.5px; cursor: default; margin: 4px;">
+                        <i class="fas fa-check-circle me-1.5 text-success"></i> No Per-User Licence Hassle
+                    </span>
+                    <span class="btn btn-sm rounded-pill px-4 py-2.5 fw-bold shadow-sm" style="background: #fef3c7; border: 1.5px solid #fde047; color: #92400e !important; font-size: 13.5px; cursor: default; margin: 4px;">
+                        <i class="fas fa-tag me-1.5 text-warning"></i> No Hidden Software Charges
+                    </span>
+                </div>
+            </div>
+
+            <!-- 7 Pillars Grid -->
+            <div class="row g-4 justify-content-center">
+                <!-- 1. Your Process First -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(224, 105, 48, 0.15); color: #c2410c !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">1. Your Process First</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">We understand your business process thoroughly before configuring the software to match your exact workflows.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Predictable Pricing -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(34, 197, 94, 0.15); color: #15803d !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">2. Predictable Pricing</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">No surprise licence escalation within the agreed plan. Clear, transparent, and fixed pricing commitment.</p>
+                    </div>
+                </div>
+
+                <!-- 3. No Per-User Licence Anxiety -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(59, 130, 246, 0.15); color: #1d4ed8 !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-users-slash"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">3. No Per-User Licence Anxiety</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 2.0;">
+                            Generous user limits: <span class="badge" style="background: #1e40af; color: #ffffff !important; font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 6px; display: inline-block; vertical-align: middle; margin: 2px 4px; line-height: 1.2;">50 users</span> for Retail/Restaurant and <span class="badge" style="background: #1e40af; color: #ffffff !important; font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 6px; display: inline-block; vertical-align: middle; margin: 2px 4px; line-height: 1.2;">100 users</span> for Manufacturing.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4. Minor Changes Included -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(245, 158, 11, 0.15); color: #b45309 !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">4. Minor Changes Included</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Reasonable process changes and minor operational adjustments can be accommodated seamlessly.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Implementation Handholding -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(168, 85, 247, 0.15); color: #7e22ce !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-hands-holding"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">5. Implementation Handholding</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">We don't just send login credentials. Dedicated implementation experts guide your team throughout deployment.</p>
+                    </div>
+                </div>
+
+                <!-- 6. Comprehensive Integrations -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="rounded-circle me-3" style="background: rgba(236, 72, 153, 0.15); color: #be185d !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">6. Comprehensive Integrations</h4>
+                        </div>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Integrations with Website, WhatsApp, Email, SMS, Tally, Busy, SAP, E-commerce, CRM, and REST APIs.</p>
+                    </div>
+                </div>
+
+                <!-- 7. One Technology Partner -->
+                <div class="col-lg-12">
+                    <div class="p-4 rounded-4 text-center shadow-lg" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1.5px solid #3b82f6; color: #ffffff !important;">
+                        <h4 style="font-size: 19px; font-weight: 800; color: #fbc145 !important;" class="mb-2">
+                            <i class="fas fa-star me-2 text-warning"></i>7. One Technology Partner
+                        </h4>
+                        <p style="color: #ffffff !important; font-size: 15px; margin: 0; font-weight: 600;">
+                            <span style="color: #60a5fa !important; font-weight: 700;">ERP • CRM • Website • App • AI • Automation</span> — <span style="color: #ffffff !important;">Lead management to despatch, all unified under one roof.</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
