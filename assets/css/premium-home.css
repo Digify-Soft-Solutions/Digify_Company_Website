@@ -2114,3 +2114,428 @@ header {
     }
 }
 
+/* ==========================================================================
+   🎯 CLEAN TYPOGRAPHY, CONTRAST & BADGE STYLING OVERRIDES
+   ========================================================================== */
+
+/* Hero Subtitle Typography */
+.sub-headline-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    margin-bottom: 6px !important;
+}
+
+.sub-headline-verticals {
+    color: #ea580c !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    margin-bottom: 4px !important;
+}
+
+.sub-headline-ecosystem {
+    color: #334155 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    margin-bottom: 0 !important;
+}
+
+/* Badge Utilities with 100% High Contrast */
+.badge-procurement {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+    border-radius: 30px !important;
+}
+
+.badge-banking {
+    background: #16a34a !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+    border-radius: 30px !important;
+}
+
+.badge-factory {
+    background: #d97706 !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+    border-radius: 30px !important;
+}
+
+.badge-suite-gold {
+    background: #fbc145 !important;
+    color: #0f172a !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    border: 1px solid #d97706 !important;
+    border-radius: 30px !important;
+    padding: 6px 14px !important;
+}
+
+/* Dark Section Text Overrides */
+.ocr-dark-sec {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    color: #ffffff !important;
+}
+
+.ocr-dark-sec h2, .ocr-dark-sec h3, .ocr-dark-sec h4 {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+.ocr-dark-sec p {
+    color: #cbd5e1 !important;
+}
+
+.ocr-light-card {
+    background: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+}
+
+.ocr-light-card p {
+    color: #1e293b !important;
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+}
+
+/* OCR Specific Typography & Heading Rules */
+.ocr-hero-title {
+    font-size: 44px !important;
+    line-height: 1.15 !important;
+}
+
+.ocr-hero-subtitle {
+    font-size: 16.5px !important;
+}
+
+.ocr-sec-heading {
+    font-size: 34px !important;
+}
+
+.ocr-card-heading {
+    font-size: 24px !important;
+}
+
+.ocr-vision-heading {
+    font-size: 26px !important;
+}
+
+/* ==========================================================================
+   📱 COMPREHENSIVE MOBILE RESPONSIVE & AESTHETIC FIXES (max-width: 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden !important;
+    }
+
+    /* Container & Spacing */
+    .container {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    /* Hero Section Mobile */
+    .premium-hero {
+        padding: 24px 0 20px !important;
+        text-align: center !important;
+    }
+
+    .hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+        margin-top: 14px !important;
+    }
+
+    .ocr-hero-title {
+        font-size: 25px !important;
+        line-height: 1.22 !important;
+    }
+
+    .ocr-hero-subtitle {
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+    }
+
+    .ocr-sec-heading {
+        font-size: 24px !important;
+    }
+
+    .ocr-card-heading {
+        font-size: 20px !important;
+    }
+
+    .ocr-vision-heading {
+        font-size: 20px !important;
+    }
+
+    .choose-business-heading h2 {
+        font-size: 24px !important;
+    }
+
+    .hero-subtitle {
+        max-width: 100% !important;
+        margin: 12px auto !important;
+    }
+
+    .sub-headline-title {
+        font-size: 1.15rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .sub-headline-verticals {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+    }
+
+    .sub-headline-ecosystem {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+    }
+
+    .hero-ctas {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+    }
+
+    .btn-hero-primary, .btn-hero-secondary {
+        width: 100% !important;
+        font-size: 13.5px !important;
+        padding: 12px 16px !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+
+    /* Badges on Mobile */
+    .badge-procurement, .badge-banking, .badge-factory, .badge-suite-gold {
+        font-size: 10.5px !important;
+        padding: 4px 10px !important;
+        white-space: normal !important;
+        display: inline-block !important;
+        max-width: 100% !important;
+        word-wrap: break-word !important;
+    }
+
+    /* Card Padding & Layout on Mobile */
+    .card-body {
+        padding: 16px 14px !important;
+    }
+
+    .business-choice-card {
+        padding: 20px 16px !important;
+    }
+
+    .ai-advantage-card {
+        padding: 18px 14px !important;
+    }
+
+    /* OCR Cards & Steps on Mobile */
+    .ocr-dark-sec {
+        padding: 24px 0 !important;
+    }
+
+    .ocr-dark-sec h2 {
+        font-size: 22px !important;
+    }
+
+    .ocr-dark-sec p {
+        font-size: 13.5px !important;
+    }
+
+    /* Table Mobile Horizontal Scroll */
+    .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 8px !important;
+    }
+
+    .table th, .table td {
+        white-space: nowrap !important;
+        font-size: 12.5px !important;
+        padding: 10px 12px !important;
+    }
+}
+
+/* AI Advantage Card Base Rules */
+.ai-advantage-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 26px 22px;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-advantage-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 576px) {
+    .choose-business-sec {
+        padding: 30px 0 40px !important;
+    }
+    
+    .choose-business-heading {
+        margin-bottom: 24px !important;
+    }
+
+    .business-choice-card h3 {
+        font-size: 17px !important;
+    }
+
+    .business-choice-card .choice-desc {
+        font-size: 12.5px !important;
+    }
+
+    .category-card {
+        padding: 14px 8px !important;
+        border-radius: 14px !important;
+    }
+
+    .category-card .category-icon {
+        font-size: 22px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .category-card h3 {
+        font-size: 13px !important;
+    }
+
+    .category-card p {
+        font-size: 10px !important;
+    }
+}
+
+/* Clean OCR Step Cards & Workflows */
+.ocr-step-card {
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 18px !important;
+    padding: 22px 18px !important;
+}
+
+@media (min-width: 768px) {
+    .ocr-step-card {
+        padding: 26px 24px !important;
+    }
+}
+
+.ocr-step-card-heading {
+    font-weight: 800 !important;
+    font-size: 16px !important;
+    color: #0f172a !important;
+    margin-bottom: 16px !important;
+}
+
+.ocr-step-item {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    margin-bottom: 10px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+}
+
+.ocr-step-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+.ocr-step-item-success {
+    background: #f0fdf4 !important;
+    border-color: #bbf7d0 !important;
+}
+
+.ocr-step-num {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 50% !important;
+    background: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.ocr-step-num-success {
+    background: #16a34a !important;
+}
+
+.ocr-step-num-amber {
+    background: #d97706 !important;
+}
+
+.ocr-step-text {
+    font-size: 13px !important;
+    color: #334155 !important;
+    line-height: 1.5 !important;
+}
+
+.ocr-step-text strong {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+/* Pricing Section Responsive Badges & Fluid Headings */
+.badge-pricing-unified {
+    background: rgba(34, 197, 94, 0.12) !important;
+    color: #166534 !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    padding: 6px 14px !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
+}
+
+.badge-pricing-suite {
+    background: #fbc145 !important;
+    color: #0f172a !important;
+    border: 1px solid #d97706 !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    padding: 6px 14px !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
+}
+
+@media (max-width: 576px) {
+    .badge-pricing-unified, .badge-pricing-suite {
+        font-size: 10px !important;
+        padding: 4px 10px !important;
+        letter-spacing: 0.2px !important;
+    }
+
+    .ocr-sec-heading {
+        font-size: 19px !important;
+        line-height: 1.3 !important;
+    }
+
+    .ocr-card-heading {
+        font-size: 16px !important;
+        line-height: 1.35 !important;
+    }
+}
+
+
+
+
+

@@ -26,7 +26,8 @@
       <link rel="stylesheet" as="style" type="text/css" href="assets/css/responsive.css?v=<?php echo file_exists(__DIR__ . '/assets/css/responsive.css') ? filemtime(__DIR__ . '/assets/css/responsive.css') : '2.2'; ?>" media="all" />
       <?php 
          $currPage = basename($_SERVER['PHP_SELF']);
-         if ($currPage == 'index.php' || $currPage == 'country.php' || $currPage == 'restaurant.php' || $currPage == 'partner-with-us.php') { 
+         $premiumPages = ['index.php', 'country.php', 'restaurant.php', 'partner-with-us.php', 'ai-ocr.php', 'ai-business.php', 'ai-manufacturing.php'];
+         if (in_array($currPage, $premiumPages)) { 
       ?>
          <link rel="stylesheet" href="assets/css/premium-home.css?v=<?php echo file_exists(__DIR__ . '/assets/css/premium-home.css') ? filemtime(__DIR__ . '/assets/css/premium-home.css') : '2.2'; ?>">
       <?php } ?>

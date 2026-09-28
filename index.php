@@ -22,9 +22,9 @@
                         Business Software. Automation. AI.
                     </h1>
                     <div class="hero-subtitle mt-3 mx-auto mx-lg-0 gsap-hero-item">
-                        <p class="fw-bold fs-5 mb-2" style="color: #0f172a !important; font-weight: 800 !important; font-size: 1.35rem !important;">Built Around the Way Your Business Actually Works.</p>
-                        <p class="mb-1 fw-bold" style="font-size: 15px !important; color: #ea580c !important;">Manufacturing | Retail | Restaurants | After-Sales | Refurbishment | AI Automation</p>
-                        <p class="mb-0 fw-semibold" style="font-size: 14px !important; color: #334155 !important;">ERP + CRM + POS + Websites + Apps + AI + Integrations</p>
+                        <p class="sub-headline-title">Built Around the Way Your Business Actually Works.</p>
+                        <p class="sub-headline-verticals">Manufacturing | Retail | Restaurants | After-Sales | Refurbishment | AI Automation</p>
+                        <p class="sub-headline-ecosystem">ERP + CRM + POS + Websites + Apps + AI + Integrations</p>
                     </div>
 
                     <!-- Transparent Pricing Hook -->
@@ -47,12 +47,12 @@
 
                     <!-- Digify AI Intelligence Command Center Card -->
                     <div class="ai-copilot-floating-card mt-4 p-3 rounded-4 shadow-lg gsap-hero-item" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.96)) !important; border: 1px solid rgba(59, 130, 246, 0.35) !important; backdrop-filter: blur(12px);">
-                        <div class="d-flex align-items-center justify-content-between pb-2 mb-2" style="border-bottom: 1px solid rgba(255,255,255,0.12) !important;">
-                            <div style="color: #60a5fa !important; font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 7px;">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-2 mb-2" style="border-bottom: 1px solid rgba(255,255,255,0.12) !important;">
+                            <div style="color: #60a5fa !important; font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 7px; flex-wrap: wrap;">
                                 <i class="fa-solid fa-wand-magic-sparkles text-warning fs-6"></i>
                                 <span>Digify AI Copilot — Real-Time Intelligence</span>
                             </div>
-                            <span class="badge rounded-pill px-2.5 py-1" style="background: rgba(34, 197, 94, 0.25); color: #4ade80; font-size: 11px; border: 1px solid rgba(34, 197, 94, 0.4); font-weight: 700;">
+                            <span class="badge rounded-pill px-2.5 py-1 text-nowrap" style="background: rgba(34, 197, 94, 0.25); color: #4ade80; font-size: 11px; border: 1px solid rgba(34, 197, 94, 0.4); font-weight: 700;">
                                 <i class="fas fa-circle-dot text-success me-1"></i> Engine Active
                             </span>
                         </div>
@@ -299,33 +299,33 @@
     </section>
 
     <!-- AI POWERED OCR SHOWCASE SECTION -->
-    <section class="py-5" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff;">
-        <div class="container py-3">
-            <div class="text-center mb-5">
-                <span class="badge rounded-pill px-3.5 py-2 mb-3 shadow-sm" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 13px; font-weight: 700;">
+    <section class="py-4 py-md-5" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff;">
+        <div class="container py-2 py-md-3">
+            <div class="text-center mb-4 mb-md-5">
+                <span class="badge rounded-pill px-3 py-2 mb-3 shadow-sm" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 12px; font-weight: 700; max-width: 100%; white-space: normal;">
                     <i class="fas fa-eye me-1.5 text-warning"></i> AI-POWERED DOCUMENT INTELLIGENCE
                 </span>
-                <h2 style="font-size: 34px; font-weight: 800; color: #ffffff;" class="mb-2">
+                <h2 class="ocr-sec-heading mb-2" style="font-weight: 800; color: #ffffff;">
                     Just Scan &amp; Do It — <span style="background: linear-gradient(135deg, #60a5fa, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI Powered OCR</span>
                 </h2>
-                <p style="color: #94a3b8; max-width: 750px; margin: 0 auto; font-size: 15.5px;">
+                <p style="color: #94a3b8; max-width: 750px; margin: 0 auto; font-size: 14.5px;">
                     Don't type physical documents into software. AI converts physical purchase bills, bank statements, and factory manual registers directly into structured ERP data.
                 </p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-3 g-md-4">
                 <!-- Use Case 1: Purchase Bills -->
                 <div class="col-lg-4 col-md-6">
                     <a href="ai-ocr.php" class="text-decoration-none">
-                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#38bdf8';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="rounded-3 px-3 py-2" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 18px;">
+                        <div class="p-3 p-md-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='#38bdf8';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <div class="rounded-3 px-3 py-1.5" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 16px;">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </div>
-                                <span class="badge rounded-pill" style="background: #2563eb !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Procurement</span>
+                                <span class="badge badge-procurement">Procurement</span>
                             </div>
-                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Purchase Bills Automation</h4>
-                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                            <h4 style="font-size: 18px; font-weight: 800; color: #ffffff !important;" class="mb-2">Purchase Bills Automation</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 13.5px !important; line-height: 1.55 !important;" class="mb-3">
                                 Scan or upload supplier invoices. AI extracts line items, rates, GST tax, and posts purchase entries automatically.
                             </p>
                             <div class="text-info font-size-13 fw-bold" style="color: #38bdf8 !important;">
@@ -338,15 +338,15 @@
                 <!-- Use Case 2: Bank Statements -->
                 <div class="col-lg-4 col-md-6">
                     <a href="ai-ocr.php" class="text-decoration-none">
-                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#4ade80';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="rounded-3 px-3 py-2" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 18px;">
+                        <div class="p-3 p-md-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='#4ade80';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <div class="rounded-3 px-3 py-1.5" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 16px;">
                                     <i class="fas fa-university"></i>
                                 </div>
-                                <span class="badge rounded-pill" style="background: #16a34a !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Banking</span>
+                                <span class="badge badge-banking">Banking</span>
                             </div>
-                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Bank Statement Intelligence</h4>
-                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                            <h4 style="font-size: 18px; font-weight: 800; color: #ffffff !important;" class="mb-2">Bank Statement Intelligence</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 13.5px !important; line-height: 1.55 !important;" class="mb-3">
                                 Upload PDF bank statements or connect APIs. AI matches customer receipts, supplier payments, &amp; generates BRS reconciliations.
                             </p>
                             <div class="text-success font-size-13 fw-bold" style="color: #4ade80 !important;">
@@ -359,15 +359,15 @@
                 <!-- Use Case 3: Factory Registers -->
                 <div class="col-lg-4 col-md-12">
                     <a href="ai-ocr.php" class="text-decoration-none">
-                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#facc15';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="rounded-3 px-3 py-2" style="background: rgba(245, 158, 11, 0.2); color: #facc15; font-size: 18px;">
+                        <div class="p-3 p-md-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='#facc15';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                <div class="rounded-3 px-3 py-1.5" style="background: rgba(245, 158, 11, 0.2); color: #facc15; font-size: 16px;">
                                     <i class="fas fa-industry"></i>
                                 </div>
-                                <span class="badge rounded-pill" style="background: #d97706 !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Factory Floor</span>
+                                <span class="badge badge-factory">Factory Floor</span>
                             </div>
-                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Factory Registers Digitization</h4>
-                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                            <h4 style="font-size: 18px; font-weight: 800; color: #ffffff !important;" class="mb-2">Factory Registers Digitization</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 13.5px !important; line-height: 1.55 !important;" class="mb-3">
                                 Click a smartphone photo of manual production logbooks, machine shift registers, or QC sheets to generate real-time ERP dashboards.
                             </p>
                             <div class="text-warning font-size-13 fw-bold" style="color: #facc15 !important;">
@@ -379,7 +379,7 @@
             </div>
 
             <div class="text-center mt-4">
-                <a href="ai-ocr.php" class="btn btn-outline-light rounded-pill px-4 py-2.5 fw-bold" style="font-size: 14px;">
+                <a href="ai-ocr.php" class="btn btn-outline-light rounded-pill px-4 py-2.5 fw-bold w-100 w-sm-auto" style="font-size: 13.5px;">
                     <i class="fas fa-sparkles me-1 text-warning"></i> Explore Complete AI Powered OCR Details &amp; Workflows &rarr;
                 </a>
             </div>
@@ -526,32 +526,37 @@
     </section>
 
     <!-- CONSOLIDATED TRANSPARENT PRICING SECTION -->
-    <section id="pricing-section" class="py-5" style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
-        <div class="container py-3">
+    <section id="pricing-section" class="py-4 py-md-5" style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+        <div class="container py-2 py-md-3">
             <div class="text-center mb-4">
-                <span class="badge rounded-pill px-3.5 py-2 mb-3 shadow-sm" style="background: rgba(34, 197, 94, 0.12); color: #166534; border: 1px solid rgba(34, 197, 94, 0.3); font-size: 13px; font-weight: 800;">
+                <span class="badge badge-pricing-unified rounded-pill mb-3 shadow-sm d-inline-block">
                     <i class="fas fa-tag me-1.5 text-success"></i> UNIFIED TRANSPARENT PRICING
                 </span>
-                <h2 style="font-size: 34px; font-weight: 800; color: #0f172a;" class="mb-2">
+                <h2 style="font-weight: 800; color: #0f172a;" class="mb-2 ocr-sec-heading">
                     Pricing Plans — <span style="background: linear-gradient(135deg, #e06930, #fbc145); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Choose What Fits Your Business Best</span>
                 </h2>
-                <p style="color: #64748b; max-width: 650px; margin: 0 auto; font-size: 15.5px;">
+                <p style="color: #64748b; max-width: 650px; margin: 0 auto; font-size: 15px; line-height: 1.6;">
                     Simple, transparent pricing built around your operational scale. No per-user licence anxiety.
-                      <!-- Single Consolidated Pricing Plan Card -->
-            <div class="max-w-900 mx-auto" style="max-width: 950px; margin: 0 auto;">
-                <div class="p-4 p-md-5 rounded-4 shadow-lg text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 2px solid #e06930; position: relative;">
-                    <span class="badge position-absolute top-0 end-0 m-3 m-md-4 px-3 py-2 rounded-pill fw-extrabold" style="background: #fbc145 !important; color: #0f172a !important; font-weight: 800 !important; font-size: 13px !important; border: 1px solid #d97706 !important;">
-                        <i class="fas fa-star me-1 text-dark"></i> ALL-IN-ONE BUSINESS SUITE
-                    </span>
+                </p>
+            </div>
+
+            <!-- Single Consolidated Pricing Plan Card -->
+            <div class="mx-auto mt-4" style="max-width: 950px;">
+                <div class="p-3 p-sm-4 p-lg-5 rounded-4 shadow-lg text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 2px solid #e06930; position: relative;">
+                    <div class="d-flex justify-content-center justify-content-lg-start align-items-center mb-3">
+                        <span class="badge badge-pricing-suite rounded-pill shadow-sm d-inline-block">
+                            <i class="fas fa-star me-1 text-dark"></i> ALL-IN-ONE BUSINESS SUITE
+                        </span>
+                    </div>
                     
                     <div class="row align-items-center g-4">
-                        <div class="col-lg-7">
-                            <h3 style="color: #ffffff !important; font-size: 26px; font-weight: 800;" class="mb-2">Digify Unified ERP &amp; Business Operating Platform</h3>
-                            <p style="color: #38bdf8 !important; font-weight: 700; font-size: 14.5px;" class="mb-4">
+                        <div class="col-lg-7 text-center text-lg-start">
+                            <h3 style="color: #ffffff !important; font-weight: 800;" class="mb-2 ocr-card-heading">Digify Unified ERP &amp; Business Operating Platform</h3>
+                            <p style="color: #38bdf8 !important; font-weight: 700; font-size: 13.5px;" class="mb-4">
                                 One system covering Lead CRM, Sales, POS Billing, Inventory, Production, Accounting, GST, &amp; AI Document Intelligence.
                             </p>
                             
-                            <div class="row g-3" style="font-size: 14px;">
+                            <div class="row g-2.5 text-start" style="font-size: 13px;">
                                 <div class="col-sm-6">
                                     <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">Smart POS Billing &amp; Invoicing</span></div>
                                 </div>
@@ -576,7 +581,7 @@
                         <div class="col-lg-5 text-center text-lg-end border-lg-start ps-lg-4" style="border-color: rgba(255,255,255,0.12) !important;">
                             <div class="p-3.5 rounded-3 mb-3 text-center" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);">
                                 <div style="color: #fbc145 !important; font-weight: 800 !important; font-size: 12px; letter-spacing: 1px;" class="text-uppercase">Starting From</div>
-                                <div class="my-1" style="color: #ffffff !important; font-size: 36px; font-weight: 800;">
+                                <div class="my-1" style="color: #ffffff !important; font-size: 32px; font-weight: 800;">
                                     ₹1,000 <span style="font-size: 14px; color: #cbd5e1 !important; font-weight: 600;">/ month onwards</span>
                                 </div>
                                 <div style="color: #e2e8f0 !important; font-size: 13px; line-height: 1.6;">
@@ -591,7 +596,6 @@
                         </div>
                     </div>
                 </div>
-            </div>          </div>
             </div>
         </div>
     </section>
@@ -808,36 +812,44 @@
             </div>
 
             <!-- AI Metric Stats Bar -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 900px; margin-left: auto; margin-right: auto; margin-bottom: 48px;">
-                <div style="text-align:center; padding: 20px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
-                    <div style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">3x</div>
-                    <div style="font-size: 12px; color: #64748b; margin-top:4px; font-weight: 600;">Faster Operations</div>
+            <div class="row g-2 g-md-3 max-w-900 mx-auto mb-4 mb-md-5 text-center" style="max-width: 900px;">
+                <div class="col-6 col-md-3">
+                    <div class="p-2.5 p-md-3 bg-light border rounded-4 h-100">
+                        <div style="font-size: 28px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">3x</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top:2px; font-weight: 700;">Faster Operations</div>
+                    </div>
                 </div>
-                <div style="text-align:center; padding: 20px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
-                    <div style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">40%</div>
-                    <div style="font-size: 12px; color: #64748b; margin-top:4px; font-weight: 600;">Cost Reduction</div>
+                <div class="col-6 col-md-3">
+                    <div class="p-2.5 p-md-3 bg-light border rounded-4 h-100">
+                        <div style="font-size: 28px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">40%</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top:2px; font-weight: 700;">Cost Reduction</div>
+                    </div>
                 </div>
-                <div style="text-align:center; padding: 20px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
-                    <div style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">99%</div>
-                    <div style="font-size: 12px; color: #64748b; margin-top:4px; font-weight: 600;">Billing Accuracy</div>
+                <div class="col-6 col-md-3">
+                    <div class="p-2.5 p-md-3 bg-light border rounded-4 h-100">
+                        <div style="font-size: 28px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">99%</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top:2px; font-weight: 700;">Billing Accuracy</div>
+                    </div>
                 </div>
-                <div style="text-align:center; padding: 20px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
-                    <div style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">24/7</div>
-                    <div style="font-size: 12px; color: #64748b; margin-top:4px; font-weight: 600;">AI Auto-Pilot</div>
+                <div class="col-6 col-md-3">
+                    <div class="p-2.5 p-md-3 bg-light border rounded-4 h-100">
+                        <div style="font-size: 28px; font-weight: 900; background: linear-gradient(135deg,#e06930,#fbc145); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">24/7</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top:2px; font-weight: 700;">AI Auto-Pilot</div>
+                    </div>
                 </div>
             </div>
 
             <!-- AI Feature Cards Grid -->
-            <div class="row g-4">
+            <div class="row g-3 g-md-4">
                 <!-- Card 1 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #e06930; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.borderColor='rgba(224,105,48,0.6)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(224,105,48,0.15)';" onmouseout="this.style.borderColor='rgba(224,105,48,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background: linear-gradient(135deg,#e06930,#ea580c); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow: 0 6px 16px rgba(224,105,48,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #e06930 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg,#e06930,#ea580c); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-network-wired"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px; letter-spacing:-0.2px;">AI-Integrated ERP & POS Framework</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">AI connects POS billing, inventory, manufacturing, and accounting into one unified system — eliminating silos and manual data entry.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">AI-Integrated ERP &amp; POS Framework</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">AI connects POS billing, inventory, manufacturing, and accounting into one unified system — eliminating silos and manual data entry.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#fff7ed; border:1px solid #fed7aa; color:#c2410c; padding:3px 9px; border-radius:20px;">Unified Modules</span>
                             <span style="font-size:10px; font-weight:700; background:#fff7ed; border:1px solid #fed7aa; color:#c2410c; padding:3px 9px; border-radius:20px;">Zero Manual Entry</span>
                         </div>
@@ -845,13 +857,13 @@
                 </div>
                 <!-- Card 2 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(59,130,246,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(59,130,246,0.15)';" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background: linear-gradient(135deg,#3b82f6,#1d4ed8); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(59,130,246,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #3b82f6 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg,#3b82f6,#1d4ed8); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-chart-line"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">AI-Driven Real-Time Data Flow</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">Sales, stock, production, and financial data synchronize instantly across all departments. AI flags anomalies before they become problems.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">AI-Driven Real-Time Data Flow</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">Sales, stock, production, and financial data synchronize instantly across all departments. AI flags anomalies before they become problems.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:3px 9px; border-radius:20px;">Live Sync</span>
                             <span style="font-size:10px; font-weight:700; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:3px 9px; border-radius:20px;">Anomaly Detection</span>
                         </div>
@@ -859,13 +871,13 @@
                 </div>
                 <!-- Card 3 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #10b981; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(16,185,129,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(16,185,129,0.15)';" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#10b981,#059669); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(16,185,129,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #10b981 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#10b981,#059669); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-cash-register"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Intelligent POS Billing</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">AI speeds up checkout, detects pricing errors, auto-applies GST, dynamic discounts, and loyalty points — all in under 3 seconds per bill.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Intelligent POS Billing</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">AI speeds up checkout, detects pricing errors, auto-applies GST, dynamic discounts, and loyalty points — all in under 3 seconds per bill.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; color:#059669; padding:3px 9px; border-radius:20px;">3-Sec Billing</span>
                             <span style="font-size:10px; font-weight:700; background:#f0fdf4; border:1px solid #bbf7d0; color:#059669; padding:3px 9px; border-radius:20px;">GST Auto-Calc</span>
                         </div>
@@ -873,13 +885,13 @@
                 </div>
                 <!-- Card 4 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #fbc145; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(251,193,69,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(251,193,69,0.15)';" onmouseout="this.style.borderColor='rgba(251,193,69,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#fbc145,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(251,193,69,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #fbc145 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#fbc145,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-boxes-stacked"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Smart Inventory Optimization</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">AI analyzes demand trends, predicts reorder needs, flags dead stock, and auto-generates purchase orders before you run out.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Smart Inventory Optimization</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">AI analyzes demand trends, predicts reorder needs, flags dead stock, and auto-generates purchase orders before you run out.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:3px 9px; border-radius:20px;">Demand Forecast</span>
                             <span style="font-size:10px; font-weight:700; background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:3px 9px; border-radius:20px;">Auto Reorder</span>
                         </div>
@@ -887,13 +899,13 @@
                 </div>
                 <!-- Card 5 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #8b5cf6; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(139,92,246,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(139,92,246,0.15)';" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#8b5cf6,#6d28d9); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(139,92,246,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #8b5cf6 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#8b5cf6,#6d28d9); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-industry"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">AI Manufacturing Control</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">Production planning, BOM auto-calculation, WIP tracking, and machine efficiency monitoring — all AI-assisted and real-time.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">AI Manufacturing Control</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">Production planning, BOM auto-calculation, WIP tracking, and machine efficiency monitoring — all AI-assisted and real-time.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#f5f3ff; border:1px solid #ddd6fe; color:#6d28d9; padding:3px 9px; border-radius:20px;">BOM Auto-Calc</span>
                             <span style="font-size:10px; font-weight:700; background:#f5f3ff; border:1px solid #ddd6fe; color:#6d28d9; padding:3px 9px; border-radius:20px;">WIP Tracking</span>
                         </div>
@@ -901,27 +913,27 @@
                 </div>
                 <!-- Card 6 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #06b6d4; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(6,182,212,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(6,182,212,0.15)';" onmouseout="this.style.borderColor='rgba(6,182,212,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#06b6d4,#0284c7); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(6,182,212,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #06b6d4 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#06b6d4,#0284c7); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-chart-pie"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Predictive Business Intelligence</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">AI algorithms turn raw data into forecasts. Sales trends, profitability projections, and risk alerts — delivered to your phone every morning.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Predictive Business Intelligence</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">AI algorithms turn raw data into forecasts. Sales trends, profitability projections, and risk alerts — delivered to your phone every morning.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#ecfeff; border:1px solid #a5f3fc; color:#0284c7; padding:3px 9px; border-radius:20px;">Sales Forecast</span>
-                            <span style="font-size:10px; font-weight:700; background:#ecfeff; border:1px solid #a5f3fc; color:#0284c7; padding:3px 9px; border-radius:20px;">Daily P&L</span>
+                            <span style="font-size:10px; font-weight:700; background:#ecfeff; border:1px solid #a5f3fc; color:#0284c7; padding:3px 9px; border-radius:20px;">Daily P&amp;L</span>
                         </div>
                     </div>
                 </div>
                 <!-- Card 7 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #ef4444; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(239,68,68,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(239,68,68,0.15)';" onmouseout="this.style.borderColor='rgba(239,68,68,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#ef4444,#b91c1c); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(239,68,68,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #ef4444 !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#ef4444,#b91c1c); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-file-invoice-dollar"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Automated Accounting & Compliance</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">GST returns, E-Invoicing, E-Way Bills, TDS, Saudi ZATCA VAT — auto-filed with zero errors. AI catches discrepancies before ITR filing.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Automated Accounting &amp; Compliance</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">GST returns, E-Invoicing, E-Way Bills, TDS, Saudi ZATCA VAT — auto-filed with zero errors. AI catches discrepancies before ITR filing.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:3px 9px; border-radius:20px;">GST Auto-File</span>
                             <span style="font-size:10px; font-weight:700; background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:3px 9px; border-radius:20px;">E-Invoicing</span>
                         </div>
@@ -929,13 +941,13 @@
                 </div>
                 <!-- Card 8 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #4576ba; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(69,118,186,0.55)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(69,118,186,0.15)';" onmouseout="this.style.borderColor='rgba(69,118,186,0.25)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#4576ba,#1d4ed8); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(69,118,186,0.35);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #4576ba !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#4576ba,#1d4ed8); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-map-location-dot"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Centralized Multi-Location Management</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">Manage 100+ stores, warehouses, and factories from one screen. AI ensures consistent data across all locations in real time.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Centralized Multi-Location Management</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">Manage 100+ stores, warehouses, and factories from one screen. AI ensures consistent data across all locations in real time.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:3px 9px; border-radius:20px;">Multi-Store</span>
                             <span style="font-size:10px; font-weight:700; background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:3px 9px; border-radius:20px;">Live Sync</span>
                         </div>
@@ -943,13 +955,13 @@
                 </div>
                 <!-- Card 9 -->
                 <div class="col-lg-4 col-md-6">
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid #291fbc; border-radius: 18px; padding: 28px 24px; height:100%; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(41,31,188,0.6)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 16px 40px rgba(41,31,188,0.2)';" onmouseout="this.style.borderColor='rgba(41,31,188,0.3)'; this.style.transform=''; this.style.boxShadow='';">
-                        <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#291fbc,#1e1a91); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; margin-bottom:16px; box-shadow:0 6px 16px rgba(41,31,188,0.4);">
+                    <div class="ai-advantage-card" style="border-top: 4px solid #291fbc !important;">
+                        <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#291fbc,#1e1a91); display:flex; align-items:center; justify-content:center; font-size:18px; color:#fff; margin-bottom:14px;">
                             <i class="fa-solid fa-cloud"></i>
                         </div>
-                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:10px;">Adaptive Cloud & Offline Architecture</h3>
-                        <p style="font-size:13.5px; color:#475569; line-height:1.65; margin:0;">Works perfectly offline. AI manages data queuing, syncing, and recovery — your business never stops even without internet.</p>
-                        <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:6px;">
+                        <h3 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">Adaptive Cloud &amp; Offline Architecture</h3>
+                        <p style="font-size:13px; color:#475569; line-height:1.6; margin:0;">Works perfectly offline. AI manages data queuing, syncing, and recovery — your business never stops even without internet.</p>
+                        <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:10px; font-weight:700; background:#eef2ff; border:1px solid #c7d2fe; color:#3730a3; padding:3px 9px; border-radius:20px;">Offline First</span>
                             <span style="font-size:10px; font-weight:700; background:#eef2ff; border:1px solid #c7d2fe; color:#3730a3; padding:3px 9px; border-radius:20px;">Auto Sync</span>
                         </div>
@@ -958,13 +970,13 @@
             </div>
 
             <!-- Bottom CTA -->
-            <div class="text-center mt-5">
-                <a href="erp.php" style="display:inline-flex; align-items:center; gap:10px; background: linear-gradient(135deg,#e06930 0%,#fbc145 100%); color:#fff; font-weight:700; font-size:15px; padding:14px 36px; border-radius:30px; text-decoration:none; box-shadow:0 8px 24px rgba(224,105,48,0.35); transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 32px rgba(224,105,48,0.5)';" onmouseout="this.style.transform=''; this.style.boxShadow='0 8px 24px rgba(224,105,48,0.35)';">
+            <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 mt-4 mt-md-5">
+                <a href="erp.php" class="w-100 w-sm-auto" style="display:inline-flex; align-items:center; justify-content:center; gap:10px; background: linear-gradient(135deg,#e06930 0%,#fbc145 100%); color:#fff; font-weight:700; font-size:15px; padding:14px 32px; border-radius:30px; text-decoration:none; box-shadow:0 8px 24px rgba(224,105,48,0.35); transition:all 0.3s ease;">
                     <i class="fa-solid fa-brain"></i> Explore Full AI ERP Platform
-                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fa-solid fa-arrow-right ms-1"></i>
                 </a>
-                <a href="contact-us.php" class="ms-3" data-bs-toggle="modal" data-bs-target="#trialModal" style="display:inline-flex; align-items:center; gap:8px; background:#f1f5f9; border:1px solid #e2e8f0; color:#334155; font-weight:600; font-size:14px; padding:14px 28px; border-radius:30px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.background='#e2e8f0'; this.style.borderColor='#cbd5e1';" onmouseout="this.style.background='#f1f5f9'; this.style.borderColor='#e2e8f0';">
-                    <i class="fa-solid fa-calendar-check"></i> Book Free Demo
+                <a href="contact-us.php" class="w-100 w-sm-auto" data-bs-toggle="modal" data-bs-target="#trialModal" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#f1f5f9; border:1px solid #cbd5e1; color:#334155; font-weight:700; font-size:14.5px; padding:14px 28px; border-radius:30px; text-decoration:none; transition:all 0.3s ease;">
+                    <i class="fa-solid fa-calendar-check me-1"></i> Book Free Demo
                 </a>
             </div>
         </div>
