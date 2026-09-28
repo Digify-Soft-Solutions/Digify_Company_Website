@@ -1760,6 +1760,10 @@ ul.sub-menu li {
 .navbar-nav > .nav-item {
     position: inherit;
 }
+.navbar-nav > .nav-item.dropdown-services,
+.navbar-nav > .nav-item:has(> .sub-menu) {
+    position: relative;
+}
 body.inner-pages {
     background: #f6fafe;
 }

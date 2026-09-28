@@ -30,10 +30,6 @@
                     <!-- Transparent Pricing Hook -->
                     <div class="hero-pricing-banner gsap-hero-item">
                         <span class="pricing-tag"><i class="fas fa-bolt me-1"></i> Transparent Pricing</span>
-                        <span>Retail &amp; Restaurant: <strong class="pricing-highlight">₹1,000 Onwards / month</strong></span>
-                        <span class="d-none d-sm-inline">•</span>
-                        <span>Manufacturing: <strong class="pricing-highlight">₹10,000 Onwards / month</strong></span>
-                        <span class="text-muted" style="font-size: 11px;">(Up to 100 Users)</span>
                     </div>
 
                     <div class="hero-ctas justify-content-center justify-content-lg-start gsap-hero-item">

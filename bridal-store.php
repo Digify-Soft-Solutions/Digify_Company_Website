@@ -331,7 +331,7 @@ include 'header.php';
                      <div class="row justify-content-center">
 
                         <!-- 1. Add Customer Profiles -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -349,7 +349,7 @@ include 'header.php';
                         </div>
 
                         <!-- 2. Segment Customers -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -367,7 +367,7 @@ include 'header.php';
                         </div>
 
                         <!-- 3. Track Customer Interactions -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -385,7 +385,7 @@ include 'header.php';
                         </div>
 
                         <!-- 4. Manage Appointments and Fittings -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -403,7 +403,7 @@ include 'header.php';
                         </div>
 
                         <!-- 5. Purchase History -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -421,7 +421,7 @@ include 'header.php';
                         </div>
 
                         <!-- 6. Loyalty & Membership Programs -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -439,7 +439,7 @@ include 'header.php';
                         </div>
 
                         <!-- 7. Send Offers & Notifications -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -457,7 +457,7 @@ include 'header.php';
                         </div>
 
                         <!-- 8. Generate Invoices & Receipts -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -475,7 +475,7 @@ include 'header.php';
                         </div>
 
                         <!-- 9. Analytics & Reports -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">

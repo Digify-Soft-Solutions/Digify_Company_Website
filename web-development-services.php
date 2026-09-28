@@ -322,7 +322,7 @@ include 'header.php';
                      </div>
                      <div class="desktop-industries">
                         <div class="row justify-content-center">
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -335,7 +335,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -348,7 +348,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -361,7 +361,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -374,7 +374,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -387,7 +387,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">
@@ -400,7 +400,7 @@ include 'header.php';
                                  </div>
                               </div>
                            </div>
-                           <div class="col-lg-4 col-md-6 col-4">
+                           <div class="col-lg-4 col-md-6 col-12">
                               <div class="boxes mb-4 flip-container">
                                  <div class="flip-card">
                                     <div class="flip-card-inner">

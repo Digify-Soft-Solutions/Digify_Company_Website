@@ -465,7 +465,7 @@ include 'header.php';
             <div class="desktop-industries">
                <div class="row justify-content-center">
                   <!-- 1. Initial Setup -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -479,7 +479,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 2. Billing & Checkout -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -493,7 +493,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 3. Inventory Management -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -507,7 +507,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 4. Customer Management -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -521,7 +521,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 5. Accounting & Finance -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -535,7 +535,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 6. Analytics & Reports -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">
@@ -549,7 +549,7 @@ include 'header.php';
                      </div>
                   </div>
                   <!-- 6. Analytics & Reports -->
-                  <div class="col-lg-4 col-md-6 col-6">
+                  <div class="col-lg-4 col-md-6 col-12">
                      <div class="boxes mb-4 flip-container">
                         <div class="flip-card">
                            <div class="flip-card-inner">

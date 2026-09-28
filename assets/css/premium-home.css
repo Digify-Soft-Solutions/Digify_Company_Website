@@ -1160,47 +1160,34 @@ header {
 .hero-pricing-banner {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    padding: 8px 16px;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
     margin-top: 12px;
     margin-bottom: 20px;
-    font-size: 13px;
-    color: #334155;
-    flex-wrap: wrap;
 }
 
 .hero-pricing-banner .pricing-tag {
     background: linear-gradient(135deg, #e06930 0%, #fbc145 100%);
     color: #ffffff;
     font-weight: 700;
-    padding: 3px 10px;
+    padding: 6px 16px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-}
-
-.hero-pricing-banner .pricing-highlight {
-    font-weight: 700;
-    color: #0f172a;
+    box-shadow: 0 2px 10px rgba(224, 105, 48, 0.3);
+    display: inline-flex;
+    align-items: center;
 }
 
 @media (max-width: 767px) {
     .hero-pricing-banner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 6px !important;
-        border-radius: 14px !important;
-        padding: 10px 14px !important;
-        width: 100% !important;
-        margin: 12px 0 16px !important;
-        font-size: 12px !important;
-        text-align: left !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        margin: 10px auto 16px !important;
+        width: auto !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 }
 

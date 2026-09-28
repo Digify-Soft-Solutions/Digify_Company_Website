@@ -69,6 +69,146 @@
    <body>
 <?php } ?>
 
+<style>
+/* Global Fix: Ensure header stacks above demo strip and mega-menus never get truncated at top */
+header {
+    position: relative !important;
+    z-index: 10000 !important;
+}
+.sub-menu, .mega-menu {
+    z-index: 10005 !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18) !important;
+    border-top: 3px solid #e06930 !important;
+    border-radius: 0 0 12px 12px !important;
+}
+/* Services Dropdown Alignment on Desktop */
+@media (min-width: 992px) {
+    .navbar-nav > .nav-item.dropdown-services,
+    .navbar-nav > .nav-item:has(> .sub-menu) {
+        position: relative !important;
+    }
+    .navbar-nav > .nav-item.dropdown-services > .sub-menu,
+    .navbar-nav > .nav-item:has(> .sub-menu) > .sub-menu {
+        left: 0 !important;
+        right: auto !important;
+        top: 100% !important;
+        min-width: 275px !important;
+        margin-top: 0 !important;
+    }
+    .sub-menu::before {
+        content: "";
+        position: absolute;
+        top: -12px;
+        left: 0;
+        width: 100%;
+        height: 12px;
+    }
+    .sub-menu li a {
+        padding: 10px 18px !important;
+        font-size: 14.5px !important;
+        color: #333 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        transition: all 0.25s ease !important;
+    }
+    .sub-menu li a:hover {
+        color: #e06930 !important;
+        background-color: rgba(224, 105, 48, 0.07) !important;
+        padding-left: 22px !important;
+    }
+    .sub-menu li a i {
+        font-size: 15px !important;
+        color: #e06930 !important;
+        width: 20px !important;
+        text-align: center !important;
+    }
+}
+/* Book Demo Strip Fully Responsive Styling (Guaranteed to apply on all pages) */
+.book-demo-strip {
+    background: #0f172a !important;
+    padding: 6px 14px !important;
+    text-align: center;
+    border-bottom: 2px solid #e06930 !important;
+    position: relative;
+    z-index: 9998;
+}
+.strip-content-wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+@media (min-width: 768px) {
+    .strip-content-wrap {
+        justify-content: center;
+        gap: 18px;
+    }
+}
+.strip-text-desktop {
+    color: #f8fafc !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px;
+}
+.strip-text-mobile {
+    color: #f8fafc !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    min-width: 0 !important;
+}
+.strip-action-btn {
+    background: linear-gradient(to right, #e06930, #fbc145) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border-radius: 20px !important;
+    padding: 4px 14px !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(224, 105, 48, 0.35) !important;
+    text-transform: uppercase !important;
+    font-size: 10.5px !important;
+    letter-spacing: 0.4px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.strip-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(224, 105, 48, 0.5) !important;
+    color: #ffffff !important;
+}
+@media (max-width: 576px) {
+    .book-demo-strip {
+        padding: 5px 8px !important;
+    }
+    .strip-content-wrap {
+        gap: 6px !important;
+    }
+    .strip-text-mobile {
+        font-size: 10.5px !important;
+    }
+    .strip-action-btn {
+        padding: 3px 9px !important;
+        font-size: 9.5px !important;
+    }
+}
+@media (max-width: 330px) {
+    .strip-text-mobile {
+        font-size: 9.5px !important;
+    }
+    .strip-action-btn {
+        padding: 2px 7px !important;
+        font-size: 9px !important;
+    }
+}
+</style>
+
   <!-- top header start here -->
     <!--   <section class="top-header">
       <div class="container">
@@ -247,7 +387,7 @@
                         </li>
 
                         <!-- 4. SERVICES & TECH -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown dropdown-services">
                           <a class="nav-link" href="#">
                             Services <i class="fa-solid fa-angle-down"></i>
                           </a>
@@ -297,18 +437,30 @@
    <!-- header end -->
 
    <!-- Book A Demo Strip -->
-    <div class="book-demo-strip" style="background: #0f172a; padding: 7px 15px; text-align: center; border-bottom: 2px solid #e06930; position: relative; z-index: 9998;">
-        <div class="container d-flex flex-row align-items-center justify-content-between justify-content-md-center gap-2 gap-md-4">
-            <span style="color: #f8fafc; font-size: 13px; font-weight: 600; letter-spacing: 0.3px; line-height: 1.3;">
-                <span class="d-none d-md-inline">Experience Digify AI Business Platform — </span>
-                <span style="color: #fbc145;">Fast-Track Operations, POS &amp; Automation</span>
-            </span>
-            <button type="button" class="btn btn-sm" style="background: linear-gradient(to right, #e06930, #fbc145); color: white; font-weight: 700; border-radius: 20px; padding: 5px 16px; border: none; box-shadow: 0 2px 8px rgba(224, 105, 48, 0.3); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; white-space: nowrap;" data-bs-toggle="modal" data-bs-target="#trialModal">
-                <i class="fas fa-calendar-check me-1"></i> Book Demo
+    <div class="book-demo-strip">
+        <div class="strip-content-wrap">
+            <!-- Desktop View (>= 768px) -->
+            <div class="d-none d-md-flex align-items-center gap-2">
+                <i class="fa-solid fa-clipboard-check text-warning"></i>
+                <span class="strip-text-desktop">
+                    Book a Free <strong style="color: #fbc145; font-weight: 700;">Digify Business Audit</strong> — Accelerate Growth &amp; Scale Faster
+                </span>
+            </div>
+
+            <!-- Mobile View (< 768px) -->
+            <div class="d-flex d-md-none align-items-center gap-1" style="min-width: 0; overflow: hidden;">
+                <i class="fa-solid fa-clipboard-check text-warning flex-shrink-0" style="font-size: 11px;"></i>
+                <span class="strip-text-mobile">
+                    Book a Free <strong style="color: #fbc145; font-weight: 700;">Digify Business Audit</strong>
+                </span>
+            </div>
+
+            <!-- Action Button (Always fully visible, never pushed out) -->
+            <button type="button" class="btn strip-action-btn" data-bs-toggle="modal" data-bs-target="#trialModal">
+                <i class="fas fa-calendar-check me-1 d-none d-sm-inline"></i> Book Now
             </button>
         </div>
     </div>
-   </div>
    </div>
    <!-- sticky wrapper end -->
 

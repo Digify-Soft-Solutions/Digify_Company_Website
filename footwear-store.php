@@ -267,7 +267,7 @@ include 'header.php';
                      <div class="row justify-content-center">
 
                         <!-- 1. Add Customer Profiles -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -288,7 +288,7 @@ include 'header.php';
                         </div>
 
                         <!-- 2. Segment Customers -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -309,7 +309,7 @@ include 'header.php';
                         </div>
 
                         <!-- 3. Track Customer Interactions -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -330,7 +330,7 @@ include 'header.php';
                         </div>
 
                         <!-- 4. Manage Appointments and Fittings -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -351,7 +351,7 @@ include 'header.php';
                         </div>
 
                         <!-- 5. Purchase History -->
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -370,7 +370,7 @@ include 'header.php';
                            </div>
                         </div>
 
-                        <div class="col-lg-4 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-6 col-12">
                            <div class="boxes mb-4 flip-container">
                               <div class="flip-card">
                                  <div class="flip-card-inner">
@@ -424,87 +424,46 @@ include 'header.php';
       <section class="pricing-section py-5">
         <div class="container">
           <div class="heading-wrap text-center">
-            <h2>Pricing Plans – Choose What Fits Your <span>Footwear Store Best</span></h2>
-            <p>Our footwear ERP software is designed to scale with your business. Whether you run a single shop or manage a multi-store chain, we have a plan tailored to your needs.</p>
+            <h2>Pricing Plan – Built for Your <span>Footwear Business</span></h2>
+            <p>Our footwear ERP software is designed to scale with your business. Get the complete all-in-one platform tailored to your store's needs.</p>
           </div>
 
           <div class="row justify-content-center">
-            <!-- Basic Plan -->
-            <div class="col-md-4 mb-4">
-              <div class="pricing-card basic">
-                <div class="pricing-header">
-                  <div class="plan-icon-wrap bg-success">
-                    <i class="bi bi-bag-check"></i>
-                  </div>
-                  <h3>Basic Plan</h3>
-                  <p>Ideal for small footwear shops looking for essential tools.</p>
-                </div>
-                <ul class="pricing-features">
-                  <li>✔ Smart POS Billing (GST-Compliant)</li>
-                  <li>✔ Single Store Setup</li>
-                  <li>✔ Manage Basic Inventory (Size, Color, Category)</li>
-                  <li>✔ Barcode & Label Generator</li>
-                  <li>✔ WhatsApp / SMS Billing</li>
-                  <li>✔ Basic Reports & Analytics</li>
-                  <li>👉 Best for single-location footwear stores starting out.</li>
-                </ul>
-                <div class="price">₹1,999 <span>/month</span></div>
-                <div class="price-alt">₹19,999 /year</div>
-                <a href="#" class="btn btn-success mt-3">Get Started</a>
-              </div>
-            </div>
-
-            <!-- Standard Plan -->
-            <div class="col-md-4 mb-4">
-              <div class="pricing-card standard">
-                <div class="pricing-header">
-                  <div class="plan-icon-wrap bg-primary">
-                    <i class="bi bi-graph-up-arrow"></i>
-                  </div>
-                  <h3>Standard Plan</h3>
-                  <p>Perfect for growing footwear retailers managing multiple categories.</p>
-                </div>
-                <ul class="pricing-features">
-                  <li>✔ Everything in Basic, plus:</li>
-                  <li>✔ Multi-Payment Modes (UPI, Cards, Wallets)</li>
-                  <li>✔ Inbuilt Accounting Module (P&L, Balance Sheet, Ledgers)</li>
-                  <li>✔ Loyalty Programs & Membership Management</li>
-                  <li>✔ Offers & Discount Management</li>
-                  <li>✔ WhatsApp Promotions & Customer Engagement</li>
-                  <li>✔ 150+ Advanced Reports & Analytics</li>
-                  <li>✔ Shopify & WooCommerce Integration</li>
-                  <li>👉 Best for mid-sized footwear retailers expanding their reach.</li>
-                </ul>
-                <div class="price">₹4,999 <span>/month</span></div>
-                <div class="price-alt">₹49,999 /year</div>
-                <a href="#" class="btn btn-primary mt-3">Get Started</a>
-              </div>
-            </div>
-
-            <!-- Premium Plan -->
-            <div class="col-md-4 mb-4">
-              <div class="pricing-card premium">
+            <!-- Premium Plan (All-in-One) -->
+            <div class="col-lg-6 col-md-8 col-12 mb-4">
+              <div class="pricing-card premium shadow-lg" style="border-top: 5px solid #dc3545; max-width: 580px; margin: 0 auto; padding: 35px 30px;">
                 <div class="pricing-header">
                   <div class="plan-icon-wrap bg-danger">
                     <i class="bi bi-building-gear"></i>
                   </div>
-                  <h3>Premium Plan</h3>
-                  <p>The ultimate ERP solution for multi-store chains and franchises.</p>
+                  <h3 style="font-size: 26px; font-weight: 800; color: #1e293b; margin-top: 8px;">Premium Plan</h3>
+                  <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0;">Complete all-in-one AI POS & ERP suite built specifically for modern footwear retailers and multi-store chains.</p>
                 </div>
-                <ul class="pricing-features">
-                  <li>✔ Everything in Standard, plus:</li>
-                  <li>✔ Multi-Store Centralized ERP Dashboard</li>
-                  <li>✔ Centralized Customer Database</li>
-                  <li>✔ Stock Transfer & Inter-Branch Requests</li>
-                  <li>✔ Warehouse & Real-Time Stock Management</li>
-                  <li>✔ mPOS for Exhibitions, Fairs & Mobile Sales</li>
-                  <li>✔ Advanced Analytics & Sales Forecasting</li>
-                  <li>✔ Dedicated Account Manager & 24/7 Priority Support</li>
-                  <li>👉 Ideal for large footwear chains & franchise networks.</li>
+                
+                <div class="price-box my-3 py-2 text-center" style="background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                  <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Starting From</div>
+                  <div class="price" style="font-size: 32px; font-weight: 800; color: #0f172a; line-height: 1.2;">
+                    ₹1,000 <span style="font-size: 1rem; color: #64748b; font-weight: 500;">/month</span>
+                  </div>
+                </div>
+
+                <ul class="pricing-features" style="font-size: 0.92rem; line-height: 1.6;">
+                  <li>✔ <strong>Smart POS Billing</strong> (High-speed, GST-compliant & barcode scanning)</li>
+                  <li>✔ <strong>Footwear Inventory Control</strong> (Size, color, brand, style & SKU matrix)</li>
+                  <li>✔ <strong>Multi-Store Centralized ERP</strong> (Manage all branches from one dashboard)</li>
+                  <li>✔ <strong>Stock Transfer & Branch Requests</strong> (Zero stockout inter-store movement)</li>
+                  <li>✔ <strong>Instant WhatsApp & SMS Invoicing</strong> (Paperless digital billing)</li>
+                  <li>✔ <strong>Inbuilt Accounting Module</strong> (P&L, Balance Sheet, Ledgers & Tax filing)</li>
+                  <li>✔ <strong>CRM & Customer Loyalty</strong> (Reward points, discounts & WhatsApp marketing)</li>
+                  <li>✔ <strong>150+ MIS Reports & AI Analytics</strong> (Track bestsellers & sales forecasting)</li>
+                  <li>✔ <strong>Omnichannel Ready</strong> (Shopify & WooCommerce e-commerce integration)</li>
+                  <li>✔ <strong>Priority Support & Free Staff Training</strong> (Dedicated account manager)</li>
+                  <li>👉 <em>Ideal for single stores, growing retail outlets & footwear chains.</em></li>
                 </ul>
-                <div class="price">Custom Pricing</div>
-                <div class="price-alt">Contact Sales for Quote</div>
-                <a href="#" class="btn btn-danger mt-3">Contact Sales</a>
+                
+                <a href="contact-us.php" class="btn btn-danger btn-lg w-100 mt-2 py-3 fw-bold text-white shadow-sm" style="border-radius: 10px; font-size: 1.05rem;">
+                  Schedule a Free Demo <i class="fas fa-arrow-right ms-2"></i>
+                </a>
               </div>
             </div>
           </div>

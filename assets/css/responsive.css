@@ -716,7 +716,9 @@ section.overview-section .features-list ul li {
 .case-study-card {
     width: 100%;
 }
-.desktop-industries .col-4 {
+.desktop-industries .col-4,
+.desktop-industries .col-6,
+.desktop-industries [class*="col-"] {
     flex: 0 0 50%;
     max-width: 50%;
 }
@@ -731,9 +733,12 @@ section.overview-section .features-list ul li {
   .services-box {
     text-align: center;
 }
-.desktop-industries .col-4 {
-    flex: 0 0 100%;
-    max-width: 100%;
+.desktop-industries .col-4,
+.desktop-industries .col-6,
+.desktop-industries [class*="col-"] {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
 }
 .why-choose-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
@@ -931,4 +936,80 @@ section.overview-section .features-list ul li {
     .contact-floating {
         bottom: 85px !important;
     }
+
+    /* Industry / Retail Store Feature Cards Mobile Layout */
+    .desktop-industries .boxes,
+    .boxes.flip-container,
+    .flip-container {
+        height: auto !important;
+        min-height: auto !important;
+        margin-bottom: 20px !important;
+        padding: 22px 18px !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06) !important;
+        border: 1px solid #eef2f6 !important;
+        border-radius: 14px !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+    }
+
+    .flip-card,
+    .flip-card-inner,
+    .flip-card-back {
+        height: auto !important;
+        min-height: auto !important;
+        transform: none !important;
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        text-align: left !important;
+        border-radius: 0 !important;
+    }
+
+    .boxes .flip-card .flip-card-inner .flip-card-back h4 {
+        height: auto !important;
+        min-height: auto !important;
+        font-size: 19px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 14px !important;
+        text-align: left !important;
+        color: #1e293b !important;
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .boxes img {
+        height: 56px !important;
+        width: auto !important;
+        margin-bottom: 14px !important;
+        display: inline-block !important;
+    }
+
+    .flip-card-back ul {
+        padding-left: 20px !important;
+        margin-bottom: 16px !important;
+        text-align: left !important;
+    }
+
+    .flip-card-back ul li {
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+        margin-bottom: 8px !important;
+        color: #475569 !important;
+        text-align: left !important;
+    }
+
+    .flip-card-back p {
+        font-size: 13.5px !important;
+        line-height: 1.55 !important;
+        color: #475569 !important;
+        margin-bottom: 0 !important;
+        text-align: left !important;
+        background: #f8fafc;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border-left: 3px solid #0056b3;
+    }
 }
+
