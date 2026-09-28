@@ -19,11 +19,13 @@
                         <i class="fas fa-sparkles me-1 text-warning"></i> Autonomous AI Business Operating Platform
                     </span>
                     <h1 class="hero-title mt-4 gsap-hero-item">
-                        One Platform to Scale Your Business.<br><span>Supercharged by Autonomous AI.</span>
+                        Business Software. Automation. AI.
                     </h1>
-                    <p class="hero-subtitle mt-3 mx-auto mx-lg-0 gsap-hero-item">
-                        Empower your entire enterprise with real-time AI intelligence. Unify factory production, multi-store retail, Smart POS billing, inventory forecasting, and auto GST compliance into one seamless, intelligent ecosystem.
-                    </p>
+                    <div class="hero-subtitle mt-3 mx-auto mx-lg-0 gsap-hero-item">
+                        <p class="fw-bold fs-5 mb-2" style="color: #0f172a !important; font-weight: 800 !important; font-size: 1.35rem !important;">Built Around the Way Your Business Actually Works.</p>
+                        <p class="mb-1 fw-bold" style="font-size: 15px !important; color: #ea580c !important;">Manufacturing | Retail | Restaurants | After-Sales | Refurbishment | AI Automation</p>
+                        <p class="mb-0 fw-semibold" style="font-size: 14px !important; color: #334155 !important;">ERP + CRM + POS + Websites + Apps + AI + Integrations</p>
+                    </div>
 
                     <!-- Transparent Pricing Hook -->
                     <div class="hero-pricing-banner gsap-hero-item">
@@ -36,10 +38,10 @@
 
                     <div class="hero-ctas justify-content-center justify-content-lg-start gsap-hero-item">
                         <a href="contact-us.php" class="btn btn-hero-primary" data-bs-toggle="modal" data-bs-target="#trialModal">
-                            <i class="fas fa-calendar-check me-2"></i> Book Free Live Demo
+                            <i class="fas fa-calculator me-2"></i> GET YOUR FREE BUSINESS ASSESSMENT
                         </a>
                         <a href="#choose-business" class="btn btn-hero-secondary">
-                            <i class="fas fa-compass me-2"></i> Choose Your Business <i class="fas fa-arrow-down ms-1"></i>
+                            <i class="fas fa-compass me-2"></i> EXPLORE SOLUTIONS <i class="fas fa-arrow-down ms-1"></i>
                         </a>
                     </div>
 
@@ -144,123 +146,242 @@
             <div class="row g-4">
                 <!-- 1. Manufacturing -->
                 <div class="col-lg-4 col-md-6">
-                    <a href="ai-manufacturing.php" class="business-choice-card card-manufacturing">
+                    <a href="ai-manufacturing.php" class="business-choice-card card-manufacturing h-100">
                         <div>
                             <div class="choice-icon-wrap">
                                 <i class="fa-solid fa-industry"></i>
                             </div>
-                            <h3>Manufacturing ERP</h3>
-                            <p class="choice-desc">Run your factory floor to ledger. Multi-level Bill of Materials (BOM), WIP tracking, shop-floor QC, and accurate batch costing.</p>
+                            <h3>Manufacturing</h3>
+                            <p class="choice-desc">Complete shop-floor to financial ledger management for factories and production units.</p>
                             <div class="choice-tags">
-                                <span>BOM &amp; Routing</span>
-                                <span>WIP Tracking</span>
-                                <span>Quality Control</span>
-                                <span>Batch Costing</span>
-                                <span>AI Insights</span>
+                                <span>Production</span>
+                                <span>BOM</span>
+                                <span>WIP</span>
+                                <span>Quality</span>
+                                <span>Costing</span>
+                                <span>Inventory</span>
+                                <span>AI</span>
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹10,000 Onwards <small>/ month</small></div>
-                            <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
+                            <div class="choice-price">₹10,000 Onwards <small>/ mo</small></div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
 
-                <!-- 2. Retail & Supermarket -->
+                <!-- 2. Retail -->
                 <div class="col-lg-4 col-md-6">
-                    <a href="pos.php" class="business-choice-card card-retail">
+                    <a href="pos.php" class="business-choice-card card-retail h-100">
                         <div>
                             <div class="choice-icon-wrap">
                                 <i class="fa-solid fa-store"></i>
                             </div>
-                            <h3>Retail &amp; POS Billing</h3>
-                            <p class="choice-desc">3-second high-speed checkout, barcode scanning, real-time multi-store inventory sync, customer CRM, and dead-stock alerts.</p>
+                            <h3>Retail</h3>
+                            <p class="choice-desc">Ultra-fast checkout, barcode scanning, multi-branch inventory, and e-commerce sync.</p>
                             <div class="choice-tags">
-                                <span>3-Sec POS</span>
-                                <span>Multi-Store Sync</span>
-                                <span>Barcode / GST</span>
-                                <span>CRM Loyalty</span>
-                                <span>Dead Stock Alert</span>
+                                <span>POS</span>
+                                <span>Inventory</span>
+                                <span>Multi-store</span>
+                                <span>CRM</span>
+                                <span>E-commerce</span>
+                                <span>AI</span>
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹2,000 Onwards <small>/ month</small></div>
-                            <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
+                            <div class="choice-price">₹1,000 Onwards <small>/ mo</small></div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
 
-                <!-- 3. Restaurant & Café -->
+                <!-- 3. Restaurant -->
                 <div class="col-lg-4 col-md-6">
-                    <a href="restaurant.php" class="business-choice-card card-restaurant">
+                    <a href="restaurant.php" class="business-choice-card card-restaurant h-100">
                         <div>
                             <div class="choice-icon-wrap">
                                 <i class="fa-solid fa-utensils"></i>
                             </div>
-                            <h3>Restaurant &amp; Café OS</h3>
-                            <p class="choice-desc">Instant Kitchen Order Tickets (KOT), visual table floor plans, raw ingredient recipe costing, and unified Swiggy/Zomato sync.</p>
+                            <h3>Restaurant</h3>
+                            <p class="choice-desc">Instant KOT printing, recipe inventory costing, food wastage tracking, and online delivery apps.</p>
                             <div class="choice-tags">
-                                <span>Fast KOT / KDS</span>
-                                <span>Table Floor Plan</span>
-                                <span>Recipe Costing</span>
-                                <span>Wastage Control</span>
-                                <span>Aggregator Sync</span>
+                                <span>POS</span>
+                                <span>KOT</span>
+                                <span>Recipe</span>
+                                <span>Food Cost</span>
+                                <span>Inventory</span>
+                                <span>Delivery</span>
+                                <span>AI</span>
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">₹1,000 Onwards <small>/ month</small></div>
-                            <span class="choice-link-text">Explore Suite <i class="fa-solid fa-arrow-right"></i></span>
+                            <div class="choice-price">₹1,000 Onwards <small>/ mo</small></div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
 
-                <!-- 4. After-Sales & Warranty -->
-                <div class="col-lg-6 col-md-6">
-                    <a href="After-Sale-Service.php" class="business-choice-card card-warranty">
+                <!-- 4. After-Sales -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="After-Sale-Service.php" class="business-choice-card card-warranty h-100">
                         <div>
                             <div class="choice-icon-wrap">
                                 <i class="fa-solid fa-screwdriver-wrench"></i>
                             </div>
-                            <h3>After-Sales &amp; Warranty Fulfilment</h3>
-                            <p class="choice-desc">Complete post-sales lifecycle management for Electronics, Appliances, HVAC, Solar, and Machinery. Track warranties via Serial/IMEI, dispatch field service engineers, manage spare parts inventory, and automate AMC renewals.</p>
+                            <h3>After-Sales</h3>
+                            <p class="choice-desc">Full service lifecycle, warranty tracking, field engineer allocation, and spare management.</p>
                             <div class="choice-tags">
-                                <span>Serial / IMEI Tracking</span>
-                                <span>Digital Warranty Portal</span>
-                                <span>Field Engineer Dispatch</span>
-                                <span>AMC Contracts</span>
-                                <span>RMA &amp; Spares</span>
+                                <span>Warranty</span>
+                                <span>Service</span>
+                                <span>AMC</span>
+                                <span>Engineers</span>
+                                <span>Spares</span>
+                                <span>Serial Numbers</span>
+                                <span>AI</span>
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">Specialized B2B Suite</div>
-                            <span class="choice-link-text">Explore Service Suite <i class="fa-solid fa-arrow-right"></i></span>
+                            <div class="choice-price">B2B Suite</div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
 
-                <!-- 5. AI & WhatsApp Automation -->
-                <div class="col-lg-6 col-md-12">
-                    <a href="ai-business.php" class="business-choice-card card-ai">
+                <!-- 5. AI Automation -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="ai-business.php" class="business-choice-card card-ai h-100">
                         <div>
                             <div class="choice-icon-wrap">
                                 <i class="fa-solid fa-robot"></i>
                             </div>
-                            <h3>AI Intelligence &amp; WhatsApp Employees</h3>
-                            <p class="choice-desc">Deploy 24/7 AI agents directly on WhatsApp and your website. AI Sales Executives qualify leads into CRM, AI Service Agents resolve customer queries, and AI Management Copilot alerts leadership on operational bottlenecks.</p>
+                            <h3>AI Automation</h3>
+                            <p class="choice-desc">Deploy 24/7 AI agents on WhatsApp and website for sales, support, and lead capture.</p>
                             <div class="choice-tags">
-                                <span>WhatsApp AI Agents</span>
-                                <span>AI Sales Executive</span>
-                                <span>Lead Qualification</span>
-                                <span>ERP Connectors</span>
-                                <span>Daily Owner P&amp;L</span>
+                                <span>WhatsApp</span>
+                                <span>Website AI</span>
+                                <span>Lead Bot</span>
+                                <span>Support</span>
+                                <span>ERP Integration</span>
                             </div>
                         </div>
                         <div class="choice-footer">
-                            <div class="choice-price">AI Automation Layer</div>
-                            <span class="choice-link-text">Explore AI Platform <i class="fa-solid fa-arrow-right"></i></span>
+                            <div class="choice-price">AI Layer</div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
+
+                <!-- 6. Websites & Apps -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="web-development-services.php" class="business-choice-card card-custom h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+                        <div>
+                            <div class="choice-icon-wrap" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8;">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <h3>Websites &amp; Apps</h3>
+                            <p class="choice-desc">Custom web portals, mobile apps, e-commerce storefronts, and seamless REST API integrations.</p>
+                            <div class="choice-tags">
+                                <span>Website</span>
+                                <span>E-commerce</span>
+                                <span>Mobile App</span>
+                                <span>API</span>
+                                <span>Integration</span>
+                            </div>
+                        </div>
+                        <div class="choice-footer">
+                            <div class="choice-price">Custom Apps</div>
+                            <span class="choice-link-text">Explore <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI POWERED OCR SHOWCASE SECTION -->
+    <section class="py-5" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff;">
+        <div class="container py-3">
+            <div class="text-center mb-5">
+                <span class="badge rounded-pill px-3.5 py-2 mb-3 shadow-sm" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 13px; font-weight: 700;">
+                    <i class="fas fa-eye me-1.5 text-warning"></i> AI-POWERED DOCUMENT INTELLIGENCE
+                </span>
+                <h2 style="font-size: 34px; font-weight: 800; color: #ffffff;" class="mb-2">
+                    Just Scan &amp; Do It — <span style="background: linear-gradient(135deg, #60a5fa, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI Powered OCR</span>
+                </h2>
+                <p style="color: #94a3b8; max-width: 750px; margin: 0 auto; font-size: 15.5px;">
+                    Don't type physical documents into software. AI converts physical purchase bills, bank statements, and factory manual registers directly into structured ERP data.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Use Case 1: Purchase Bills -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="ai-ocr.php" class="text-decoration-none">
+                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#38bdf8';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="rounded-3 px-3 py-2" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 18px;">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <span class="badge rounded-pill" style="background: #2563eb !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Procurement</span>
+                            </div>
+                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Purchase Bills Automation</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                                Scan or upload supplier invoices. AI extracts line items, rates, GST tax, and posts purchase entries automatically.
+                            </p>
+                            <div class="text-info font-size-13 fw-bold" style="color: #38bdf8 !important;">
+                                View 5-Step Workflow <i class="fas fa-arrow-right ms-1"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Use Case 2: Bank Statements -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="ai-ocr.php" class="text-decoration-none">
+                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#4ade80';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="rounded-3 px-3 py-2" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 18px;">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <span class="badge rounded-pill" style="background: #16a34a !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Banking</span>
+                            </div>
+                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Bank Statement Intelligence</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                                Upload PDF bank statements or connect APIs. AI matches customer receipts, supplier payments, &amp; generates BRS reconciliations.
+                            </p>
+                            <div class="text-success font-size-13 fw-bold" style="color: #4ade80 !important;">
+                                View BRS Engine <i class="fas fa-arrow-right ms-1"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Use Case 3: Factory Registers -->
+                <div class="col-lg-4 col-md-12">
+                    <a href="ai-ocr.php" class="text-decoration-none">
+                        <div class="p-4 rounded-4 h-100 shadow-sm position-relative text-white" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); transition: transform 0.3s ease, border-color 0.3s ease;" onmouseover="this.style.transform='translateY(-6px)'; this.style.borderColor='#facc15';" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="rounded-3 px-3 py-2" style="background: rgba(245, 158, 11, 0.2); color: #facc15; font-size: 18px;">
+                                    <i class="fas fa-industry"></i>
+                                </div>
+                                <span class="badge rounded-pill" style="background: #d97706 !important; color: #ffffff !important; font-weight: 800 !important; padding: 6px 14px; font-size: 12px;">Factory Floor</span>
+                            </div>
+                            <h4 style="font-size: 19px; font-weight: 800; color: #ffffff !important;" class="mb-2">Factory Registers Digitization</h4>
+                            <p style="color: #cbd5e1 !important; font-size: 14px !important; line-height: 1.6 !important;" class="mb-3">
+                                Click a smartphone photo of manual production logbooks, machine shift registers, or QC sheets to generate real-time ERP dashboards.
+                            </p>
+                            <div class="text-warning font-size-13 fw-bold" style="color: #facc15 !important;">
+                                View Factory AI <i class="fas fa-arrow-right ms-1"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="ai-ocr.php" class="btn btn-outline-light rounded-pill px-4 py-2.5 fw-bold" style="font-size: 14px;">
+                    <i class="fas fa-sparkles me-1 text-warning"></i> Explore Complete AI Powered OCR Details &amp; Workflows &rarr;
+                </a>
             </div>
         </div>
     </section>
@@ -316,20 +437,20 @@
                             </div>
                             <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">1. Your Process First</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">We understand your business process thoroughly before configuring the software to match your exact workflows.</p>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">We adapt to the exact operational workflow of your business instead of forcing your business into rigid software.</p>
                     </div>
                 </div>
 
-                <!-- 2. Predictable Pricing -->
+                <!-- 2. Predictable Pricing / No Surprises -->
                 <div class="col-lg-4 col-md-6">
                     <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
                         <div class="d-flex align-items-center mb-3">
                             <div class="rounded-circle me-3" style="background: rgba(34, 197, 94, 0.15); color: #15803d !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <i class="fas fa-file-invoice-dollar"></i>
                             </div>
-                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">2. Predictable Pricing</h4>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">2. Predictable Pricing / No Surprises</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">No surprise licence escalation within the agreed plan. Clear, transparent, and fixed pricing commitment.</p>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">No surprise fee escalation. Clear, transparent, and fixed pricing commitments for your Peace of Mind.</p>
                     </div>
                 </div>
 
@@ -342,22 +463,22 @@
                             </div>
                             <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">3. No Per-User Licence Anxiety</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 2.0;">
-                            Generous user limits: <span class="badge" style="background: #1e40af; color: #ffffff !important; font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 6px; display: inline-block; vertical-align: middle; margin: 2px 4px; line-height: 1.2;">50 users</span> for Retail/Restaurant and <span class="badge" style="background: #1e40af; color: #ffffff !important; font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 6px; display: inline-block; vertical-align: middle; margin: 2px 4px; line-height: 1.2;">100 users</span> for Manufacturing.
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.8;">
+                            Empower your entire staff without worrying about per-seat charges. Generous user tiers built for scale.
                         </p>
                     </div>
                 </div>
 
-                <!-- 4. Minor Changes Included -->
+                <!-- 4. Customizable as per your needs -->
                 <div class="col-lg-4 col-md-6">
                     <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
                         <div class="d-flex align-items-center mb-3">
                             <div class="rounded-circle me-3" style="background: rgba(245, 158, 11, 0.15); color: #b45309 !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <i class="fas fa-sliders-h"></i>
                             </div>
-                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">4. Minor Changes Included</h4>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">4. Customizable as per your needs</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Reasonable process changes and minor operational adjustments can be accommodated seamlessly.</p>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Custom fields, tailored print formats, operational logic, and report layouts built to your exact specifications.</p>
                     </div>
                 </div>
 
@@ -370,34 +491,107 @@
                             </div>
                             <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">5. Implementation Handholding</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">We don't just send login credentials. Dedicated implementation experts guide your team throughout deployment.</p>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Dedicated domain experts train your team on-site or online until your operations run seamlessly.</p>
                     </div>
                 </div>
 
-                <!-- 6. Comprehensive Integrations -->
+                <!-- 6. Integrations -->
                 <div class="col-lg-4 col-md-6">
                     <div class="p-4 rounded-4 h-100 bg-white shadow-sm" style="border: 1.5px solid #cbd5e1; transition: transform 0.3s ease;">
                         <div class="d-flex align-items-center mb-3">
                             <div class="rounded-circle me-3" style="background: rgba(236, 72, 153, 0.15); color: #be185d !important; font-size: 18px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <i class="fas fa-network-wired"></i>
                             </div>
-                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">6. Comprehensive Integrations</h4>
+                            <h4 style="font-size: 17px; font-weight: 800; color: #0f172a !important; margin: 0;">6. Integrations</h4>
                         </div>
-                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Integrations with Website, WhatsApp, Email, SMS, Tally, Busy, SAP, E-commerce, CRM, and REST APIs.</p>
+                        <p style="color: #1e293b !important; font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.6;">Seamless integration with WhatsApp, Tally, E-commerce, Payment Gateways, Banks, and REST APIs.</p>
                     </div>
                 </div>
 
-                <!-- 7. One Technology Partner -->
+                <!-- 7. One Technology Partner for All your Automation needs -->
                 <div class="col-lg-12">
                     <div class="p-4 rounded-4 text-center shadow-lg" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 1.5px solid #3b82f6; color: #ffffff !important;">
                         <h4 style="font-size: 19px; font-weight: 800; color: #fbc145 !important;" class="mb-2">
-                            <i class="fas fa-star me-2 text-warning"></i>7. One Technology Partner
+                            <i class="fas fa-star me-2 text-warning"></i>7. One Technology Partner for All your Automation needs
                         </h4>
                         <p style="color: #ffffff !important; font-size: 15px; margin: 0; font-weight: 600;">
-                            <span style="color: #60a5fa !important; font-weight: 700;">ERP • CRM • Website • App • AI • Automation</span> — <span style="color: #ffffff !important;">Lead management to despatch, all unified under one roof.</span>
+                            <span style="color: #60a5fa !important; font-weight: 700;">ERP • CRM • Website • Mobile Apps • AI • OCR Automation</span> — <span style="color: #ffffff !important;">All software &amp; automation unified under one reliable partner.</span>
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONSOLIDATED TRANSPARENT PRICING SECTION -->
+    <section id="pricing-section" class="py-5" style="background: #ffffff; border-bottom: 1px solid #e2e8f0;">
+        <div class="container py-3">
+            <div class="text-center mb-4">
+                <span class="badge rounded-pill px-3.5 py-2 mb-3 shadow-sm" style="background: rgba(34, 197, 94, 0.12); color: #166534; border: 1px solid rgba(34, 197, 94, 0.3); font-size: 13px; font-weight: 800;">
+                    <i class="fas fa-tag me-1.5 text-success"></i> UNIFIED TRANSPARENT PRICING
+                </span>
+                <h2 style="font-size: 34px; font-weight: 800; color: #0f172a;" class="mb-2">
+                    Pricing Plans — <span style="background: linear-gradient(135deg, #e06930, #fbc145); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Choose What Fits Your Business Best</span>
+                </h2>
+                <p style="color: #64748b; max-width: 650px; margin: 0 auto; font-size: 15.5px;">
+                    Simple, transparent pricing built around your operational scale. No per-user licence anxiety.
+                      <!-- Single Consolidated Pricing Plan Card -->
+            <div class="max-w-900 mx-auto" style="max-width: 950px; margin: 0 auto;">
+                <div class="p-4 p-md-5 rounded-4 shadow-lg text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 2px solid #e06930; position: relative;">
+                    <span class="badge position-absolute top-0 end-0 m-3 m-md-4 px-3 py-2 rounded-pill fw-extrabold" style="background: #fbc145 !important; color: #0f172a !important; font-weight: 800 !important; font-size: 13px !important; border: 1px solid #d97706 !important;">
+                        <i class="fas fa-star me-1 text-dark"></i> ALL-IN-ONE BUSINESS SUITE
+                    </span>
+                    
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <h3 style="color: #ffffff !important; font-size: 26px; font-weight: 800;" class="mb-2">Digify Unified ERP &amp; Business Operating Platform</h3>
+                            <p style="color: #38bdf8 !important; font-weight: 700; font-size: 14.5px;" class="mb-4">
+                                One system covering Lead CRM, Sales, POS Billing, Inventory, Production, Accounting, GST, &amp; AI Document Intelligence.
+                            </p>
+                            
+                            <div class="row g-3" style="font-size: 14px;">
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">Smart POS Billing &amp; Invoicing</span></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">Full Inventory &amp; Multi-Store Sync</span></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">AI OCR (Bills, Statements, Registers)</span></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">WhatsApp &amp; Website AI Agents</span></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">No Per-User Licence Anxiety</span></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center"><i class="fas fa-check-circle text-success me-2 fs-6"></i> <span style="color: #ffffff !important; font-weight: 600;">Implementation Handholding</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 text-center text-lg-end border-lg-start ps-lg-4" style="border-color: rgba(255,255,255,0.12) !important;">
+                            <div class="p-3.5 rounded-3 mb-3 text-center" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);">
+                                <div style="color: #fbc145 !important; font-weight: 800 !important; font-size: 12px; letter-spacing: 1px;" class="text-uppercase">Starting From</div>
+                                <div class="my-1" style="color: #ffffff !important; font-size: 36px; font-weight: 800;">
+                                    ₹1,000 <span style="font-size: 14px; color: #cbd5e1 !important; font-weight: 600;">/ month onwards</span>
+                                </div>
+                                <div style="color: #e2e8f0 !important; font-size: 13px; line-height: 1.6;">
+                                    Retail &amp; Restaurants: <strong style="color: #ffffff !important;">Rs 1,000 / mo onwards</strong><br>
+                                    Manufacturing: <strong style="color: #ffffff !important;">Rs 10,000 / mo onwards</strong>
+                                </div>
+                            </div>
+
+                            <a href="contact-us.php" class="btn w-100 py-3 font-weight-bold" style="background: linear-gradient(135deg, #e06930, #fbc145) !important; color: #ffffff !important; font-weight: 800 !important; font-size: 15px !important; border: none !important; border-radius: 12px !important;" data-bs-toggle="modal" data-bs-target="#trialModal">
+                                <i class="fas fa-calculator me-2"></i> Get Custom Pricing Assessment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>          </div>
             </div>
         </div>
     </section>

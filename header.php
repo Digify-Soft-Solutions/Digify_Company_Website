@@ -226,6 +226,7 @@
                                 <div class="mega-menu-wrap">
                                   <ul>
                                     <strong><i class="fa-solid fa-robot"></i> Intelligence &amp; AI Layer</strong>
+                                    <li><a href="ai-ocr.php" style="color: #e06930; font-weight: 700;"><i class="fa-solid fa-eye text-warning"></i> AI Powered OCR Intelligence <span class="badge bg-danger text-white ms-1" style="font-size: 8px;">HOT</span></a></li>
                                     <li><a href="ai-business.php" style="color: #e06930; font-weight: 700;"><i class="fa-solid fa-brain"></i> AI Business Intelligence</a></li>
                                     <li><a href="ai-manufacturing.php"><i class="fa-solid fa-microchip"></i> AI Shop-Floor Automation</a></li>
                                     <li><a href="lead-management.php"><i class="fa-solid fa-comments"></i> 24/7 WhatsApp AI Agents</a></li>
