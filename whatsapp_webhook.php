@@ -60,35 +60,47 @@ if (
     exit;
 }
 
-// Extract sender phone number from various GoShort/Meta/WhatsApp payload structures
-$sender = '';
+// Extract recipient phone numbers from various GoShort/Meta/WhatsApp payload structures
+$recipients = [];
+if (!empty($input['receiver'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['receiver']);
+}
+if (!empty($input['from'])) {
+    $f = is_array($input['from']) ? ($input['from']['number'] ?? $input['from']['phone'] ?? '') : $input['from'];
+    if (!empty($f)) $recipients[] = preg_replace('/\D/', '', (string)$f);
+}
 if (!empty($input['sender_id'])) {
-    $sender = $input['sender_id'];
-} elseif (!empty($input['from'])) {
-    $sender = is_array($input['from']) ? ($input['from']['number'] ?? $input['from']['phone'] ?? '') : $input['from'];
-} elseif (!empty($input['sender'])) {
-    $sender = is_array($input['sender']) ? ($input['sender']['number'] ?? $input['sender']['phone'] ?? '') : $input['sender'];
-} elseif (!empty($input['phone'])) {
-    $sender = $input['phone'];
-} elseif (!empty($input['mobile'])) {
-    $sender = $input['mobile'];
-} elseif (!empty($input['wa_id'])) {
-    $sender = $input['wa_id'];
-} elseif (!empty($input['contact'])) {
-    $sender = is_array($input['contact']) ? ($input['contact']['wa_id'] ?? $input['contact']['phone'] ?? '') : $input['contact'];
-} elseif (!empty($input['contacts'][0]['wa_id'])) {
-    $sender = $input['contacts'][0]['wa_id'];
-} elseif (!empty($input['data']['from'])) {
-    $sender = $input['data']['from'];
-} elseif (!empty($input['data']['sender'])) {
-    $sender = $input['data']['sender'];
-} elseif (!empty($input['data']['phone'])) {
-    $sender = $input['data']['phone'];
-} elseif (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
-    $sender = $input['entry'][0]['changes'][0]['value']['messages'][0]['from'];
+    $recipients[] = preg_replace('/\D/', '', (string)$input['sender_id']);
+}
+if (!empty($input['sender'])) {
+    $s = is_array($input['sender']) ? ($input['sender']['number'] ?? $input['sender']['phone'] ?? '') : $input['sender'];
+    if (!empty($s)) $recipients[] = preg_replace('/\D/', '', (string)$s);
+}
+if (!empty($input['phone'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['phone']);
+}
+if (!empty($input['mobile'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['mobile']);
+}
+if (!empty($input['wa_id'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['wa_id']);
+}
+if (!empty($input['contact'])) {
+    $c = is_array($input['contact']) ? ($input['contact']['wa_id'] ?? $input['contact']['phone'] ?? '') : $input['contact'];
+    if (!empty($c)) $recipients[] = preg_replace('/\D/', '', (string)$c);
+}
+if (!empty($input['contacts'][0]['wa_id'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['contacts'][0]['wa_id']);
+}
+if (!empty($input['data']['from'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['data']['from']);
+}
+if (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
+    $recipients[] = preg_replace('/\D/', '', (string)$input['entry'][0]['changes'][0]['value']['messages'][0]['from']);
 }
 
-$sender = preg_replace('/\D/', '', (string)$sender);
+$recipients = array_values(array_unique(array_filter($recipients)));
+$sender = !empty($recipients) ? $recipients[0] : '';
 
 // Extract text message content from various formats
 $userMessage = '';
@@ -242,39 +254,48 @@ if (!$replyText) {
 $goshortApiUrl = "https://wa.goshort.in/v5/api/index.php/addbroadcast";
 $goshortToken  = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkyMTY0MjgsInZlciI6MiwiZGF0YSI6eyJ1c2VybmFtZSI6IkRpZ2lmeXNvZnRCb3QiLCJuYW1lIjoiRGlnaWZ5c29mdEJvdCJ9fQ.TPV8k8cdJWD0XYlWXv8bsMU3b1J4n-C0oO0YhRDtHZw";
 
-$sendPayload = [
-    "broadcast_service" => "whatsApp_credits",
-    "broadcast_name"    => "Chatbot Reply to " . $sender,
-    "template_id"       => "digify",
-    "contacts"          => $sender,
-    "custom_message"    => $replyText
-];
+$sendResults = [];
+foreach ($recipients as $targetPhone) {
+    if (empty($targetPhone) || strlen($targetPhone) < 10) continue;
 
-$chSend = curl_init($goshortApiUrl);
-curl_setopt($chSend, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($chSend, CURLOPT_POST, true);
-curl_setopt($chSend, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($chSend, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($chSend, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-curl_setopt($chSend, CURLOPT_TIMEOUT, 10);
-curl_setopt($chSend, CURLOPT_HTTPHEADER, [
-    "Authorization: $goshortToken",
-    "Content-Type: application/json"
-]);
-curl_setopt($chSend, CURLOPT_POSTFIELDS, json_encode($sendPayload));
-$sendResult = curl_exec($chSend);
-$sendHttpCode = curl_getinfo($chSend, CURLINFO_HTTP_CODE);
-$sendErr = curl_error($chSend);
-curl_close($chSend);
+    $sendPayload = [
+        "broadcast_service" => "whatsApp_credits",
+        "broadcast_name"    => "Chatbot Reply to " . $targetPhone,
+        "template_id"       => "digify",
+        "contacts"          => $targetPhone,
+        "custom_message"    => $replyText
+    ];
+
+    $chSend = curl_init($goshortApiUrl);
+    curl_setopt($chSend, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chSend, CURLOPT_POST, true);
+    curl_setopt($chSend, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($chSend, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($chSend, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    curl_setopt($chSend, CURLOPT_TIMEOUT, 10);
+    curl_setopt($chSend, CURLOPT_HTTPHEADER, [
+        "Authorization: $goshortToken",
+        "Content-Type: application/json"
+    ]);
+    curl_setopt($chSend, CURLOPT_POSTFIELDS, json_encode($sendPayload));
+    $sendResult = curl_exec($chSend);
+    $sendHttpCode = curl_getinfo($chSend, CURLINFO_HTTP_CODE);
+    $sendErr = curl_error($chSend);
+    curl_close($chSend);
+
+    $sendResults[$targetPhone] = [
+        "send_http_code" => $sendHttpCode,
+        "send_error"     => $sendErr,
+        "send_result"    => json_decode($sendResult, true) ?? $sendResult
+    ];
+}
 
 $resultData = [
     "status"         => "success",
-    "sender"         => $sender,
+    "recipients"     => $recipients,
     "user_message"   => $userMessage,
     "reply"          => $replyText,
-    "send_http_code" => $sendHttpCode,
-    "send_error"     => $sendErr,
-    "send_result"    => json_decode($sendResult, true) ?? $sendResult
+    "deliveries"     => $sendResults
 ];
 
 @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData) . "\n\n", FILE_APPEND);
