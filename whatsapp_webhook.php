@@ -100,6 +100,16 @@ if (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
 }
 
 $recipients = array_values(array_unique(array_filter($recipients)));
+
+// Filter out the bot's own WABA numbers so the bot replies to the customer and not itself
+$botNumbers = ['918005934184', '8005934184'];
+$customerRecipients = array_values(array_filter($recipients, function($num) use ($botNumbers) {
+    return !in_array($num, $botNumbers);
+}));
+
+if (!empty($customerRecipients)) {
+    $recipients = $customerRecipients;
+}
 $sender = !empty($recipients) ? $recipients[0] : '';
 
 // Extract text message content from various formats
