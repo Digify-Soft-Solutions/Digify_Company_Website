@@ -7,6 +7,9 @@ RUN a2enmod rewrite && \
 # Copy website files to Apache web root
 COPY . /var/www/html/
 
+# Ensure data directory exists and is writable by Apache on Render
+RUN mkdir -p /var/www/html/data && chmod -R 777 /var/www/html/data
+
 # Expose port 80 for Render
 EXPOSE 80
 
