@@ -239,8 +239,8 @@ if (!$replyText) {
 }
 
 // --- Send Outbound Reply via GoShort WhatsApp API ---
-$goshortApiUrl = "https://wa20.nuke.co.in/v5/api/index.php/addbroadcast";
-$goshortToken  = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NjA3MDY0NDYsImRhdGEiOnsidXNlcm5hbWUiOiJEaWdpZnlfc29mdCIsIm5hbWUiOiJEaWdpZnlfc29mdCJ9fQ.lbhITMYPzs0RvDRf-YhqbJ5r63rFUPnInfTnIG_T998";
+$goshortApiUrl = "https://wa.goshort.in/v5/api/index.php/addbroadcast";
+$goshortToken  = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkyMTY0MjgsInZlciI6MiwiZGF0YSI6eyJ1c2VybmFtZSI6IkRpZ2lmeXNvZnRCb3QiLCJuYW1lIjoiRGlnaWZ5c29mdEJvdCJ9fQ.TPV8k8cdJWD0XYlWXv8bsMU3b1J4n-C0oO0YhRDtHZw";
 
 $sendPayload = [
     "broadcast_service" => "whatsApp_credits",
