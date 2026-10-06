@@ -3,6 +3,7 @@
     RewriteEngine On
     RewriteRule ^webhook/?$ whatsapp_webhook.php [L,QSA]
     RewriteRule ^api/webhook/?$ whatsapp_webhook.php [L,QSA]
+    RewriteRule ^whatsapp/webhook/?$ whatsapp_webhook.php [L,QSA]
 </IfModule>
 
 # Enable Gzip (DEFLATE) Compression
