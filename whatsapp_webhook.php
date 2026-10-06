@@ -1,13 +1,12 @@
-﻿<?php
+<?php
 /**
  * Digify Soft Solutions - WhatsApp AI Chatbot Webhook
  * Integrates AutoBotChat / Meta WhatsApp Cloud API with Digify AI Assistant (Groq LLM)
  */
 
-// Prevent PHP error leakage in JSON output
 ini_set('display_errors', 0);
 error_reporting(0);
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 // Health / Ping / Test check via browser GET
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             "service"   => "Digify WhatsApp AI Webhook",
             "timestamp" => date('Y-m-d H:i:s'),
             "message"   => "Webhook endpoint is operational and ready to process WhatsApp messages."
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit;
     }
 }
@@ -60,7 +59,7 @@ if (empty($input) && !empty($_POST)) {
     $input = $_POST;
 }
 
-// Check for status updates or outgoing echo messages and ignore them to prevent reply loops
+// Ignore status updates or outgoing echo messages to prevent infinite reply loops
 if (
     (isset($input['event']) && in_array(strtolower($input['event']), ['status', 'delivery', 'sent', 'read', 'delivered', 'failed'])) ||
     isset($input['statuses']) ||
@@ -182,11 +181,11 @@ if (empty($sender) || (empty($userMessage) && empty($interactiveId))) {
     exit;
 }
 
-// --- Deduplication & Debounce: Prevent duplicate reply if gateway fires retry within 8 seconds ---
+// --- Deduplication & Debounce ---
 $incomingMsgId = $input['id'] ?? ($input['message_id'] ?? ($input['msg_id'] ?? ($input['entry'][0]['changes'][0]['value']['messages'][0]['id'] ?? ($input['data']['id'] ?? ''))));
 $hasMsgId = !empty($incomingMsgId);
 $dedupKey = $hasMsgId ? ('id_' . $incomingMsgId) : ('txt_' . $sender . '_' . md5(strtolower(trim((string)$userMessage))));
-$debounceSeconds = $hasMsgId ? 300 : 8; // If unique message ID, ignore for 5 min; if text hash, debounce only 8s
+$debounceSeconds = $hasMsgId ? 300 : 6;
 
 $dedupFile = sys_get_temp_dir() . '/digify_wa_webhook_dedup.json';
 $nowTime = time();
@@ -196,14 +195,12 @@ if (file_exists($dedupFile)) {
     $dedupCache = json_decode($rawCache, true) ?: [];
 }
 
-// Clean entries older than 300 seconds
 foreach ($dedupCache as $k => $ts) {
     if ($nowTime - $ts > 300) {
         unset($dedupCache[$k]);
     }
 }
 
-// If duplicate message arrived within debounce window, ignore immediately
 if (isset($dedupCache[$dedupKey]) && ($nowTime - $dedupCache[$dedupKey] < $debounceSeconds)) {
     $dupResponse = [
         "status"    => "ignored",
@@ -215,7 +212,6 @@ if (isset($dedupCache[$dedupKey]) && ($nowTime - $dedupCache[$dedupKey] < $debou
     exit;
 }
 
-// Mark key as seen right now (before AI processing)
 $dedupCache[$dedupKey] = $nowTime;
 @file_put_contents($dedupFile, json_encode($dedupCache));
 
@@ -227,8 +223,6 @@ if (file_exists(__DIR__ . '/mail_config.php')) {
     require_once __DIR__ . '/mail_config.php';
 }
 
-$apiKey = getenv('GROQ_API_KEY') ?: (getenv('CHAT_API_KEY') ?: (defined('GROQ_API_KEY') ? GROQ_API_KEY : (defined('CHAT_API_KEY') ? CHAT_API_KEY : '')));
-
 // Save lead to database if db.php is available
 if (file_exists(__DIR__ . '/db.php')) {
     include_once __DIR__ . '/db.php';
@@ -239,7 +233,7 @@ if (file_exists(__DIR__ . '/db.php')) {
     }
 }
 
-// Helper to format text perfectly for WhatsApp and strictly enforce Meta limits
+// Clean and format text strictly for WhatsApp
 function formatForWhatsApp($text) {
     if (empty($text)) return '';
 
@@ -249,24 +243,24 @@ function formatForWhatsApp($text) {
     // Convert markdown headers ### Header or ## Header to *Header*
     $text = preg_replace('/^#{1,6}\s*(.+)$/m', '*$1*', $text);
 
-    // Strip bracketed action tags if present
+    // Strip bracketed action tags
     $text = preg_replace('/\[\s*ACTION\s*:[^\]]*\]/i', '', $text);
 
-    // Replace multiple consecutive blank lines with double newline
+    // Replace 3+ consecutive newlines with 2
     $text = preg_replace("/\n{3,}/", "\n\n", trim($text));
 
-    // Meta WhatsApp Cloud API limit is 4096 characters.
-    // If text exceeds 3500 characters, truncate at the last full sentence boundary.
-    if (mb_strlen($text, 'UTF-8') > 3500) {
-        $trimmed = mb_substr($text, 0, 3400, 'UTF-8');
+    // Ensure response does not cut off in the middle of a sentence
+    $text = trim($text);
+    $lastChar = mb_substr($text, -1, 1, 'UTF-8');
+    if (!in_array($lastChar, ['.', '!', '?', "\n", ':', '*'])) {
         $lastPunct = max(
-            mb_strrpos($trimmed, '.', 0, 'UTF-8') ?: 0,
-            mb_strrpos($trimmed, "\n", 0, 'UTF-8') ?: 0,
-            mb_strrpos($trimmed, '!', 0, 'UTF-8') ?: 0,
-            mb_strrpos($trimmed, '?', 0, 'UTF-8') ?: 0
+            mb_strrpos($text, '.', 0, 'UTF-8') ?: 0,
+            mb_strrpos($text, "\n", 0, 'UTF-8') ?: 0,
+            mb_strrpos($text, '!', 0, 'UTF-8') ?: 0,
+            mb_strrpos($text, '?', 0, 'UTF-8') ?: 0
         );
-        if ($lastPunct > 1500) {
-            $text = mb_substr($trimmed, 0, $lastPunct, 'UTF-8') . "\n\nðŸ“ž *Call / WhatsApp Gautam:* +91 7425016636\nðŸŒ digifysoft.in";
+        if ($lastPunct > 50) {
+            $text = mb_substr($text, 0, $lastPunct + 1, 'UTF-8');
         }
     }
 
@@ -274,11 +268,11 @@ function formatForWhatsApp($text) {
 }
 
 // =========================================================================
-// CORE BUTTON DEFINITIONS
+// BUTTON DEFINITIONS (Strictly <= 20 chars for Meta WhatsApp API compliance)
 // =========================================================================
-$btnDemo    = ['id' => 'btn_demo',   'title' => 'Book Free Demo ðŸ“ž'];
-$btnExplore = ['id' => 'btn_menu',   'title' => 'Explore Services ðŸ“‹'];
-$btnGautam  = ['id' => 'btn_gautam', 'title' => 'Chat with Gautam ðŸ’¬'];
+$btnDemo    = ['id' => 'btn_demo',   'title' => 'Book Free Demo 📞'];  // 16 chars
+$btnExplore = ['id' => 'btn_menu',   'title' => 'Explore Services 📋']; // 18 chars
+$btnGautam  = ['id' => 'btn_gautam', 'title' => 'Chat with Gautam 💬']; // 18 chars
 
 $allThreeButtons = [$btnDemo, $btnExplore, $btnGautam]; // Welcome / AI Fallback
 $serviceButtons  = [$btnDemo, $btnGautam];               // After viewing a service
@@ -293,27 +287,27 @@ $msgTrimmed = trim((string)$userMessage);
 $msgLower   = strtolower($msgTrimmed);
 
 // =========================================================================
-// MAIN 10-ITEM CATALOGUE (Meta compliant: title â‰¤ 20ch, desc â‰¤ 60ch)
+// 10-ITEM CATALOGUE (Meta compliant: title <= 24ch, desc <= 60ch)
 // =========================================================================
 $catalogueSections = [
     [
         'title' => 'Retail & Business',
         'rows'  => [
-            ['id' => 'pos',          'title' => 'Smart POS âš¡',       'description' => 'Fast billing & retail management'],
-            ['id' => 'erp',          'title' => 'Cloud ERP ðŸ­',       'description' => 'Complete business management'],
-            ['id' => 'inventory',    'title' => 'Inventory ðŸ“¦',       'description' => 'Stock & warehouse control'],
-            ['id' => 'crm',          'title' => 'CRM ðŸ‘¥',             'description' => 'Customers & loyalty'],
-            ['id' => 'omnichannel',  'title' => 'Omnichannel ðŸŒ',     'description' => 'Online + offline sales'],
+            ['id' => 'pos',         'title' => 'Smart POS ⚡',      'description' => 'Fast billing & retail management'],
+            ['id' => 'erp',         'title' => 'Cloud ERP 🏢',      'description' => 'Complete business management'],
+            ['id' => 'inventory',   'title' => 'Inventory 📦',      'description' => 'Stock & warehouse control'],
+            ['id' => 'crm',         'title' => 'CRM 👥',            'description' => 'Customers & loyalty'],
+            ['id' => 'omnichannel', 'title' => 'Omnichannel 🌐',    'description' => 'Online + offline sales'],
         ]
     ],
     [
         'title' => 'Industry & Digital',
         'rows'  => [
-            ['id' => 'smart_retail',     'title' => 'Smart Retail ðŸ¤–',    'description' => 'AI-powered retail'],
-            ['id' => 'restaurant',       'title' => 'Restaurant ðŸ½ï¸',      'description' => 'POS, KOT & food operations'],
-            ['id' => 'manufacturing',    'title' => 'Manufacturing ðŸ—ï¸',   'description' => 'Production & shop-floor'],
-            ['id' => 'education',        'title' => 'Education ERP ðŸŽ“',   'description' => 'School & institution mgmt'],
-            ['id' => 'digital_services', 'title' => 'Digital Services ðŸ’»','description' => 'Web, apps, SEO & software'],
+            ['id' => 'smart_retail',     'title' => 'Smart Retail 🤖',    'description' => 'AI-powered retail'],
+            ['id' => 'restaurant',       'title' => 'Restaurant 🍽️',     'description' => 'POS, KOT & food operations'],
+            ['id' => 'manufacturing',    'title' => 'Manufacturing 🏭',  'description' => 'Production & shop-floor'],
+            ['id' => 'education',        'title' => 'Education ERP 🎓',  'description' => 'School & institution mgmt'],
+            ['id' => 'digital_services', 'title' => 'Digital Services 💻', 'description' => 'Web, apps, SEO & software'],
         ]
     ]
 ];
@@ -323,50 +317,50 @@ $digitalSubSections = [
     [
         'title' => 'Digital Solutions',
         'rows'  => [
-            ['id' => 'ds_web',    'title' => 'Web Development ðŸŒ',  'description' => 'Business & custom websites'],
-            ['id' => 'ds_ecomm',  'title' => 'E-Commerce ðŸ›’',       'description' => 'Online stores & platforms'],
-            ['id' => 'ds_mobile', 'title' => 'Mobile Apps ðŸ“±',      'description' => 'Android & iOS applications'],
-            ['id' => 'ds_seo',    'title' => 'SEO & Marketing ðŸ“ˆ',  'description' => 'Search & digital growth'],
-            ['id' => 'ds_social', 'title' => 'Social Media ðŸ“£',     'description' => 'Social media marketing'],
-            ['id' => 'ds_custom', 'title' => 'Custom Software âš™ï¸',  'description' => 'Tailored business software'],
+            ['id' => 'ds_web',    'title' => 'Web Development 🌐', 'description' => 'Business & custom websites'],
+            ['id' => 'ds_ecomm',  'title' => 'E-Commerce 🛒',      'description' => 'Online stores & platforms'],
+            ['id' => 'ds_mobile', 'title' => 'Mobile Apps 📱',     'description' => 'Android & iOS applications'],
+            ['id' => 'ds_seo',    'title' => 'SEO & Marketing 📈', 'description' => 'Search & digital growth'],
+            ['id' => 'ds_social', 'title' => 'Social Media 📢',    'description' => 'Social media marketing'],
+            ['id' => 'ds_custom', 'title' => 'Custom Software ⚙️', 'description' => 'Tailored business software'],
         ]
     ]
 ];
 
 // =========================================================================
-// FLOW 1: WELCOME / INITIAL GREETING
+// FLOW 1: WELCOME / GREETING
 // =========================================================================
 $isInitialGreeting = (
     empty($interactiveId) &&
-    preg_match('/^(hi|hello|hey|namaste|start|hola|hy|hii|helo|hai|namaskar)$/i', $msgTrimmed)
+    preg_match('/^\s*(hi+|hello+|hey+|namaste|namaskar|start|hola|hy|hii+|helo|hai|good\s*(morning|afternoon|evening)|kya\s*hai|help)[\s!.]*$/iu', $msgTrimmed)
 );
 
 if ($isInitialGreeting) {
-    $greetingText = "ðŸ‘‹ *Welcome to Digify Soft Solutions!*\n\n"
+    $greetingText = "👋 *Welcome to Digify Soft Solutions!*\n\n"
                   . "We help businesses with POS, ERP, Inventory, CRM, AI & digital solutions.\n\n"
                   . "What would you like to do?";
 
-    $r = send_whatsapp_interactive_buttons($targetPhone, $greetingText, $allThreeButtons, "Digify Soft Solutions", "Choose an option ðŸ‘‡");
+    $r = send_whatsapp_interactive_buttons($targetPhone, $greetingText, $allThreeButtons, "Digify Soft Solutions", "Choose an option 👇");
     $sendResults[$targetPhone] = ['method' => 'greeting', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'greeting', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'greeting', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // =========================================================================
-// FLOW 2: EXPLORE SERVICES â€” 10-item Interactive List
+// FLOW 2: EXPLORE SERVICES — 10-item Interactive List
 // =========================================================================
 $isMenuRequested = (
     in_array($interactiveId, ['btn_menu', 'btn_services', 'btn_explore']) ||
-    preg_match('/^(menu|services|all services|explore|explore services|options|catalog|catalogue|solutions|products)$/i', $msgTrimmed)
+    preg_match('/^\s*(menu|services|all services|explore|explore services|options|catalog|catalogue|solutions|products)\s*$/i', $msgTrimmed)
 );
 
 if ($isMenuRequested) {
-    $menuBody = "ðŸ“‹ *Explore Digify Solutions*\n\n"
+    $menuBody = "📋 *Explore Digify Solutions*\n\n"
               . "Choose what you need. I'll show you the most relevant solution for your business.";
 
     $r = send_whatsapp_interactive_list($targetPhone, "Digify Soft Solutions", $menuBody, "View Solutions", $catalogueSections, "Tap any solution to learn more");
     $sendResults[$targetPhone] = ['method' => 'explore_list', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'interactive_menu', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'interactive_menu', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -374,15 +368,15 @@ if ($isMenuRequested) {
 // FLOW 3: DIGITAL SERVICES SUB-MENU
 // =========================================================================
 if ($interactiveId === 'digital_services') {
-    $dsBody = "ðŸ’» *Digital Services*\n\n"
+    $dsBody = "💻 *Digital Services*\n\n"
             . "We build digital solutions tailored to your business.\n\n"
-            . "â€¢ Websites  â€¢ E-commerce  â€¢ Mobile Apps\n"
-            . "â€¢ SEO & Marketing  â€¢ Social Media  â€¢ Custom Software\n\n"
+            . "• Websites  • E-commerce  • Mobile Apps\n"
+            . "• SEO & Marketing  • Social Media  • Custom Software\n\n"
             . "Which service do you need?";
 
     $r = send_whatsapp_interactive_list($targetPhone, "Digital Services", $dsBody, "Choose a Service", $digitalSubSections, "Select a digital solution");
     $sendResults[$targetPhone] = ['method' => 'digital_sub_menu', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'digital_services_menu', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'digital_services_menu', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -391,20 +385,20 @@ if ($interactiveId === 'digital_services') {
 // =========================================================================
 $isDemoRequested = (
     $interactiveId === 'btn_demo' ||
-    preg_match('/\b(demo|book demo|free demo|book a demo|trial|schedule demo|book meeting)\b/i', $msgTrimmed)
+    preg_match('/\b(book demo|free demo|book a demo|trial|schedule demo|book meeting|demo)\b/i', $msgTrimmed)
 );
 
 if ($isDemoRequested) {
-    $demoText = "ðŸŽ¯ *Book Your Free Demo*\n\n"
-              . "Our team will understand your business and recommend the right Digify solution.\n\n"
-              . "ðŸ“ž +91 7425016636\n"
-              . "ðŸ‘¤ Lead Consultant: Gautam\n\n"
-              . "Submit your requirement:\nhttps://www.digifysoft.in/contact-us.php\n\n"
-              . "Ready to connect?";
+    $demoText = "🎯 *Book Your Free Demo*\n\n"
+              . "Our experts will understand your workflow and demonstrate the ideal Digify solution for your business.\n\n"
+              . "📞 +91 7425016636\n"
+              . "👤 Lead Consultant: Gautam\n\n"
+              . "Submit your requirement online:\nhttps://www.digifysoft.in/contact-us.php\n\n"
+              . "Ready to schedule a quick call?";
 
-    $r = send_whatsapp_interactive_buttons($targetPhone, $demoText, $demoButtons, "Digify Soft Solutions", "Next steps ðŸ‘‡");
+    $r = send_whatsapp_interactive_buttons($targetPhone, $demoText, $demoButtons, "Digify Soft Solutions", "Next steps 👇");
     $sendResults[$targetPhone] = ['method' => 'demo_flow', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'demo_flow', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'demo_flow', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -413,19 +407,19 @@ if ($isDemoRequested) {
 // =========================================================================
 $isGautamRequested = (
     $interactiveId === 'btn_gautam' ||
-    preg_match('/\b(gautam|chat with gautam|talk to gautam|contact gautam|human|agent|support|person)\b/i', $msgTrimmed)
+    preg_match('/\b(chat with gautam|talk to gautam|contact gautam|gautam|human|agent|support|person)\b/i', $msgTrimmed)
 );
 
 if ($isGautamRequested) {
-    $gautamText = "ðŸ’¬ *Chat with Gautam*\n\n"
+    $gautamText = "💬 *Chat with Gautam*\n\n"
                 . "Connect directly with Gautam, Lead Consultant at Digify Soft Solutions.\n\n"
-                . "ðŸ“ž +91 7425016636\n\n"
-                . "WhatsApp:\nhttps://wa.me/917425016636\n\n"
-                . "He can help with requirements, solutions and demos.";
+                . "📞 Call: +91 7425016636\n"
+                . "💬 WhatsApp: https://wa.me/917425016636\n\n"
+                . "He can assist with solution design, custom pricing and live product demos.";
 
-    $r = send_whatsapp_interactive_buttons($targetPhone, $gautamText, $gautamButtons, "Digify Soft Solutions", "Next steps ðŸ‘‡");
+    $r = send_whatsapp_interactive_buttons($targetPhone, $gautamText, $gautamButtons, "Digify Soft Solutions", "Next steps 👇");
     $sendResults[$targetPhone] = ['method' => 'gautam_flow', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'gautam_flow', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'gautam_flow', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -433,56 +427,58 @@ if ($isGautamRequested) {
 // FLOW 6: PRICING QUESTION
 // =========================================================================
 if (preg_match('/\b(price|pricing|cost|kitna|how much|rate|charges|fees|paisa|budget|quote|quotation)\b/i', $msgLower)) {
-    $pricingText = "ðŸ’° *Pricing is requirement-based.*\n\n"
+    $pricingText = "💰 *Pricing is requirement-based.*\n\n"
                  . "It depends on:\n"
-                 . "â€¢ Modules  â€¢ Users  â€¢ Outlets\n"
-                 . "â€¢ Integrations  â€¢ Customization\n\n"
-                 . "Our team can give you an accurate recommendation after understanding your needs.\n\n"
-                 . "Would you like a free demo?";
+                 . "• Modules needed\n"
+                 . "• Number of users & outlets\n"
+                 . "• Third-party integrations\n"
+                 . "• Custom workflows\n\n"
+                 . "Our team can give you an exact quote after understanding your requirements.\n\n"
+                 . "Would you like a free consultation & demo?";
 
-    $r = send_whatsapp_interactive_buttons($targetPhone, $pricingText, $pricingButtons, "Digify Soft Solutions", "Choose an option ðŸ‘‡");
+    $r = send_whatsapp_interactive_buttons($targetPhone, $pricingText, $pricingButtons, "Digify Soft Solutions", "Choose an option 👇");
     $sendResults[$targetPhone] = ['method' => 'pricing_flow', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'pricing_flow', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'pricing_flow', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // =========================================================================
-// FLOW 7: SERVICE DETAIL CARDS
-// Buttons: [Book Free Demo, Chat with Gautam] ONLY â€” zero redundancy
+// FLOW 7: SERVICE DETAIL CARDS (300-500 chars max, punchy & clean)
+// Buttons: [Book Free Demo 📞, Chat with Gautam 💬]
 // =========================================================================
 $serviceDetails = [
-    'pos' => "âš¡ *Digify Smart POS*\n\nA complete POS solution for modern retail businesses.\n\nâœ“ Fast billing  âœ“ Barcode management\nâœ“ GST billing  âœ“ Inventory sync\nâœ“ Customer management  âœ“ Multi-store\nâœ“ AI-powered features\n\nLearn more:\nhttps://www.digifysoft.in/pos.php",
+    'pos' => "⚡ *Digify Smart POS*\n\nA complete POS solution for modern retail businesses.\n\n• Fast billing & barcode scanning\n• GST invoices & thermal printing\n• Real-time inventory sync\n• Multi-store & customer loyalty\n\nLearn more:\nhttps://www.digifysoft.in/pos.php",
 
-    'erp' => "ðŸš€ *Digify Cloud ERP*\n\nManage billing, inventory, accounting, CRM, GST and multi-location from one platform.\n\nâœ“ Multi-store  âœ“ Inventory & barcode\nâœ“ GST & accounting  âœ“ CRM & loyalty\nâœ“ E-commerce integration  âœ“ Dashboards\n\nLearn more:\nhttps://www.digifysoft.in/erp.php",
+    'erp' => "🏢 *Digify Cloud ERP*\n\nManage billing, inventory, accounting, CRM, GST and multi-location from one platform.\n\n• Multi-store & warehouse control\n• GST billing, e-way bills & accounts\n• CRM, loyalty & order tracking\n• E-commerce & Tally integration\n\nLearn more:\nhttps://www.digifysoft.in/erp.php",
 
-    'inventory' => "ðŸ“¦ *Inventory Management*\n\nTrack your stock across stores and warehouses with better visibility.\n\nâœ“ Real-time stock  âœ“ Barcode management\nâœ“ Purchase & sales  âœ“ Multi-location\nâœ“ Stock reports  âœ“ ERP integration\n\nLearn more:\nhttps://www.digifysoft.in/inventory.php",
+    'inventory' => "📦 *Inventory Management*\n\nTrack stock across stores and warehouses with full visibility.\n\n• Real-time stock & barcode tracking\n• Purchase orders & vendor control\n• Low-stock & expiry alerts\n• Multi-location warehouse sync\n\nLearn more:\nhttps://www.digifysoft.in/inventory.php",
 
-    'crm' => "ðŸ‘¥ *CRM Solution*\n\nManage customers, interactions and loyalty from one connected system.\n\nâœ“ Customer database  âœ“ Sales tracking\nâœ“ Loyalty management  âœ“ Customer insights\nâœ“ CRM + ERP integration\n\nLearn more:\nhttps://www.digifysoft.in/crm.php",
+    'crm' => "👥 *CRM Solution*\n\nManage customers, leads and loyalty from one connected system.\n\n• Customer database & purchase history\n• Automated follow-ups & pipelines\n• Loyalty points & promo campaigns\n• Direct WhatsApp & SMS alerts\n\nLearn more:\nhttps://www.digifysoft.in/crm.php",
 
-    'omnichannel' => "ðŸŒ *Omnichannel ERP*\n\nConnect your physical stores and online business.\n\nâœ“ Multi-channel orders  âœ“ Inventory sync\nâœ“ Multi-warehouse  âœ“ Shopify / WooCommerce\nâœ“ CRM  âœ“ Order management\n\nLearn more:\nhttps://www.digifysoft.in/omnichannel.php",
+    'omnichannel' => "🌐 *Omnichannel ERP*\n\nConnect your physical retail stores and online channels seamlessly.\n\n• Sync Shopify, WooCommerce & POS\n• Unified inventory across channels\n• Centralized order & dispatch mgmt\n• Real-time sales reporting\n\nLearn more:\nhttps://www.digifysoft.in/omnichannel.php",
 
-    'smart_retail' => "ðŸ¤– *Smart Retail*\n\nUpgrade traditional retail with AI-powered technology.\n\nâœ“ Smart checkout  âœ“ Self-checkout\nâœ“ AI product detection  âœ“ Smart kiosks\nâœ“ Footfall analytics  âœ“ POS + CRM\n\nLearn more:\nhttps://www.digifysoft.in/smart-retail.php",
+    'smart_retail' => "🤖 *Smart Retail*\n\nUpgrade traditional retail with modern AI-driven technology.\n\n• Smart checkout & self-checkout kiosks\n• AI product detection & scan\n• Footfall & customer analytics\n• Integrated POS & loyalty suite\n\nLearn more:\nhttps://www.digifysoft.in/smart-retail.php",
 
-    'restaurant' => "ðŸ½ï¸ *Restaurant Solution*\n\nManage restaurant operations from billing to kitchen.\n\nâœ“ POS billing  âœ“ KOT / KDS\nâœ“ Recipe costing  âœ“ Inventory\nâœ“ Food operations  âœ“ Multi-outlet\n\nLearn more:\nhttps://www.digifysoft.in/restaurant.php",
+    'restaurant' => "🍽️ *Restaurant POS Solution*\n\nManage restaurant operations smoothly from table to kitchen.\n\n• Fast table billing & split bills\n• Kitchen Order Tickets (KOT / KDS)\n• Recipe costing & raw inventory\n• Multi-outlet & online delivery sync\n\nLearn more:\nhttps://www.digifysoft.in/restaurant.php",
 
-    'manufacturing' => "ðŸ­ *Manufacturing ERP*\n\nManage production, materials and shop-floor operations.\n\nâœ“ Production planning  âœ“ BOM / MRP\nâœ“ Raw materials  âœ“ Inventory\nâœ“ Shop-floor tracking  âœ“ Reports\n\nLearn more:\nhttps://www.digifysoft.in/ai-manufacturing.php",
+    'manufacturing' => "🏭 *Manufacturing ERP*\n\nStreamline production, raw materials and shop-floor operations.\n\n• Production planning & scheduling\n• Bill of Materials (BOM) & MRP\n• Raw material stock & batch tracking\n• Quality control & cost reports\n\nLearn more:\nhttps://www.digifysoft.in/ai-manufacturing.php",
 
-    'education' => "ðŸŽ“ *Education ERP*\n\nComplete management system for schools and institutions.\n\nâœ“ Student management  âœ“ Fee collection\nâœ“ Attendance tracking  âœ“ Result management\nâœ“ Library & transport  âœ“ Parent portal\n\nLearn more:\nhttps://www.digifysoft.in/education.php",
+    'education' => "🎓 *Education ERP*\n\nComplete institution management for schools, colleges and institutes.\n\n• Student admissions & fee collection\n• Attendance, timetable & exams\n• Library & transport tracking\n• Parent portal & SMS notifications\n\nLearn more:\nhttps://www.digifysoft.in/education.php",
 
-    'ds_web' => "ðŸŒ *Web Development*\n\nProfessional websites built for business growth.\n\nâœ“ Corporate websites  âœ“ Landing pages\nâœ“ Custom web portals  âœ“ Fast & SEO-ready\nâœ“ Mobile-responsive  âœ“ CMS integration\n\nLearn more:\nhttps://www.digifysoft.in/web-development-services.php",
+    'ds_web' => "🌐 *Web Development*\n\nProfessional, high-converting websites built for business growth.\n\n• Corporate sites & landing pages\n• Fast loading & mobile-responsive\n• SEO-optimized architecture\n• Custom web portals & dashboards\n\nLearn more:\nhttps://www.digifysoft.in/web-development-services.php",
 
-    'ds_ecomm' => "ðŸ›’ *E-Commerce Development*\n\nBuild a powerful online store for your business.\n\nâœ“ Shopify & WooCommerce  âœ“ Custom stores\nâœ“ Payment integration  âœ“ Inventory sync\nâœ“ Order management  âœ“ Multi-vendor\n\nLearn more:\nhttps://www.digifysoft.in/e-commerce-website-development.php",
+    'ds_ecomm' => "🛒 *E-Commerce Development*\n\nHigh-speed online stores designed to scale sales.\n\n• Shopify, WooCommerce & Custom stores\n• Payment gateway & logistics sync\n• Inventory & catalog automation\n• Mobile-first checkout experience\n\nLearn more:\nhttps://www.digifysoft.in/e-commerce-website-development.php",
 
-    'ds_mobile' => "ðŸ“± *Mobile App Development*\n\nNative Android & iOS apps for your business needs.\n\nâœ“ Android (Kotlin)  âœ“ iOS (Swift)\nâœ“ Flutter cross-platform  âœ“ Offline-capable\nâœ“ POS apps  âœ“ Delivery & field apps\n\nLearn more:\nhttps://www.digifysoft.in/android-application.php",
+    'ds_mobile' => "📱 *Mobile App Development*\n\nNative and cross-platform apps built for iOS and Android.\n\n• Android (Kotlin) & iOS (Swift)\n• Flutter cross-platform apps\n• POS & field agent billing apps\n• Secure offline-ready data sync\n\nLearn more:\nhttps://www.digifysoft.in/android-application.php",
 
-    'ds_seo' => "ðŸ“ˆ *SEO & Digital Marketing*\n\nGet found on Google and grow your business online.\n\nâœ“ Technical & On-Page SEO  âœ“ Local SEO\nâœ“ Google Ads  âœ“ Backlink building\nâœ“ Keyword ranking  âœ“ Monthly reports\n\nLearn more:\nhttps://www.digifysoft.in/search-engine-optimization.php",
+    'ds_seo' => "📈 *SEO & Digital Marketing*\n\nBoost Google rankings and generate high-intent inbound leads.\n\n• Technical & On-Page SEO\n• Local SEO & Google Business Profile\n• Google Ads (PPC) & conversions\n• Monthly ranking & traffic reports\n\nLearn more:\nhttps://www.digifysoft.in/search-engine-optimization.php",
 
-    'ds_social' => "ðŸ“£ *Social Media Marketing*\n\nBuild your brand across Instagram, Facebook & LinkedIn.\n\nâœ“ Content creation  âœ“ Post scheduling\nâœ“ Paid ad campaigns  âœ“ Follower growth\nâœ“ Engagement strategy  âœ“ Analytics\n\nLearn more:\nhttps://www.digifysoft.in/social-media-optimization.php",
+    'ds_social' => "📢 *Social Media Marketing*\n\nBuild brand authority and drive customer engagement online.\n\n• Content creation & graphic design\n• Instagram, Facebook & LinkedIn growth\n• High-ROI paid social campaigns\n• Community & message management\n\nLearn more:\nhttps://www.digifysoft.in/social-media-optimization.php",
 
-    'ds_custom' => "âš™ï¸ *Custom Software Development*\n\nTailored business software built to your exact needs.\n\nâœ“ Custom ERP / CRM  âœ“ Web portals\nâœ“ API integrations  âœ“ Automation tools\nâœ“ Legacy system upgrades  âœ“ SaaS\n\nLearn more:\nhttps://www.digifysoft.in/web-development-services.php",
+    'ds_custom' => "⚙️ *Custom Software Development*\n\nTailored software solutions engineered for your exact business workflows.\n\n• Custom ERP & specialized CRM\n• API integrations & workflow automation\n• Legacy software modernization\n• Cloud SaaS product development\n\nLearn more:\nhttps://www.digifysoft.in/web-development-services.php",
 ];
 
-// Legacy IDs from old catalogue â†’ map to new IDs
+// Legacy IDs mapping
 $legacyMap = [
     'srv_erp'         => 'erp',
     'srv_pos'         => 'pos',
@@ -496,7 +492,6 @@ $legacyMap = [
     'srv_email_bimi'  => 'ds_custom',
 ];
 
-// Resolve matched service key
 $matchedKey = null;
 
 if (!empty($interactiveId)) {
@@ -509,35 +504,35 @@ if (!empty($interactiveId)) {
 
 // Keyword matching for free-text messages
 if (!$matchedKey) {
-    if      (preg_match('/\b(smart pos|pos|billing|retail billing|kirana|supermarket|barcode billing|dukan)\b/i', $msgLower))     $matchedKey = 'pos';
-    elseif  (preg_match('/\b(cloud erp|erp|enterprise resource|multi.store erp|accounts erp|tally)\b/i', $msgLower))             $matchedKey = 'erp';
-    elseif  (preg_match('/\b(inventory|stock|warehouse|godown|stock management|maal)\b/i', $msgLower))                           $matchedKey = 'inventory';
-    elseif  (preg_match('/\b(crm|customer management|loyalty program|customer database)\b/i', $msgLower))                        $matchedKey = 'crm';
-    elseif  (preg_match('/\b(omnichannel|omni.channel|online.*offline|shopify.*erp)\b/i', $msgLower))                            $matchedKey = 'omnichannel';
-    elseif  (preg_match('/\b(smart retail|ai.*retail|self.?checkout|footfall|ai checkout)\b/i', $msgLower))                      $matchedKey = 'smart_retail';
-    elseif  (preg_match('/\b(restaurant|hotel|food|kitchen|kot|kds|recipe|dhaba|cafe)\b/i', $msgLower))                          $matchedKey = 'restaurant';
-    elseif  (preg_match('/\b(manufacturing|factory|production|bom|mrp|shop.floor|udyog)\b/i', $msgLower))                        $matchedKey = 'manufacturing';
-    elseif  (preg_match('/\b(education|school|college|institution|student|fees management|institute)\b/i', $msgLower))           $matchedKey = 'education';
-    elseif  (preg_match('/\b(ecommerce|e-commerce|online store|shopify|woocommerce|online shop)\b/i', $msgLower))                $matchedKey = 'ds_ecomm';
-    elseif  (preg_match('/\b(mobile app|android app|ios app|flutter|app development|app banao)\b/i', $msgLower))                 $matchedKey = 'ds_mobile';
-    elseif  (preg_match('/\b(seo|google ranking|search engine|google ads|digital marketing)\b/i', $msgLower))                    $matchedKey = 'ds_seo';
-    elseif  (preg_match('/\b(social media|instagram|facebook|linkedin|smm|social marketing)\b/i', $msgLower))                    $matchedKey = 'ds_social';
-    elseif  (preg_match('/\b(website|web development|web portal|landing page|site banao)\b/i', $msgLower))                       $matchedKey = 'ds_web';
-    elseif  (preg_match('/\b(custom software|custom erp|custom crm|tailored software|software banana)\b/i', $msgLower))          $matchedKey = 'ds_custom';
-    elseif  (preg_match('/\b(digital service|digital solution|web.*app.*seo)\b/i', $msgLower))                                   $matchedKey = 'digital_services';
+    if      (preg_match('/\b(smart pos|pos|retail billing|kirana|supermarket|barcode billing|dukan)\b/i', $msgLower))      $matchedKey = 'pos';
+    elseif  (preg_match('/\b(cloud erp|enterprise resource|multi.store erp|accounts erp|tally)\b/i', $msgLower))          $matchedKey = 'erp';
+    elseif  (preg_match('/\b(inventory|stock|warehouse|godown|stock management|maal)\b/i', $msgLower))                    $matchedKey = 'inventory';
+    elseif  (preg_match('/\b(crm|customer management|loyalty program|customer database)\b/i', $msgLower))                 $matchedKey = 'crm';
+    elseif  (preg_match('/\b(omnichannel|omni.channel|online.*offline|shopify.*erp)\b/i', $msgLower))                     $matchedKey = 'omnichannel';
+    elseif  (preg_match('/\b(smart retail|ai.*retail|self.?checkout|footfall|ai checkout)\b/i', $msgLower))               $matchedKey = 'smart_retail';
+    elseif  (preg_match('/\b(restaurant|hotel|food|kitchen|kot|kds|recipe|dhaba|cafe)\b/i', $msgLower))                   $matchedKey = 'restaurant';
+    elseif  (preg_match('/\b(manufacturing|factory|production|bom|mrp|shop.floor|udyog)\b/i', $msgLower))                 $matchedKey = 'manufacturing';
+    elseif  (preg_match('/\b(education|school|college|institution|student|fees management|institute)\b/i', $msgLower))    $matchedKey = 'education';
+    elseif  (preg_match('/\b(ecommerce|e-commerce|online store|shopify|woocommerce|online shop)\b/i', $msgLower))         $matchedKey = 'ds_ecomm';
+    elseif  (preg_match('/\b(mobile app|android app|ios app|flutter|app development|app banao)\b/i', $msgLower))          $matchedKey = 'ds_mobile';
+    elseif  (preg_match('/\b(seo|google ranking|search engine|google ads|digital marketing)\b/i', $msgLower))             $matchedKey = 'ds_seo';
+    elseif  (preg_match('/\b(social media|instagram|facebook|linkedin|smm|social marketing)\b/i', $msgLower))             $matchedKey = 'ds_social';
+    elseif  (preg_match('/\b(website|web development|web portal|landing page|site banao)\b/i', $msgLower))                $matchedKey = 'ds_web';
+    elseif  (preg_match('/\b(custom software|custom erp|custom crm|tailored software|software banana)\b/i', $msgLower))   $matchedKey = 'ds_custom';
+    elseif  (preg_match('/\b(digital service|digital solution|web.*app.*seo)\b/i', $msgLower))                            $matchedKey = 'digital_services';
 }
 
-// Digital Services â†’ open sub-list instead of detail card
+// Digital Services -> open sub-list
 if ($matchedKey === 'digital_services') {
-    $dsBody = "ðŸ’» *Digital Services*\n\n"
+    $dsBody = "💻 *Digital Services*\n\n"
             . "We build digital solutions tailored to your business.\n\n"
-            . "â€¢ Websites  â€¢ E-commerce  â€¢ Mobile Apps\n"
-            . "â€¢ SEO & Marketing  â€¢ Social Media  â€¢ Custom Software\n\n"
+            . "• Websites  • E-commerce  • Mobile Apps\n"
+            . "• SEO & Marketing  • Social Media  • Custom Software\n\n"
             . "Which service do you need?";
 
     $r = send_whatsapp_interactive_list($targetPhone, "Digital Services", $dsBody, "Choose a Service", $digitalSubSections, "Select a digital solution");
     $sendResults[$targetPhone] = ['method' => 'digital_sub_menu', 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'digital_services_menu', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'digital_services_menu', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -545,37 +540,43 @@ if ($matchedKey === 'digital_services') {
 if ($matchedKey && isset($serviceDetails[$matchedKey])) {
     $r = send_whatsapp_interactive_buttons(
         $targetPhone, $serviceDetails[$matchedKey], $serviceButtons,
-        "Digify Soft Solutions", "Next step ðŸ‘‡"
+        "Digify Soft Solutions", "Next step 👇"
     );
     $sendResults[$targetPhone] = ['method' => 'service_detail', 'service' => $matchedKey, 'send_status' => $r['success'] ? 'success' : 'failed', 'details' => $r['response']];
-    echo json_encode(['status' => 'success', 'mode' => 'service_buttons', 'deliveries' => $sendResults]);
+    echo json_encode(['status' => 'success', 'mode' => 'service_buttons', 'deliveries' => $sendResults], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // =========================================================================
-// FLOW 8: FREE-TEXT AI FALLBACK â€” Consultative, short, qualifying
+// FLOW 8: FREE-TEXT AI CONSULTATIVE ASSISTANT (Groq LLM)
 // =========================================================================
 $apiKey = getenv('GROQ_API_KEY') ?: (getenv('CHAT_API_KEY') ?: (defined('GROQ_API_KEY') ? GROQ_API_KEY : (defined('CHAT_API_KEY') ? CHAT_API_KEY : '')));
 
 $systemPromptContent = <<<PROMPT
-You are Digify Saathi, WhatsApp AI assistant for Digify Soft Solutions (+91 7425016636, Consultant: Gautam).
+You are Digify Saathi, the official WhatsApp AI business consultant for Digify Soft Solutions (+91 7425016636, Lead Consultant: Gautam).
 
-YOUR ROLE: Warm, smart business consultant. Quickly understand the customer's business problem and guide them toward a free demo with Gautam.
+YOUR GOAL:
+Understand the customer's business problem, recommend the right Digify software/digital solution, and guide them to book a free demo with Gautam.
 
-RESPONSE RULES â€” STRICT:
-1. Reply in 80 to 180 words MAX. Short, punchy, scannable. No walls of text.
-2. Use bullet points if listing things. WhatsApp bold = *single asterisk*.
-3. Detect the customer's business type (retail, restaurant, manufacturing, school, website etc.) and name the right Digify solution.
-4. Ask exactly ONE qualifying follow-up question to continue the conversation.
-5. Always end by inviting them to book a free demo or WhatsApp Gautam: +91 7425016636.
-6. NEVER cut off mid-sentence. Always complete your thought.
-7. Language: Hindi/Hinglish input â†’ reply in natural Hinglish. English input â†’ reply in English.
+STRICT WRITING RULES:
+1. Always complete your response cleanly. NEVER cut off mid-sentence.
+2. Keep length between 70 to 140 words. Short, punchy, and easy to read on mobile.
+3. Use bullet points (•) and WhatsApp bold (*word*).
+4. If user writes in Hindi or Hinglish, reply in natural Hinglish. If in English, reply in crisp English.
+5. Ask exactly ONE clear qualifying question to keep the conversation going.
+6. End by inviting them to book a free demo or connect with Gautam at +91 7425016636.
 
-DIGIFY SOLUTIONS (for reference):
-POS â†’ digifysoft.in/pos.php | ERP â†’ digifysoft.in/erp.php | Inventory â†’ digifysoft.in/inventory.php
-CRM â†’ digifysoft.in/crm.php | Restaurant â†’ digifysoft.in/restaurant.php | Manufacturing â†’ digifysoft.in/ai-manufacturing.php
-Education ERP â†’ digifysoft.in/education.php | Smart Retail â†’ digifysoft.in/smart-retail.php
-Web/Apps/SEO â†’ digifysoft.in/web-development-services.php
+DIGIFY SOLUTIONS:
+- Smart Cloud POS: Retail billing, barcodes, thermal print, inventory sync (digifysoft.in/pos.php)
+- Cloud ERP: Multi-store, GST, accounting, warehouse & Tally sync (digifysoft.in/erp.php)
+- Inventory Management: Stock tracking, alerts, multi-warehouse (digifysoft.in/inventory.php)
+- CRM Suite: Customer database, lead automation, loyalty (digifysoft.in/crm.php)
+- Omnichannel: Connect offline stores with Shopify & WooCommerce (digifysoft.in/omnichannel.php)
+- Smart Retail: AI checkout, kiosks, footfall analytics (digifysoft.in/smart-retail.php)
+- Restaurant Solution: POS, KOT/KDS, table billing, recipe costing (digifysoft.in/restaurant.php)
+- Manufacturing ERP: BOM, production planning, raw materials (digifysoft.in/ai-manufacturing.php)
+- Education ERP: School/college fees, attendance, admissions (digifysoft.in/education.php)
+- Digital Services: Websites, Mobile Apps, SEO, Social Media, Custom Software (digifysoft.in)
 PROMPT;
 
 $messages = [
@@ -585,11 +586,11 @@ $messages = [
 
 function queryGroqAI($apiKey, $messages) {
     if (empty($apiKey)) return null;
-    $models  = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
+    $models  = ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'llama-3.1-8b-instant'];
     $groqUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
     foreach ($models as $model) {
-        $payload = ['model' => $model, 'messages' => $messages, 'temperature' => 0.65, 'max_tokens' => 300];
+        $payload = ['model' => $model, 'messages' => $messages, 'temperature' => 0.65, 'max_tokens' => 650];
         $ch = curl_init($groqUrl);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
@@ -616,16 +617,16 @@ $rawReply = queryGroqAI($apiKey, $messages);
 if ($rawReply && trim($rawReply) !== '') {
     $replyText = formatForWhatsApp($rawReply);
 } else {
-    $replyText = "ðŸ‘‹ *Hi! I'm Digify Saathi.*\n\n"
+    $replyText = "👋 *Welcome to Digify Soft Solutions!*\n\n"
                . "We help businesses with:\n"
-               . "â€¢ POS & ERP  â€¢ Inventory & CRM\n"
-               . "â€¢ Restaurants & Manufacturing\n"
-               . "â€¢ Websites, Apps & SEO\n\n"
-               . "Tell me your business type and I'll suggest the right solution. ðŸ˜Š";
+               . "• POS & ERP  • Inventory & CRM\n"
+               . "• Restaurants & Manufacturing\n"
+               . "• Websites, Mobile Apps & SEO\n\n"
+               . "Tell us your business requirement and our team will recommend the right solution. 😊";
 }
 
-// AI replies use all 3 buttons so user can navigate anywhere
-$r = send_whatsapp_interactive_buttons($targetPhone, $replyText, $allThreeButtons, "Digify Soft Solutions", "Choose an option ðŸ‘‡");
+// Deliver response with interactive navigation buttons
+$r = send_whatsapp_interactive_buttons($targetPhone, $replyText, $allThreeButtons, "Digify Soft Solutions", "Choose an option 👇");
 if ($r['success']) {
     $sendResults[$targetPhone] = ['method' => 'ai_reply', 'send_status' => 'success', 'details' => $r['response']];
 } else {
@@ -637,5 +638,5 @@ $resultData = [
     'status' => 'success', 'target_phone' => $targetPhone,
     'user_message' => $userMessage, 'reply' => $replyText, 'deliveries' => $sendResults
 ];
-@file_put_contents($logFile, date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData) . "\n\n", FILE_APPEND);
-echo json_encode($resultData);
+@file_put_contents($logFile, date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData, JSON_UNESCAPED_UNICODE) . "\n\n", FILE_APPEND);
+echo json_encode($resultData, JSON_UNESCAPED_UNICODE);
