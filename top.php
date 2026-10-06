@@ -101,7 +101,11 @@
     if (in_array($current_page, $product_pages)) {
         echo '    <link href="assets/css/premium-products.css" rel="stylesheet">' . "\n";
     }
-    $home_pages = ['index.php', '', 'country.php', 'restaurant.php', 'partner-with-us.php', 'ai-ocr.php', 'ai-business.php', 'ai-manufacturing.php'];
+    $home_pages = [
+        'index.php', '', 'country.php', 'restaurant.php', 'partner-with-us.php', 'ai-ocr.php', 'ai-business.php', 'ai-manufacturing.php',
+        'email-deliverability-services.php', 'dmarc-dkim-spf-setup.php', 'business-email-branding-bimi.php',
+        'dns-cloudflare-management.php', 'email-blacklist-removal.php', 'cloud-hosting-deployment.php'
+    ];
     if (in_array($current_page, $home_pages)) {
         $vHome = file_exists(__DIR__ . '/assets/css/premium-home.css') ? filemtime(__DIR__ . '/assets/css/premium-home.css') : '2.2';
         echo '    <link rel="stylesheet" href="assets/css/premium-home.css?v=' . $vHome . '">' . "\n";

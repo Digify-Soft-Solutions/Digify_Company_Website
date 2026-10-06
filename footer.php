@@ -59,14 +59,16 @@
               </div>
               <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
                 <div class="footer-widget">
-                   <h4>Service</h4>
+                   <h4>Cloud &amp; Services</h4>
                    <ul class="footer-links">
-                       <li><a href="digital-marketing-services.php">Digital Marketing Services</a></li>
-                       <li><a href="e-commerce-website-development.php">Web Development</a></li>
-                       <li><a href="android-application.php">Mobile App Developmet</a></li>
+                       <li><a href="email-deliverability-services.php" style="color: #ffb188; font-weight: 600;">Email Deliverability</a></li>
+                       <li><a href="dmarc-dkim-spf-setup.php">DMARC &amp; SPF Setup</a></li>
+                       <li><a href="business-email-branding-bimi.php">BIMI Email Branding</a></li>
+                       <li><a href="dns-cloudflare-management.php">DNS &amp; Cloudflare</a></li>
+                       <li><a href="cloud-hosting-deployment.php">Cloud Deployment</a></li>
+                       <li><a href="email-blacklist-removal.php">Blacklist Removal</a></li>
                        <li><a href="modern-responsive-website-design.php">Web Design</a></li>
-                       <li><a href="social-media-optimization.php">Social Media Marketing</a></li>
-                       <li><a href="custom-crm-solutions.php">CRM Development</a></li>
+                       <li><a href="android-application.php">Mobile App Dev</a></li>
                      </ul>
                 </div>
               </div> 

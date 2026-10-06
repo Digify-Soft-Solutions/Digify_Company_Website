@@ -2,8 +2,9 @@ const http = require('http');
 
 const PORT = process.env.PORT || 3000;
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
-const GOSHORT_TOKEN = process.env.GOSHORT_TOKEN || '';
-const GOSHORT_API_URL = 'https://wa20.nuke.co.in/v5/api/index.php/addbroadcast';
+const AUTOBOTCHAT_TOKEN = process.env.AUTOBOTCHAT_JWT_TOKEN || process.env.GOSHORT_TOKEN || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NjA3MDY0NDYsImRhdGEiOnsidXNlcm5hbWUiOiJEaWdpZnlfc29mdCIsIm5hbWUiOiJEaWdpZnlfc29mdCJ9fQ.lbhITMYPzs0RvDRf-YhqbJ5r63rFUPnInfTnIG_T998';
+const AUTOBOTCHAT_V5_API_URL = process.env.AUTOBOTCHAT_V5_BROADCAST_API || 'https://wa20.nuke.co.in/v5/api/index.php/addbroadcast';
+const AUTOBOTCHAT_V6_API_URL = process.env.AUTOBOTCHAT_V6_SESSION_API || 'https://wa20.nuke.co.in/v6/api/whatsapp/24/Digify_soft/messages';
 
 const server = http.createServer((req, res) => {
   // CORS & Header
@@ -33,13 +34,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Handle incoming POST Webhook from GoShort
+  // Handle incoming POST Webhook from AutoBotChat / Meta
   if (req.method === 'POST' && (req.url === '/webhook' || req.url === '/')) {
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', async () => {
       try {
-        console.log('--- Incoming GoShort Webhook Request ---');
+        console.log('--- Incoming AutoBotChat Webhook Request ---');
         console.log(body);
 
         let input = {};
@@ -142,33 +143,59 @@ RULES:
 
         console.log(`Generated AI Reply for ${sender}:`, replyText);
 
-        // Send outbound reply back via GoShort API
-        const sendPayload = {
-          broadcast_service: "whatsApp_credits",
-          broadcast_name: "Chatbot Reply to " + sender,
-          template_id: "digify",
-          contacts: sender,
-          custom_message: replyText
-        };
+        // Send outbound reply back via AutoBotChat WhatsApp API
+        let sendData = null;
+        try {
+          // Attempt 1: v6 Session Message
+          const v6Res = await fetch(AUTOBOTCHAT_V6_API_URL, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${AUTOBOTCHAT_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              messaging_product: "whatsapp",
+              recipient_type: "individual",
+              to: sender,
+              type: "text",
+              text: { preview_url: false, body: replyText }
+            })
+          });
+          const v6Data = await v6Res.json();
+          if (v6Res.ok && v6Data.messages) {
+            sendData = { method: 'v6_session', data: v6Data };
+          } else {
+            // Fallback: v5 Template Broadcast with approved template lmsnewlead
+            const v5Payload = {
+              brodcast_service: "whatsapp_credits",
+              broadcast_name: "Chatbot Reply to " + sender,
+              template_id: "lmsnewlead",
+              contacts: sender
+            };
+            const v5Res = await fetch(AUTOBOTCHAT_V5_API_URL, {
+              method: 'POST',
+              headers: {
+                'Authorization': AUTOBOTCHAT_TOKEN,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(v5Payload)
+            });
+            const v5Data = await v5Res.json();
+            sendData = { method: 'v5_broadcast', data: v5Data, v6_error: v6Data };
+          }
+        } catch (e) {
+          console.error('Failed to send outbound message:', e);
+          sendData = { error: e.message };
+        }
 
-        const goShortRes = await fetch(GOSHORT_API_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': GOSHORT_TOKEN,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(sendPayload)
-        });
-
-        const goShortData = await goShortRes.json();
-        console.log('GoShort API Response:', goShortData);
+        console.log('AutoBotChat API Response:', sendData);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           status: 'success',
           sender: sender,
           reply: replyText,
-          goshort_response: goShortData
+          autobotchat_response: sendData
         }));
 
       } catch (err) {

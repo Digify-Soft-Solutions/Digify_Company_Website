@@ -28,8 +28,11 @@ assets/fonts/
 *.jpeg
 *.webp
 
-# Private SMTP Credentials
+# Private SMTP Credentials & Environment Config
 mail_config.php
+.env
+.env.local
+.env.*.local
 
 # Security: GitHub Personal Access Token
 personal_access_token.txt
@@ -37,6 +40,9 @@ personal-access-token.txt
 
 # Scratch folder and working notes
 scratch/
+scratch_*.*
+test_cdp.js
+test_curl.html
 *.tmp
 Dockerfile.staging
 render_staging/

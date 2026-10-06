@@ -1,30 +1,40 @@
 <?php
-// broadcast.php — WhatsApp Broadcast Sender (simple web form + cURL)
-
-// === CONFIG ===
-$endpoint = 'https://wa.goshort.in/v5/api/index.php/addbroadcast';
-$bearerToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkyMTY0MjgsInZlciI6MiwiZGF0YSI6eyJ1c2VybmFtZSI6IkRpZ2lmeXNvZnRCb3QiLCJuYW1lIjoiRGlnaWZ5c29mdEJvdCJ9fQ.TPV8k8cdJWD0XYlWXv8bsMU3b1J4n-C0oO0YhRDtHZw';
-// ==============
+// broadcast.php — WhatsApp AutoBotChat Broadcast Sender
+require_once __DIR__ . '/whatsapp_config.php';
 
 $response = '';
 $status = '';
+$sentJson = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        "broadcast_service" => trim($_POST['broadcast_service']),
-        "broadcast_name"    => trim($_POST['broadcast_name']),
-        "template_id"       => trim($_POST['template_id']),
-        // send as array
-        "contacts"          => array_map('trim', explode(',', $_POST['contacts']))
-    ];
+    $broadcastService = trim($_POST['broadcast_service'] ?? 'whatsapp_credits');
+    $broadcastName    = trim($_POST['broadcast_name'] ?? 'Campaign');
+    $templateId       = trim($_POST['template_id'] ?? 'lmsnewlead');
+    $contactsRaw      = trim($_POST['contacts'] ?? '');
 
-    $ch = curl_init($endpoint);
+    // Format contacts as clean comma-separated phone string
+    $contactsArray = array_filter(array_map(function($c) {
+        return preg_replace('/\D/', '', trim($c));
+    }, explode(',', $contactsRaw)));
+    $contactsString = implode(',', $contactsArray);
+
+    $data = [
+        "brodcast_service" => $broadcastService,
+        "broadcast_name"   => $broadcastName,
+        "template_id"      => $templateId,
+        "contacts"         => $contactsString
+    ];
+    $sentJson = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+    $ch = curl_init(AUTOBOTCHAT_V5_BROADCAST_API);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_HTTPHEADER     => [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $bearerToken
+            'Authorization: ' . AUTOBOTCHAT_JWT_TOKEN
         ],
         CURLOPT_POSTFIELDS     => json_encode($data, JSON_UNESCAPED_SLASHES)
     ]);
@@ -37,58 +47,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     curl_close($ch);
 }
+
+$templates = $GLOBALS['DIGIFY_WA_TEMPLATES'] ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WhatsApp Broadcast Sender</title>
+<title>AutoBotChat WhatsApp Broadcast Sender - Digify Soft</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial, sans-serif; background:#f5f7fa; padding:40px; color:#333; }
-.container { max-width:600px; margin:auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-h2 { display:flex; align-items:center; gap:10px; color:#128C7E; }
-svg { width:26px; height:26px; }
-label { display:block; margin-top:15px; font-weight:600; }
-input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-top:6px; font-size:14px; }
-textarea { resize:vertical; min-height:60px; }
-button { margin-top:20px; background:#25D366; color:#fff; border:none; padding:12px 20px; font-size:16px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:8px; }
-button:hover { background:#1eb854; }
-.response { margin-top:25px; white-space:pre-wrap; background:#f0f0f0; padding:10px; border-radius:6px; font-family:monospace; font-size:13px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; padding: 40px 20px; color: #f1f5f9; margin: 0; }
+.container { max-width: 650px; margin: auto; background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid #334155; }
+h2 { display: flex; align-items: center; gap: 12px; color: #22c55e; margin-top: 0; font-size: 22px; }
+svg { width: 28px; height: 28px; }
+.badge { background: rgba(34, 197, 94, 0.15); color: #4ade80; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+label { display: block; margin-top: 16px; font-weight: 600; color: #cbd5e1; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+input, select, textarea { width: 100%; box-sizing: border-box; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; margin-top: 6px; font-size: 14px; color: #f8fafc; outline: none; transition: border-color 0.2s; }
+input:focus, select:focus, textarea:focus { border-color: #22c55e; }
+textarea { resize: vertical; min-height: 70px; font-family: monospace; }
+.hint { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+button { margin-top: 24px; background: #22c55e; color: #0f172a; font-weight: 700; border: none; padding: 14px 22px; font-size: 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: background 0.2s; }
+button:hover { background: #16a34a; color: #fff; }
+.response { margin-top: 25px; white-space: pre-wrap; background: #090d16; border: 1px solid #334155; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; color: #38bdf8; overflow-x: auto; }
+.info-box { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; color: #bae6fd; }
 </style>
 </head>
 <body>
 <div class="container">
   <h2>
-    <svg viewBox="0 0 32 32"><path fill="#25D366" d="M16 0C7.2 0 0 7.1 0 15.9c0 2.8.7 5.5 2 7.9L0 32l8.5-2.2c2.3 1.2 4.9 1.8 7.5 1.8 8.8 0 16-7.1 16-15.9S24.8 0 16 0z"/><path fill="#FFF" d="M24 21.2c-.3-.1-1.8-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.8-1.4-3.9-3.1-.3-.4.3-.4.9-1.3.1-.2.1-.3 0-.5-.1-.1-.7-1.6-.9-2.3-.2-.6-.5-.5-.7-.6-.2 0-.4 0-.6 0-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.5s1 2.8 1.2 3.1c.1.2 2.3 3.4 5.6 4.6 3.3 1.2 3.3.8 3.9.7.6-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
-    WhatsApp Broadcast Sender
+    <svg viewBox="0 0 32 32"><path fill="#22c55e" d="M16 0C7.2 0 0 7.1 0 15.9c0 2.8.7 5.5 2 7.9L0 32l8.5-2.2c2.3 1.2 4.9 1.8 7.5 1.8 8.8 0 16-7.1 16-15.9S24.8 0 16 0z"/><path fill="#FFF" d="M24 21.2c-.3-.1-1.8-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.6-.8-2.8-1.4-3.9-3.1-.3-.4.3-.4.9-1.3.1-.2.1-.3 0-.5-.1-.1-.7-1.6-.9-2.3-.2-.6-.5-.5-.7-.6-.2 0-.4 0-.6 0-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.5s1 2.8 1.2 3.1c.1.2 2.3 3.4 5.6 4.6 3.3 1.2 3.3.8 3.9.7.6-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+    AutoBotChat Broadcast Sender
+    <span class="badge">Innuvis v5 API</span>
   </h2>
+
+  <div class="info-box">
+    <strong>Sender Account:</strong> <?= htmlspecialchars(AUTOBOTCHAT_USERNAME) ?> (<?= htmlspecialchars(BOT_PHONE_NUMBER) ?>)<br>
+    <strong>API:</strong> <?= htmlspecialchars(AUTOBOTCHAT_V5_BROADCAST_API) ?>
+  </div>
+
   <form method="POST">
     <label>Broadcast Service</label>
-    <input type="text" name="broadcast_service" value="whatsApp_credits" required>
+    <input type="text" name="broadcast_service" value="whatsapp_credits" required>
 
-    <label>Broadcast Name</label>
-    <input type="text" name="broadcast_name" value="testingggg" required>
+    <label>Campaign Name</label>
+    <input type="text" name="broadcast_name" value="lms_campaign" required>
 
-    <label>Template ID</label>
-    <input type="text" name="template_id" value="digify" required>
+    <label>Select Approved Template</label>
+    <select name="template_id" required>
+      <?php foreach ($templates as $key => $tmpl): ?>
+        <option value="<?= htmlspecialchars($tmpl['name']) ?>">
+          <?= htmlspecialchars($tmpl['name']) ?> (ID: <?= htmlspecialchars($tmpl['id']) ?>) &mdash; <?= htmlspecialchars($tmpl['desc']) ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+    <div class="hint">Templates approved in Innuvis Dashboard for Digify_soft</div>
 
-    <label>Contacts (comma separated)</label>
-    <textarea name="contacts" placeholder="917425016636,919999888777" required>917425016636</textarea>
+    <label>Recipient Contacts (Comma separated with country code)</label>
+    <textarea name="contacts" placeholder="917425016636, 918233816675" required>917425016636</textarea>
+    <div class="hint">Example: 917425016636, 918233816675 (without + or spaces)</div>
 
     <button type="submit">
-      <svg viewBox="0 0 24 24"><path fill="white" d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
-      Send Broadcast
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      Send WhatsApp Broadcast
     </button>
   </form>
 
   <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
   <div class="response">
-<b>Status:</b> <?= htmlspecialchars($status) . "\n\n" ?>
-<b>Sent JSON:</b>
-<?= htmlspecialchars(json_encode($data, JSON_PRETTY_PRINT)) . "\n\n" ?>
-<b>Response:</b>
-<?= htmlspecialchars($response ?: 'No response') ?>
+<b>HTTP Status:</b> <?= htmlspecialchars($status) . "\n\n" ?>
+<b>Sent Request Payload:</b>
+<?= htmlspecialchars($sentJson) . "\n\n" ?>
+<b>AutoBotChat Server Response:</b>
+<?= htmlspecialchars($response ?: 'No response received') ?>
   </div>
   <?php endif; ?>
 </div>

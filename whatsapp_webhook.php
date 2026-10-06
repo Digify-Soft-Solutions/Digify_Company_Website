@@ -1,7 +1,7 @@
 <?php
 /**
  * Digify Soft Solutions - WhatsApp AI Chatbot Webhook
- * Integrates GoShort / Meta WhatsApp API with Digify AI Assistant (Groq LLM)
+ * Integrates AutoBotChat / Meta WhatsApp Cloud API with Digify AI Assistant (Groq LLM)
  */
 
 // Prevent PHP error leakage in JSON output
@@ -102,7 +102,7 @@ if (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
 $recipients = array_values(array_unique(array_filter($recipients)));
 
 // Filter out the bot's own WABA numbers so the bot replies to the customer and not itself
-$botNumbers = ['918005934184', '8005934184'];
+$botNumbers = ['917425016636', '7425016636', '918005934184', '8005934184'];
 $customerRecipients = array_values(array_filter($recipients, function($num) use ($botNumbers) {
     return !in_array($num, $botNumbers);
 }));
@@ -143,11 +143,14 @@ if (empty($sender) || empty($userMessage)) {
 }
 
 // Require configuration / API keys
+if (file_exists(__DIR__ . '/whatsapp_config.php')) {
+    require_once __DIR__ . '/whatsapp_config.php';
+}
 if (file_exists(__DIR__ . '/mail_config.php')) {
     require_once __DIR__ . '/mail_config.php';
 }
 
-$apiKey = getenv('CHAT_API_KEY') ?: (getenv('GROQ_API_KEY') ?: (defined('CHAT_API_KEY') ? CHAT_API_KEY : ''));
+$apiKey = getenv('GROQ_API_KEY') ?: (getenv('CHAT_API_KEY') ?: (defined('GROQ_API_KEY') ? GROQ_API_KEY : (defined('CHAT_API_KEY') ? CHAT_API_KEY : '')));
 
 // Save lead to database if db.php is available
 if (file_exists(__DIR__ . '/db.php')) {
@@ -260,44 +263,31 @@ if (!$replyText) {
     $replyText = "Hello! Namaste from Digify Soft Solutions.\n\nWe provide Cloud ERP, Smart POS (3-sec billing), Custom Mobile App & Web Development, and CRM Automation.\n\nTo schedule a live product demo or discuss your project, contact Gautam directly at +91 7425016636 or visit https://digifysoft.in.";
 }
 
-// --- Send Outbound Reply via GoShort WhatsApp API ---
-$goshortApiUrl = "https://wa.goshort.in/v5/api/index.php/addbroadcast";
-$goshortToken  = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3ODkyMTY0MjgsInZlciI6MiwiZGF0YSI6eyJ1c2VybmFtZSI6IkRpZ2lmeXNvZnRCb3QiLCJuYW1lIjoiRGlnaWZ5c29mdEJvdCJ9fQ.TPV8k8cdJWD0XYlWXv8bsMU3b1J4n-C0oO0YhRDtHZw";
-
+// --- Send Outbound Reply via AutoBotChat WhatsApp API ---
 $sendResults = [];
 foreach ($recipients as $targetPhone) {
     if (empty($targetPhone) || strlen($targetPhone) < 10) continue;
 
-    $sendPayload = [
-        "broadcast_service" => "whatsApp_credits",
-        "broadcast_name"    => "Chatbot Reply to " . $targetPhone,
-        "template_id"       => "digify",
-        "contacts"          => $targetPhone,
-        "custom_message"    => $replyText
-    ];
+    // First attempt v6 session message (direct text reply to active conversation)
+    $v6Result = send_whatsapp_session_message($targetPhone, $replyText);
 
-    $chSend = curl_init($goshortApiUrl);
-    curl_setopt($chSend, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($chSend, CURLOPT_POST, true);
-    curl_setopt($chSend, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($chSend, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($chSend, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-    curl_setopt($chSend, CURLOPT_TIMEOUT, 10);
-    curl_setopt($chSend, CURLOPT_HTTPHEADER, [
-        "Authorization: $goshortToken",
-        "Content-Type: application/json"
-    ]);
-    curl_setopt($chSend, CURLOPT_POSTFIELDS, json_encode($sendPayload));
-    $sendResult = curl_exec($chSend);
-    $sendHttpCode = curl_getinfo($chSend, CURLINFO_HTTP_CODE);
-    $sendErr = curl_error($chSend);
-    curl_close($chSend);
-
-    $sendResults[$targetPhone] = [
-        "send_http_code" => $sendHttpCode,
-        "send_error"     => $sendErr,
-        "send_result"    => json_decode($sendResult, true) ?? $sendResult
-    ];
+    if ($v6Result['success']) {
+        $sendResults[$targetPhone] = [
+            "method"      => "v6_session",
+            "send_status" => "success",
+            "details"     => $v6Result['response']
+        ];
+    } else {
+        // Fallback: send approved lead template via v5 broadcast
+        $v5Result = send_whatsapp_template_broadcast($targetPhone, 'lmsnewlead', 'Webhook Reply to ' . $targetPhone);
+        $sendResults[$targetPhone] = [
+            "method"      => "v5_broadcast_fallback",
+            "v6_error"    => $v6Result['error'] ?? ($v6Result['response'] ?? 'Session message failed'),
+            "send_status" => $v5Result['success'] ? 'success' : 'failed',
+            "details"     => $v5Result['response'],
+            "error"       => $v5Result['error']
+        ];
+    }
 }
 
 $resultData = [

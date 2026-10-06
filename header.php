@@ -387,17 +387,40 @@ header {
                         </li>
 
                         <!-- 4. SERVICES & TECH -->
-                        <li class="nav-item dropdown dropdown-services">
+                        <!-- 4. SERVICES & CLOUD -->
+                        <li class="nav-item dropdown">
                           <a class="nav-link" href="#">
                             Services <i class="fa-solid fa-angle-down"></i>
                           </a>
-                          <ul class="sub-menu">
-                            <li><a href="modern-responsive-website-design.php"><i class="fa-solid fa-laptop"></i> Connected Web Development</a></li>
-                            <li><a href="e-commerce-website-development.php"><i class="fa-solid fa-cart-shopping"></i> E-Commerce Stores</a></li>
-                            <li><a href="android-application.php"><i class="fa-brands fa-android"></i> Android Apps</a></li>
-                            <li><a href="ios-application.php"><i class="fa-brands fa-apple"></i> iOS Apps</a></li>
-                            <li><a href="search-engine-optimization.php"><i class="fa-solid fa-magnifying-glass"></i> SEO &amp; Growth</a></li>
-                          </ul>
+                          <div class="mega-menu" style="min-width: 580px;">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="mega-menu-wrap">
+                                  <ul>
+                                    <strong><i class="fa-solid fa-code"></i> Web &amp; App Development</strong>
+                                    <li><a href="modern-responsive-website-design.php"><i class="fa-solid fa-laptop"></i> Connected Web Development</a></li>
+                                    <li><a href="e-commerce-website-development.php"><i class="fa-solid fa-cart-shopping"></i> E-Commerce Stores</a></li>
+                                    <li><a href="android-application.php"><i class="fa-brands fa-android"></i> Android Apps</a></li>
+                                    <li><a href="ios-application.php"><i class="fa-brands fa-apple"></i> iOS Apps</a></li>
+                                    <li><a href="search-engine-optimization.php"><i class="fa-solid fa-magnifying-glass"></i> SEO &amp; Growth</a></li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="mega-menu-wrap">
+                                  <ul>
+                                    <strong><i class="fa-solid fa-cloud-arrow-up text-primary"></i> Cloud &amp; Deliverability</strong>
+                                    <li><a href="email-deliverability-services.php"><i class="fa-solid fa-envelope-circle-check text-primary"></i> Email Deliverability <span class="badge bg-danger text-white ms-1" style="font-size: 8px;">HOT</span></a></li>
+                                    <li><a href="dmarc-dkim-spf-setup.php"><i class="fa-solid fa-shield-halved text-success"></i> DMARC, DKIM &amp; SPF</a></li>
+                                    <li><a href="business-email-branding-bimi.php"><i class="fa-solid fa-certificate text-warning"></i> BIMI Email Branding</a></li>
+                                    <li><a href="dns-cloudflare-management.php"><i class="fa-solid fa-network-wired text-info"></i> DNS &amp; Cloudflare</a></li>
+                                    <li><a href="email-blacklist-removal.php"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Blacklist Removal</a></li>
+                                    <li><a href="cloud-hosting-deployment.php"><i class="fa-solid fa-server text-primary"></i> Cloud Deployment</a></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </li>
 
                         <!-- 5. COMPANY -->
