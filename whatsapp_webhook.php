@@ -142,8 +142,35 @@ if (isset($input['text'])) {
     $userMessage = $input['entry'][0]['changes'][0]['value']['messages'][0]['text']['body'];
 }
 
+// Extract interactive button or list reply if clicked
+$interactiveId = '';
+$interactiveTitle = '';
+if (isset($input['interactive']['button_reply'])) {
+    $interactiveId = $input['interactive']['button_reply']['id'] ?? '';
+    $interactiveTitle = $input['interactive']['button_reply']['title'] ?? '';
+} elseif (isset($input['interactive']['list_reply'])) {
+    $interactiveId = $input['interactive']['list_reply']['id'] ?? '';
+    $interactiveTitle = $input['interactive']['list_reply']['title'] ?? '';
+} elseif (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'])) {
+    $inter = $input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'];
+    if (isset($inter['button_reply'])) {
+        $interactiveId = $inter['button_reply']['id'] ?? '';
+        $interactiveTitle = $inter['button_reply']['title'] ?? '';
+    } elseif (isset($inter['list_reply'])) {
+        $interactiveId = $inter['list_reply']['id'] ?? '';
+        $interactiveTitle = $inter['list_reply']['title'] ?? '';
+    }
+}
+
+if (!empty($interactiveTitle) && empty($userMessage)) {
+    $userMessage = $interactiveTitle;
+}
+if (!empty($interactiveId) && empty($userMessage)) {
+    $userMessage = $interactiveId;
+}
+
 // If no valid message or sender found, exit gracefully
-if (empty($sender) || empty($userMessage)) {
+if (empty($sender) || (empty($userMessage) && empty($interactiveId))) {
     $response = [
         "status" => "ignored",
         "reason" => "No valid message or sender detected",
@@ -244,30 +271,6 @@ function formatForWhatsApp($text) {
     }
 
     return trim($text);
-}
-
-// Extract interactive button or list reply if clicked
-$interactiveId = '';
-$interactiveTitle = '';
-if (isset($input['interactive']['button_reply'])) {
-    $interactiveId = $input['interactive']['button_reply']['id'] ?? '';
-    $interactiveTitle = $input['interactive']['button_reply']['title'] ?? '';
-} elseif (isset($input['interactive']['list_reply'])) {
-    $interactiveId = $input['interactive']['list_reply']['id'] ?? '';
-    $interactiveTitle = $input['interactive']['list_reply']['title'] ?? '';
-} elseif (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'])) {
-    $inter = $input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'];
-    if (isset($inter['button_reply'])) {
-        $interactiveId = $inter['button_reply']['id'] ?? '';
-        $interactiveTitle = $inter['button_reply']['title'] ?? '';
-    } elseif (isset($inter['list_reply'])) {
-        $interactiveId = $inter['list_reply']['id'] ?? '';
-        $interactiveTitle = $inter['list_reply']['title'] ?? '';
-    }
-}
-
-if (!empty($interactiveTitle) && empty($userMessage)) {
-    $userMessage = $interactiveTitle;
 }
 
 // 1. Full 10-Service Catalogue Definition (Meta 24-character title compliant)
