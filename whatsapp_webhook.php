@@ -212,39 +212,83 @@ if (file_exists(__DIR__ . '/db.php')) {
     }
 }
 
+// Helper to format text perfectly for WhatsApp and strictly enforce Meta limits
+function formatForWhatsApp($text) {
+    if (empty($text)) return '';
+
+    // Convert markdown bold **text** to WhatsApp native bold *text*
+    $text = preg_replace('/\*\*(.*?)\*\*/s', '*$1*', $text);
+
+    // Convert markdown headers ### Header or ## Header to *Header*
+    $text = preg_replace('/^#{1,6}\s*(.+)$/m', '*$1*', $text);
+
+    // Strip bracketed action tags if present
+    $text = preg_replace('/\[\s*ACTION\s*:[^\]]*\]/i', '', $text);
+
+    // Replace multiple consecutive blank lines with double newline
+    $text = preg_replace("/\n{3,}/", "\n\n", trim($text));
+
+    // Meta WhatsApp Cloud API limit is 4096 characters.
+    // If text exceeds 3500 characters, truncate at the last full sentence boundary.
+    if (mb_strlen($text, 'UTF-8') > 3500) {
+        $trimmed = mb_substr($text, 0, 3400, 'UTF-8');
+        $lastPunct = max(
+            mb_strrpos($trimmed, '.', 0, 'UTF-8') ?: 0,
+            mb_strrpos($trimmed, "\n", 0, 'UTF-8') ?: 0,
+            mb_strrpos($trimmed, '!', 0, 'UTF-8') ?: 0,
+            mb_strrpos($trimmed, '?', 0, 'UTF-8') ?: 0
+        );
+        if ($lastPunct > 1500) {
+            $text = mb_substr($trimmed, 0, $lastPunct, 'UTF-8') . "\n\n📞 *Call / WhatsApp Gautam:* +91 7425016636\n🌐 digifysoft.in";
+        }
+    }
+
+    return trim($text);
+}
+
 // Prepare System Prompt for Digify Saathi WhatsApp Assistant
 $systemPromptContent = <<<PROMPT
-You are Digify Saathi, official WhatsApp AI Assistant for Digify Soft Solutions (+91 7425016636).
-Keep replies concise, polite, helpful, clear, and perfectly formatted for WhatsApp mobile screens.
-Use bullet points, emojis, and short paragraphs. Avoid walls of text.
+You are Digify Saathi, the official, highly intelligent, consultative AI Assistant for Digify Soft Solutions (+91 7425016636).
+You are conversing directly with customers on WhatsApp. Your tone is warm, polite, confident, ultra-smart, engaging, and premium ("smart & sexy").
 
-COMPANY OVERVIEW & CONTACTS:
-- Company: Digify Soft Solutions (Cloud ERP, Smart POS, Mobile App & Web Development, AI Automation).
-- Founder: Gautam (+91 7425016636 / +91 7017558150)
-- WhatsApp / Phone: +91 7425016636
-- Email: webdev.digifysoft@gmail.com, support@digifysoft.in
-- Offices: Noida/Greater Noida, Jaipur, Bhopal. Serving clients across 13+ countries.
+LANGUAGE & TONE:
+- Adapt to the user's language: If the user texts in Hindi or Hinglish, reply in natural, polished, conversational Hinglish. If in English, reply in clean, executive-level English.
+- Be consultative and helpful: Understand their business (e.g. Retail, Supermarket, Restaurant, Garments, Manufacturing, E-Commerce, Mobile App) and give tailored solutions.
+- Formatting: Use emojis elegantly (⚡, 🛒, 📦, 📊, 📱, 🚀, 📞), short paragraphs, and clean bullet points.
+- Use single asterisks for bold (e.g. *Feature Name*) as per WhatsApp formatting standards.
 
-CORE PRODUCTS & SERVICES:
-1. Digify AI Business ERP:
-   - Unified cloud platform for Retail, Wholesale, Manufacturing, Supermarkets & Restaurants.
-   - Modules: Sales, Purchasing, Multi-warehouse Inventory, BOM Manufacturing, Accounting & GST, CRM, HR/Payroll.
-2. Digify Smart POS:
-   - Ultra-fast 3-second billing, barcode scanning, offline-first billing mode.
-   - Hardware integration: thermal printer, weighing scale, barcode scanner.
-   - Dual pricing (MRP/Selling price), wholesale rates, loyalty points, customer ledger.
+ABOUT DIGIFY SOFT SOLUTIONS:
+- Global deployments across 13+ countries, 100+ happy retailers, 10M+ bills generated, 99.9% uptime.
+- Offices: Noida / Greater Noida (Gaur City Mall / Knowledge Park), Jaipur (Civil Lines), Bhopal (Avadhpuri).
+- Key Contact Person: Gautam (+91 7425016636 / +91 7017558150).
+- Email: webdev.digifysoft@gmail.com, support@digifysoft.in | Website: digifysoft.in
+
+CORE PRODUCTS & CAPABILITIES:
+1. Digify Smart POS Software (3-Second Billing):
+   - Ultra-fast 3-sec billing, offline-first billing mode (bills without internet & syncs automatically).
+   - Hardware integration: Thermal receipt printers, electronic weighing scales, barcode & QR scanners, cash drawers.
+   - Dual pricing (MRP / Wholesale rate), customer loyalty points, store credit & customer ledger.
+   - AI Smart Visual POS for rapid item recognition on touch screens.
+2. Digify AI Cloud ERP Suite:
+   - Unified platform for Retail, Wholesale, Distribution, and Factories.
+   - Modules: Sales & Invoicing, Purchasing (PO/GRN), Multi-Warehouse Inventory (Batch/Expiry, Reorder alerts), BOM Manufacturing (raw materials, production scheduling, costing), GST / Accounting (automated e-invoicing, e-way bills, Tally sync), CRM & Sales Pipelines, HR & Payroll (attendance, salary slips).
+   - International Compliance: Saudi Arabia ZATCA Phase 2, UAE FTA VAT, India GST.
 3. Custom Mobile Application Development:
-   - Native Android (Kotlin) & iOS (Swift), Cross-platform (Flutter).
-   - Tablet POS apps, B2B customer apps, delivery apps, Play Store publishing.
-4. Accounting, GST & Compliance:
-   - Automated E-Invoicing & E-Way Bill generation, Tally sync, ZATCA Phase 2 (Saudi Arabia) & UAE FTA VAT compliance.
-5. Custom Web & E-Commerce:
-   - High-performance business websites, Shopify / WooCommerce integration, custom CRM pipelines.
+   - Native Android (Kotlin), iOS (Swift), and Cross-Platform (Flutter).
+   - Tablet POS apps, B2B dealer/ordering apps, delivery tracking, customer storefronts, Play Store & App Store deployment.
+4. Custom Web & E-Commerce:
+   - High-performance business websites, Shopify / WooCommerce integration, custom CRM pipelines, email deliverability (BIMI, DMARC, Cloudflare).
+5. Industry Verticals:
+   - Supermarkets & Kirana, Garments & Boutiques, Footwear, Restaurants & Cafés (KOT, table billing), Hardware & Sanitary, Pharmacy & Cosmetics, Schools, Religious/Temple trusts.
 
-COMMUNICATION GUIDELINES:
-- Answer user questions directly, clearly, and concisely.
-- For pricing or custom requirements, mention that pricing depends on required modules/counters and invite them to speak with Gautam on +91 7425016636.
-- Always include Gautam's contact (+91 7425016636) for live demos or direct consultation.
+CRITICAL COMPLETION & LENGTH RULES (NEVER CUT OFF):
+1. Keep replies concise, punchy, and complete (between 120 and 220 words, under 1200 characters).
+2. NEVER stop mid-sentence. Always finish your thoughts, bullet points, and sentences completely.
+3. For pricing or custom requirements, mention that pricing depends on required modules/counters and invite them for a live interactive demo with Gautam.
+4. Always conclude with a clean, attractive Call to Action:
+   👉 *Live Demo ya Best Quote ke liye direct sampark karein:*
+   📞 Call / WhatsApp: *+91 7425016636* (Gautam)
+   🌐 Website: *digifysoft.in*
 PROMPT;
 
 $messages = [
@@ -263,7 +307,6 @@ function queryGroqAI($apiKey, $messages) {
     if (empty($apiKey)) return null;
 
     $models = [
-        "openai/gpt-oss-120b",
         "llama-3.3-70b-versatile",
         "llama-3.1-8b-instant"
     ];
@@ -273,8 +316,8 @@ function queryGroqAI($apiKey, $messages) {
         $payload = [
             "model"       => $model,
             "messages"    => $messages,
-            "temperature" => 0.7,
-            "max_tokens"  => 400
+            "temperature" => 0.6,
+            "max_tokens"  => 1024
         ];
 
         $ch = curl_init($groqUrl);
@@ -285,7 +328,7 @@ function queryGroqAI($apiKey, $messages) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 14);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $apiKey
@@ -297,20 +340,27 @@ function queryGroqAI($apiKey, $messages) {
         if ($httpCode === 200 && $res) {
             $json = json_decode($res, true);
             if (!empty($json['choices'][0]['message']['content'])) {
-                $content = trim($json['choices'][0]['message']['content']);
-                // Strip bracketed action tags if present
-                $content = preg_replace('/\[\s*ACTION\s*:[^\]]*\]/i', '', $content);
-                return trim($content);
+                return trim($json['choices'][0]['message']['content']);
             }
         }
     }
     return null;
 }
 
-$replyText = queryGroqAI($apiKey, $messages);
+$rawReply = queryGroqAI($apiKey, $messages);
 
-if (!$replyText) {
-    $replyText = "Hello! Namaste from Digify Soft Solutions.\n\nWe provide Cloud ERP, Smart POS (3-sec billing), Custom Mobile App & Web Development, and CRM Automation.\n\nTo schedule a live product demo or discuss your project, contact Gautam directly at +91 7425016636 or visit https://digifysoft.in.";
+if ($rawReply && trim($rawReply) !== '') {
+    $replyText = formatForWhatsApp($rawReply);
+} else {
+    // Intelligent, complete fallback response
+    $replyText = "🙏 *Namaste! Main Digify Saathi hoon, Digify Soft Solutions ka official AI Assistant.*\n\n"
+               . "Hum provide karte hain:\n"
+               . "⚡ *Digify Smart POS:* Ultra-fast 3-sec billing, offline mode, thermal printer & barcode scan.\n"
+               . "🏭 *Cloud ERP:* Multi-warehouse inventory, factory BOM manufacturing, GST e-invoicing & accounts.\n"
+               . "📱 *Custom Mobile Apps:* Android (Kotlin), iOS & Flutter cross-platform apps.\n\n"
+               . "👉 *Live Product Demo ya pricing ke liye Gautam se connect karein:*\n"
+               . "📞 Call / WhatsApp: *+91 7425016636*\n"
+               . "🌐 Website: *digifysoft.in*";
 }
 
 // --- Send Outbound Reply via AutoBotChat WhatsApp API ---
