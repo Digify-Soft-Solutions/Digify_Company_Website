@@ -60,11 +60,8 @@ if (
     exit;
 }
 
-// Extract recipient phone numbers from various GoShort/Meta/WhatsApp payload structures
+// Extract customer sender phone numbers from various payload structures
 $recipients = [];
-if (!empty($input['receiver'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['receiver']);
-}
 if (!empty($input['from'])) {
     $f = is_array($input['from']) ? ($input['from']['number'] ?? $input['from']['phone'] ?? '') : $input['from'];
     if (!empty($f)) $recipients[] = preg_replace('/\D/', '', (string)$f);
@@ -141,6 +138,41 @@ if (empty($sender) || empty($userMessage)) {
     echo json_encode($response);
     exit;
 }
+
+// --- Deduplication & Debounce: Prevent duplicate reply if gateway fires retry within 25 seconds ---
+$incomingMsgId = $input['id'] ?? ($input['message_id'] ?? ($input['msg_id'] ?? ($input['entry'][0]['changes'][0]['value']['messages'][0]['id'] ?? ($input['data']['id'] ?? ''))));
+$dedupKey = !empty($incomingMsgId) ? (string)$incomingMsgId : ($sender . '_' . md5(strtolower(trim((string)$userMessage))));
+
+$dedupFile = sys_get_temp_dir() . '/digify_wa_webhook_dedup.json';
+$nowTime = time();
+$dedupCache = [];
+if (file_exists($dedupFile)) {
+    $rawCache = @file_get_contents($dedupFile);
+    $dedupCache = json_decode($rawCache, true) ?: [];
+}
+
+// Clean entries older than 60 seconds
+foreach ($dedupCache as $k => $ts) {
+    if ($nowTime - $ts > 60) {
+        unset($dedupCache[$k]);
+    }
+}
+
+// If duplicate message arrived within 25 seconds, ignore immediately
+if (isset($dedupCache[$dedupKey]) && ($nowTime - $dedupCache[$dedupKey] < 25)) {
+    $dupResponse = [
+        "status"    => "ignored",
+        "reason"    => "Duplicate message / retry debounce (already processed within 25s)",
+        "dedup_key" => $dedupKey
+    ];
+    @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Duplicate Ignored: " . json_encode($dupResponse) . "\n\n", FILE_APPEND);
+    echo json_encode($dupResponse);
+    exit;
+}
+
+// Mark key as seen right now (before AI processing)
+$dedupCache[$dedupKey] = $nowTime;
+@file_put_contents($dedupFile, json_encode($dedupCache));
 
 // Require configuration / API keys
 if (file_exists(__DIR__ . '/whatsapp_config.php')) {
@@ -265,9 +297,9 @@ if (!$replyText) {
 
 // --- Send Outbound Reply via AutoBotChat WhatsApp API ---
 $sendResults = [];
-foreach ($recipients as $targetPhone) {
-    if (empty($targetPhone) || strlen($targetPhone) < 10) continue;
+$targetPhone = preg_replace('/\D/', '', (string)$sender);
 
+if (!empty($targetPhone) && strlen($targetPhone) >= 10) {
     // First attempt v6 session message (direct text reply to active conversation)
     $v6Result = send_whatsapp_session_message($targetPhone, $replyText);
 
