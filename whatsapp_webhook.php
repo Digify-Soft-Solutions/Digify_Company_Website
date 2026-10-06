@@ -30,13 +30,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
-// Log incoming request for debugging
+// Helper to clean and normalize WhatsApp phone numbers (e.g. 8233816674 -> 918233816674)
+if (!function_exists('normalize_wa_phone')) {
+    function normalize_wa_phone($num) {
+        $clean = preg_replace('/\D/', '', (string)$num);
+        if (strlen($clean) === 10) {
+            $clean = '91' . $clean;
+        }
+        return $clean;
+    }
+}
+
+// Log incoming request to data directory for debugging
+$logDir = __DIR__ . '/data';
+if (!is_dir($logDir)) {
+    @mkdir($logDir, 0777, true);
+}
+$logFile = $logDir . '/webhook_log.json';
+
 $rawInput = file_get_contents('php://input');
 $requestHeaders = function_exists('getallheaders') ? getallheaders() : [];
 $logData = date('Y-m-d H:i:s') . " - " . $_SERVER['REQUEST_METHOD'] . " " . ($_SERVER['REQUEST_URI'] ?? '') . "\n"
          . "Headers: " . json_encode($requestHeaders) . "\n"
          . "Raw: " . $rawInput . "\n";
-@file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', $logData, FILE_APPEND);
+@file_put_contents($logFile, $logData, FILE_APPEND);
 
 $input = json_decode($rawInput, true) ?? [];
 if (empty($input) && !empty($_POST)) {
@@ -45,7 +62,7 @@ if (empty($input) && !empty($_POST)) {
 
 // Check for status updates or outgoing echo messages and ignore them to prevent reply loops
 if (
-    isset($input['event']) && in_array(strtolower($input['event']), ['status', 'delivery', 'sent', 'read', 'delivered', 'failed']) ||
+    (isset($input['event']) && in_array(strtolower($input['event']), ['status', 'delivery', 'sent', 'read', 'delivered', 'failed'])) ||
     isset($input['statuses']) ||
     !empty($input['from_me']) ||
     (isset($input['direction']) && strtolower($input['direction']) === 'outgoing') ||
@@ -55,59 +72,57 @@ if (
         "status" => "ignored",
         "reason" => "Message status or outgoing notification received, no action required."
     ];
-    @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - " . json_encode($ignoreResponse) . "\n\n", FILE_APPEND);
+    @file_put_contents($logFile, date('Y-m-d H:i:s') . " - " . json_encode($ignoreResponse) . "\n\n", FILE_APPEND);
     echo json_encode($ignoreResponse);
     exit;
 }
 
-// Extract customer sender phone numbers from various payload structures
-$recipients = [];
+// Extract customer phone candidates from all known Innuvis / Meta webhook fields
+$rawCandidates = [];
+if (!empty($input['receiver'])) {
+    $r = is_array($input['receiver']) ? ($input['receiver']['number'] ?? $input['receiver']['phone'] ?? '') : $input['receiver'];
+    if (!empty($r)) $rawCandidates[] = $r;
+}
 if (!empty($input['from'])) {
     $f = is_array($input['from']) ? ($input['from']['number'] ?? $input['from']['phone'] ?? '') : $input['from'];
-    if (!empty($f)) $recipients[] = preg_replace('/\D/', '', (string)$f);
+    if (!empty($f)) $rawCandidates[] = $f;
 }
-if (!empty($input['sender_id'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['sender_id']);
-}
+if (!empty($input['sender_id'])) $rawCandidates[] = $input['sender_id'];
 if (!empty($input['sender'])) {
     $s = is_array($input['sender']) ? ($input['sender']['number'] ?? $input['sender']['phone'] ?? '') : $input['sender'];
-    if (!empty($s)) $recipients[] = preg_replace('/\D/', '', (string)$s);
+    if (!empty($s)) $rawCandidates[] = $s;
 }
-if (!empty($input['phone'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['phone']);
-}
-if (!empty($input['mobile'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['mobile']);
-}
-if (!empty($input['wa_id'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['wa_id']);
-}
+if (!empty($input['phone'])) $rawCandidates[] = $input['phone'];
+if (!empty($input['mobile'])) $rawCandidates[] = $input['mobile'];
+if (!empty($input['wa_id'])) $rawCandidates[] = $input['wa_id'];
 if (!empty($input['contact'])) {
     $c = is_array($input['contact']) ? ($input['contact']['wa_id'] ?? $input['contact']['phone'] ?? '') : $input['contact'];
-    if (!empty($c)) $recipients[] = preg_replace('/\D/', '', (string)$c);
+    if (!empty($c)) $rawCandidates[] = $c;
 }
-if (!empty($input['contacts'][0]['wa_id'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['contacts'][0]['wa_id']);
-}
-if (!empty($input['data']['from'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['data']['from']);
-}
+if (!empty($input['contacts'][0]['wa_id'])) $rawCandidates[] = $input['contacts'][0]['wa_id'];
+if (!empty($input['data']['from'])) $rawCandidates[] = $input['data']['from'];
+if (!empty($input['data']['receiver'])) $rawCandidates[] = $input['data']['receiver'];
+if (!empty($input['data']['sender'])) $rawCandidates[] = $input['data']['sender'];
 if (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['from'])) {
-    $recipients[] = preg_replace('/\D/', '', (string)$input['entry'][0]['changes'][0]['value']['messages'][0]['from']);
+    $rawCandidates[] = $input['entry'][0]['changes'][0]['value']['messages'][0]['from'];
 }
 
-$recipients = array_values(array_unique(array_filter($recipients)));
+$normalizedCandidates = [];
+foreach ($rawCandidates as $cand) {
+    $norm = normalize_wa_phone($cand);
+    if (!empty($norm) && strlen($norm) >= 10) {
+        $normalizedCandidates[] = $norm;
+    }
+}
+$normalizedCandidates = array_values(array_unique($normalizedCandidates));
 
-// Filter out the bot's own WABA numbers so the bot replies to the customer and not itself
+// Filter out bot numbers so we never reply to our own WABA profile
 $botNumbers = ['917425016636', '7425016636', '918005934184', '8005934184'];
-$customerRecipients = array_values(array_filter($recipients, function($num) use ($botNumbers) {
+$customerRecipients = array_values(array_filter($normalizedCandidates, function($num) use ($botNumbers) {
     return !in_array($num, $botNumbers);
 }));
 
-if (!empty($customerRecipients)) {
-    $recipients = $customerRecipients;
-}
-$sender = !empty($recipients) ? $recipients[0] : '';
+$sender = !empty($customerRecipients) ? $customerRecipients[0] : '';
 
 // Extract text message content from various formats
 $userMessage = '';
@@ -132,16 +147,19 @@ if (empty($sender) || empty($userMessage)) {
     $response = [
         "status" => "ignored",
         "reason" => "No valid message or sender detected",
+        "detected_candidates" => $normalizedCandidates,
         "received_keys" => array_keys($input)
     ];
-    @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Ignored: " . json_encode($response) . "\n\n", FILE_APPEND);
+    @file_put_contents($logFile, date('Y-m-d H:i:s') . " - Ignored: " . json_encode($response) . "\n\n", FILE_APPEND);
     echo json_encode($response);
     exit;
 }
 
-// --- Deduplication & Debounce: Prevent duplicate reply if gateway fires retry within 25 seconds ---
+// --- Deduplication & Debounce: Prevent duplicate reply if gateway fires retry within 8 seconds ---
 $incomingMsgId = $input['id'] ?? ($input['message_id'] ?? ($input['msg_id'] ?? ($input['entry'][0]['changes'][0]['value']['messages'][0]['id'] ?? ($input['data']['id'] ?? ''))));
-$dedupKey = !empty($incomingMsgId) ? (string)$incomingMsgId : ($sender . '_' . md5(strtolower(trim((string)$userMessage))));
+$hasMsgId = !empty($incomingMsgId);
+$dedupKey = $hasMsgId ? ('id_' . $incomingMsgId) : ('txt_' . $sender . '_' . md5(strtolower(trim((string)$userMessage))));
+$debounceSeconds = $hasMsgId ? 300 : 8; // If unique message ID, ignore for 5 min; if text hash, debounce only 8s
 
 $dedupFile = sys_get_temp_dir() . '/digify_wa_webhook_dedup.json';
 $nowTime = time();
@@ -151,21 +169,21 @@ if (file_exists($dedupFile)) {
     $dedupCache = json_decode($rawCache, true) ?: [];
 }
 
-// Clean entries older than 60 seconds
+// Clean entries older than 300 seconds
 foreach ($dedupCache as $k => $ts) {
-    if ($nowTime - $ts > 60) {
+    if ($nowTime - $ts > 300) {
         unset($dedupCache[$k]);
     }
 }
 
-// If duplicate message arrived within 25 seconds, ignore immediately
-if (isset($dedupCache[$dedupKey]) && ($nowTime - $dedupCache[$dedupKey] < 25)) {
+// If duplicate message arrived within debounce window, ignore immediately
+if (isset($dedupCache[$dedupKey]) && ($nowTime - $dedupCache[$dedupKey] < $debounceSeconds)) {
     $dupResponse = [
         "status"    => "ignored",
-        "reason"    => "Duplicate message / retry debounce (already processed within 25s)",
+        "reason"    => "Duplicate message / retry debounce (already handled within {$debounceSeconds}s)",
         "dedup_key" => $dedupKey
     ];
-    @file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Duplicate Ignored: " . json_encode($dupResponse) . "\n\n", FILE_APPEND);
+    @file_put_contents($logFile, date('Y-m-d H:i:s') . " - Duplicate Ignored: " . json_encode($dupResponse) . "\n\n", FILE_APPEND);
     echo json_encode($dupResponse);
     exit;
 }
@@ -324,12 +342,12 @@ if (!empty($targetPhone) && strlen($targetPhone) >= 10) {
 
 $resultData = [
     "status"         => "success",
-    "recipients"     => $recipients,
+    "target_phone"   => $targetPhone,
     "user_message"   => $userMessage,
     "reply"          => $replyText,
     "deliveries"     => $sendResults
 ];
 
-@file_put_contents(__DIR__ . '/whatsapp_webhook_log.json', date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData) . "\n\n", FILE_APPEND);
+@file_put_contents($logFile, date('Y-m-d H:i:s') . " - Result: " . json_encode($resultData) . "\n\n", FILE_APPEND);
 
 echo json_encode($resultData);
