@@ -339,31 +339,67 @@ $catalogueSections = [
     ]
 ];
 
-// Standard follow-up quick reply buttons
-$standardButtons = [
-    ['id' => 'btn_demo',   'title' => 'Book Free Demo 📞'],
-    ['id' => 'btn_menu',   'title' => 'Explore Services 📋'],
-    ['id' => 'btn_gautam', 'title' => 'Chat with Gautam 💬']
-];
+// Button Definitions
+$btnDemo    = ['id' => 'btn_demo',   'title' => 'Book Free Demo 📞'];
+$btnExplore = ['id' => 'btn_menu',   'title' => 'Explore Services 📋'];
+$btnGautam  = ['id' => 'btn_gautam', 'title' => 'Chat with Gautam 💬'];
+
+// Standard 3 buttons for initial greeting and general inquiries
+$allThreeButtons = [$btnDemo, $btnExplore, $btnGautam];
 
 $targetPhone = preg_replace('/\D/', '', (string)$sender);
 $sendResults = [];
 
-// CHECK 1: If Greeting or Main Menu requested -> Send 10-Solution Interactive Menu
-$isGreetingOrMenu = preg_match('/^(hi|hello|hey|namaste|menu|services|start|help|options)$/i', trim((string)$userMessage)) || in_array($interactiveId, ['btn_menu', 'btn_services']);
+$msgTrimmed = trim((string)$userMessage);
+$msgLower   = strtolower($msgTrimmed);
 
-if ($isGreetingOrMenu) {
-    $menuBody = "Namaste! 🙏 Welcome to *Digify Soft Solutions*.\n\n"
-              . "Hum provide karte hain complete Enterprise Software, AI Automation, Mobile App & Web Development services.\n\n"
-              . "Niche diye gaye button par click karke hamari poori services list dekhein 👇";
+// =========================================================================
+// FLOW 1: INITIAL GREETING ("Hi", "Hello", "Namaste", "Hey", "Start")
+// -> Welcome intro with ALL 3 buttons
+// =========================================================================
+$isInitialGreeting = (empty($interactiveId) && preg_match('/^(hi|hello|hey|namaste|start|hola)$/i', $msgTrimmed));
+
+if ($isInitialGreeting) {
+    $greetingText = "🙏 *Namaste! Welcome to Digify Soft Solutions.*\n\n"
+                  . "Hum deliver karte hain High-Performance Cloud ERP, Smart POS, Custom Mobile Apps, Modern Websites, AI OCR Bill Automation, aur Email Deliverability solutions.\n\n"
+                  . "🌐 *Official Website:* https://digifysoft.in\n\n"
+                  . "Aap kaise explore karna chahenge? Niche diye gaye option par tap karein 👇";
+
+    $btnResult = send_whatsapp_interactive_buttons(
+        $targetPhone,
+        $greetingText,
+        $allThreeButtons,
+        "Digify Soft Solutions",
+        "Select an option 👇"
+    );
+
+    $sendResults[$targetPhone] = [
+        "method"      => "greeting_buttons",
+        "send_status" => $btnResult['success'] ? 'success' : 'failed',
+        "details"     => $btnResult['response']
+    ];
+
+    echo json_encode(["status" => "success", "mode" => "greeting", "deliveries" => $sendResults]);
+    exit;
+}
+
+// =========================================================================
+// FLOW 2: EXPLORE SERVICES REQUEST (btn_menu or keywords "services", "menu")
+// -> Sends 10-Service Interactive List Menu
+// =========================================================================
+$isMenuRequested = ($interactiveId === 'btn_menu' || $interactiveId === 'btn_services' || preg_match('/^(menu|services|all services|explore|explore services|options|catalog)$/i', $msgTrimmed));
+
+if ($isMenuRequested) {
+    $menuBody = "🙏 Hamare sabhi enterprise software aur digital growth solutions neeche diye gaye hain.\n\n"
+              . "Kisi bhi service ki feature details aur official website link dekhne ke liye menu me se choose karein 👇";
 
     $listResult = send_whatsapp_interactive_list(
         $targetPhone,
         "Digify Soft Solutions",
         $menuBody,
-        "Explore Services 📋",
+        "View All Services 📋",
         $catalogueSections,
-        "Official Digify Saathi Menu"
+        "Select any solution"
     );
 
     $sendResults[$targetPhone] = [
@@ -376,157 +412,219 @@ if ($isGreetingOrMenu) {
     exit;
 }
 
-// CHECK 2: Specific Service Details by ID or Keyword
+// =========================================================================
+// FLOW 3: BOOK FREE DEMO (btn_demo or keyword "demo", "book demo")
+// -> Demo link https://digifysoft.in/contact-us.php
+// -> Buttons: ONLY [Explore Services, Chat with Gautam] (Book Demo omitted)
+// =========================================================================
+$isDemoRequested = ($interactiveId === 'btn_demo' || preg_match('/^(demo|book demo|free demo|book a demo|trial|schedule demo)$/i', $msgTrimmed));
+
+if ($isDemoRequested) {
+    $demoText = "📞 *Book Free Live Demo - Digify Soft Solutions*\n\n"
+              . "Hamari technical team aapke business requirements ke mutabiq personalized screen-share demo arrange karegi:\n\n"
+              . "🔗 *Online Demo Booking Form:*\n"
+              . "👉 https://digifysoft.in/contact-us.php\n\n"
+              . "Aap direct call ya WhatsApp par bhi instant slot confirm kar sakte hain:\n"
+              . "👤 *Consultant:* Gautam (+91 7425016636)\n"
+              . "⏰ *Timing:* Mon - Sat (10:00 AM - 8:00 PM IST)\n\n"
+              . "Aap website form par slot book kar sakte hain ya yahan apna preferred time share karein!";
+
+    // Remaining buttons: Explore Services + Chat with Gautam
+    $demoButtons = [$btnExplore, $btnGautam];
+
+    $btnResult = send_whatsapp_interactive_buttons(
+        $targetPhone,
+        $demoText,
+        $demoButtons,
+        "Digify Soft Solutions",
+        "Next steps 👇"
+    );
+
+    $sendResults[$targetPhone] = [
+        "method"      => "demo_buttons",
+        "send_status" => $btnResult['success'] ? 'success' : 'failed',
+        "details"     => $btnResult['response']
+    ];
+
+    echo json_encode(["status" => "success", "mode" => "demo_flow", "deliveries" => $sendResults]);
+    exit;
+}
+
+// =========================================================================
+// FLOW 4: CHAT WITH GAUTAM (btn_gautam or keyword "gautam", "human", "talk")
+// -> Gautam contact details + direct WhatsApp wa.me link
+// -> Buttons: ONLY [Book Free Demo, Explore Services] (Chat with Gautam omitted)
+// =========================================================================
+$isGautamRequested = ($interactiveId === 'btn_gautam' || preg_match('/^(gautam|chat with gautam|talk to gautam|contact gautam|human|talk to human|support)$/i', $msgTrimmed));
+
+if ($isGautamRequested) {
+    $gautamText = "💬 *Connect Directly with Gautam (Digify Soft Solutions)*\n\n"
+                . "Project discussion, software customization, pricing ya technical architecture ke liye direct baat karein:\n\n"
+                . "📱 *Call / WhatsApp:* +91 7425016636\n"
+                . "💬 *1-Click WhatsApp:* https://wa.me/917425016636\n"
+                . "📧 *Email:* webdev.digifysoft@gmail.com\n"
+                . "🌐 *Website:* https://digifysoft.in\n"
+                . "📍 *Offices:* Noida (Gaur City) | Jaipur | Bhopal\n\n"
+                . "Aap yahan apna project brief ya phone number chhod sakte hain, Gautam personally revert karenge.";
+
+    // Remaining buttons: Book Free Demo + Explore Services
+    $gautamButtons = [$btnDemo, $btnExplore];
+
+    $btnResult = send_whatsapp_interactive_buttons(
+        $targetPhone,
+        $gautamText,
+        $gautamButtons,
+        "Digify Soft Solutions",
+        "Next steps 👇"
+    );
+
+    $sendResults[$targetPhone] = [
+        "method"      => "gautam_buttons",
+        "send_status" => $btnResult['success'] ? 'success' : 'failed',
+        "details"     => $btnResult['response']
+    ];
+
+    echo json_encode(["status" => "success", "mode" => "gautam_flow", "deliveries" => $sendResults]);
+    exit;
+}
+
+// =========================================================================
+// FLOW 5: SPECIFIC SERVICE DETAILS
+// -> Feature summary + Embedded Website URL
+// -> Buttons: ONLY [Book Free Demo, Chat with Gautam] (Explore Services omitted!)
+// =========================================================================
 $serviceDetails = [
     'srv_erp' => [
-        'title' => "🏭 *Digify Cloud ERP Suite*",
-        'text'  => "🏭 *Digify AI Cloud ERP Platform*\n\n"
-                 . "Complete operations suite for Retail, Wholesale, Distribution & Factories:\n\n"
+        'title' => "🏭 *Digify Cloud ERP*",
+        'text'  => "🏭 *Digify Cloud ERP Platform*\n\n"
+                 . "Manufacturing, Wholesale, Retail & Distribution operations ka complete cloud suite:\n\n"
                  . "• *Multi-Warehouse Inventory:* Real-time stock alerts, batch & expiry tracking.\n"
-                 . "• *BOM & Manufacturing:* Raw material planning, production orders & unit costing.\n"
-                 . "• *GST, E-Invoicing & Tally Sync:* Automated compliance, E-Way bills & ZATCA Phase 2.\n"
-                 . "• *Sales & Purchasing:* PO/GRN, vendor portal, customer ledger.\n"
-                 . "• *HR & Payroll:* Biometric sync, salary slips, attendance management.\n\n"
-                 . "👉 *Live Demo dekhna chahte hain?*"
+                 . "• *BOM & Manufacturing:* Raw material planning, work orders & unit costing.\n"
+                 . "• *GST, E-Invoicing & Accounts:* Direct compliance, E-Way bills & ZATCA Phase 2.\n"
+                 . "• *Sales & Purchase:* Automated PO/GRN, vendor portal & customer ledgers.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/erp.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_pos' => [
-        'title' => "⚡ *Digify Smart Cloud POS*",
+        'title' => "⚡ *Digify Smart POS*",
         'text'  => "⚡ *Digify Smart Cloud POS Software*\n\n"
-                 . "Lightning-fast billing system for Supermarkets, Garments, Kirana & Retail:\n\n"
-                 . "• *3-Second Billing:* Ultra-fast barcode/QR scanning.\n"
-                 . "• *Offline-First Mode:* Internet band hone par bhi non-stop billing, automatic sync.\n"
-                 . "• *Hardware Sync:* Thermal printer, weighing scale, barcode scanner, cash drawer.\n"
-                 . "• *Dual Pricing:* MRP vs Wholesale price, customer loyalty reward points.\n"
-                 . "• *AI Visual POS:* Touchscreen product image recognition.\n\n"
-                 . "👉 *POS Demo counter schedule karein?*"
+                 . "Supermarket, Kirana, Garments & Retail counters ke liye high-speed billing system:\n\n"
+                 . "• *3-Second Billing:* Lightning fast barcode scan & thermal printing.\n"
+                 . "• *Offline-First Mode:* Internet band hone par bhi non-stop billing & auto sync.\n"
+                 . "• *Hardware Ready:* Weighing scale, barcode scanner, cash drawer & dual display.\n"
+                 . "• *Loyalty & Multi-Price:* MRP vs Wholesale pricing, loyalty points.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/pos.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_crm' => [
-        'title' => "🎯 *Digify Custom CRM Suite*",
-        'text'  => "🎯 *Digify Custom CRM & Sales Automation*\n\n"
-                 . "Inbound aur outbound sales pipelines ko automate karein:\n\n"
-                 . "• *Lead Capture:* Website, WhatsApp, IndiaMART, Facebook leads ka auto sync.\n"
-                 . "• *Auto Follow-ups:* WhatsApp & Email drip campaigns.\n"
-                 . "• *Quotation & Deal Pipeline:* Stage-wise deal tracking, team performance.\n"
-                 . "• *WhatsApp Chatbots:* AI bots jo 24/7 leads qualify karein.\n\n"
-                 . "👉 *CRM demo ke liye niche button dabayein:*"
+        'title' => "🎯 *Digify Custom CRM*",
+        'text'  => "🎯 *Digify Custom CRM & Sales Pipeline*\n\n"
+                 . "Inbound aur outbound sales pipelines ko automate karke revenue grow karein:\n\n"
+                 . "• *Multi-Channel Lead Sync:* Website, WhatsApp, IndiaMART, Facebook leads auto-capture.\n"
+                 . "• *Automated Follow-ups:* Smart WhatsApp & Email drip campaigns.\n"
+                 . "• *Deal Pipeline:* Stage-wise sales tracking, team performance & instant quotes.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/custom-crm-solutions.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_after_sales' => [
-        'title' => "🛠️ *Digify After-Sales & Warranty*",
+        'title' => "🛠️ *Digify After-Sales & AMC*",
         'text'  => "🛠️ *After-Sales, AMC & Warranty Management*\n\n"
                  . "Electronics, machinery aur equipment brands ke service operations automate karein:\n\n"
-                 . "• *Serial / IMEI Tracking:* Product purchase date & warranty status check.\n"
-                 . "• *Service Tickets:* Complaint booking, automated job-sheet creation.\n"
-                 . "• *Technician App:* Field engineers ke liye real-time job update.\n"
-                 . "• *AMC Contracts:* Annual Maintenance Contract renewals & auto-reminders.\n\n"
-                 . "👉 *Free consultation ke liye connect karein:*"
+                 . "• *Serial / IMEI Tracking:* Product purchase date & warranty status verification.\n"
+                 . "• *Service Tickets:* Complaint booking & automated technician job-sheets.\n"
+                 . "• *AMC Contracts:* Annual contract renewal alerts & preventive maintenance.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/After-Sale-Service.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_ai_ocr' => [
         'title' => "🤖 *AI OCR Bill Scanner*",
         'text'  => "🤖 *Digify AI OCR Bill & Invoice Scanner*\n\n"
-                 . "Purchase invoices aur bills ki manual entry hamesha ke liye khatam karein:\n\n"
+                 . "Purchase bills aur invoices ki manual entry hamesha ke liye band karein:\n\n"
                  . "• *Instant Extraction:* PDF ya photo upload karte hi item name, qty, rate, GST auto-read.\n"
-                 . "• *Zero Manual Error:* 99.8% extraction accuracy.\n"
-                 . "• *Direct ERP / Tally Sync:* Direct purchase voucher create ho jata hai bina typing ke.\n"
-                 . "• *Multi-Format Support:* Hand-written ya printed sabhi bills support karta hai.\n\n"
-                 . "👉 *AI OCR ka live trial dekhna chahte hain?*"
+                 . "• *Zero Manual Error:* 99.8% extraction accuracy with AI verification.\n"
+                 . "• *Direct ERP & Tally Sync:* Direct purchase voucher create ho jata hai bina typing ke.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/ai-ocr.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_lead_gen' => [
         'title' => "🚀 *B2B Lead Generation*",
         'text'  => "🚀 *Digify B2B Lead Generation & Outreach*\n\n"
-                 . "Apne business ke liye high-intent corporate B2B clients generate karein:\n\n"
-                 . "• *Targeted Industry Leads:* Verified business owners, directors & purchase heads.\n"
-                 . "• *City & Sector Filtering:* Pan-India ya export markets ke database.\n"
-                 . "• *Automated WhatsApp Outreach:* 1-click broadcast campaigns with templates.\n"
-                 . "• *High Conversion Pipelines:* Direct leads aapke CRM me connect hoti hain.\n\n"
-                 . "👉 *Lead sample dekhne ke liye tap karein:*"
+                 . "Apne business ke liye high-intent verified corporate clients generate karein:\n\n"
+                 . "• *Verified Decision Makers:* Pan-India business owners, purchase heads & directors.\n"
+                 . "• *Targeted Segments:* City, industry & turnover based verified database.\n"
+                 . "• *WhatsApp Outreach:* 1-click broadcast templates with verified delivery.\n\n"
+                 . "🔗 *Product Details & Specs:*\n👉 https://digifysoft.in/lead-management.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_app_dev' => [
-        'title' => "📱 *Custom Mobile App Development*",
+        'title' => "📱 *Custom Mobile Apps*",
         'text'  => "📱 *Mobile Application Development (iOS & Android)*\n\n"
                  . "High-performance enterprise aur consumer mobile applications:\n\n"
                  . "• *Native Android:* Kotlin & Java, offline DB, high-speed execution.\n"
-                 . "• *iOS Apps:* Swift & SwiftUI, Apple App Store compliance.\n"
-                 . "• *Cross-Platform:* Flutter & React Native for cost-effective multi-platform apps.\n"
-                 . "• *Solutions:* Tablet POS Apps, B2B Dealer Ordering, Delivery Apps, E-Commerce.\n\n"
-                 . "👉 *Apna app idea discuss karne ke liye connect karein:*"
+                 . "• *Native iOS:* Swift & SwiftUI, Apple App Store standard security.\n"
+                 . "• *Cross-Platform:* Flutter & React Native for cost-effective development.\n"
+                 . "• *Solutions:* Tablet POS Apps, B2B Dealer Apps, Delivery & Field Sales Apps.\n\n"
+                 . "🔗 *Portfolio & Case Studies:*\n👉 https://digifysoft.in/android-application.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_web_dev' => [
         'title' => "🌐 *Web & E-Commerce Development*",
         'text'  => "🌐 *Modern Web & E-Commerce Development*\n\n"
-                 . "Modern, ultra-fast aur high-converting business websites:\n\n"
-                 . "• *Corporate Websites:* Lightning-fast loading, sleek animations, premium UI.\n"
-                 . "• *E-Commerce Portals:* Custom Shopify, WooCommerce ya Full-Stack MERN/PHP.\n"
-                 . "• *ERP / POS Sync:* Website par live inventory aur auto order billing.\n"
-                 . "• *Global Infrastructure:* Cloudflare CDN, AWS, Render deployment.\n\n"
-                 . "👉 *Free website audit ya quotation ke liye tap karein:*"
+                 . "Ultra-fast, high-converting corporate websites aur e-commerce portals:\n\n"
+                 . "• *Corporate Websites:* Next.js / PHP, sleek modern UI, super-fast loading.\n"
+                 . "• *E-Commerce Portals:* Custom Shopify, WooCommerce ya Full-Stack MERN.\n"
+                 . "• *ERP / POS Sync:* Website par live inventory aur auto order billing.\n\n"
+                 . "🔗 *Services & Portfolio:*\n👉 https://digifysoft.in/web-development-services.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_seo_smo' => [
         'title' => "📈 *SEO & Digital Growth*",
         'text'  => "📈 *SEO & Digital Marketing Services*\n\n"
-                 . "Google par Top #1 Ranking aur organic customer growth:\n\n"
+                 . "Google par Top #1 Ranking aur consistent organic business leads:\n\n"
                  . "• *Technical & On-Page SEO:* Core Web Vitals, speed optimization, schema markup.\n"
-                 . "• *High-Authority Backlinks:* Off-page SEO aur brand authority building.\n"
-                 . "• *Local SEO & Google Maps:* Local city commercial hubs me top ranking.\n"
-                 . "• *Social Media (SMO):* LinkedIn, Instagram aur Facebook brand management.\n\n"
-                 . "👉 *Apni website ka Free SEO Audit report chahiye?*"
+                 . "• *High-Authority Backlinks:* Off-page SEO aur domain authority boost.\n"
+                 . "• *Local SEO & Maps:* Local city commercial searches me top ranking.\n\n"
+                 . "🔗 *SEO Packages & Details:*\n👉 https://digifysoft.in/digital-marketing-services.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ],
     'srv_email_bimi' => [
         'title' => "📧 *Email Deliverability & BIMI*",
-        'text'  => "📧 *Email Deliverability & BIMI Branding Suite*\n\n"
-                 . "Apni corporate emails ko Spam folder se bacha kar direct Primary Inbox me layein:\n\n"
-                 . "• *BIMI Setup with VMC:* Gmail me company ka blue checkmark aur verified logo.\n"
-                 . "• *SPF, DKIM & DMARC (p=reject):* 100% email authentication against spoofing.\n"
-                 . "• *Spam Blacklist Removal:* Domain aur IP reputation recovery.\n"
-                 . "• *99% Inbox Delivery:* Cold email aur transactional email delivery assurance.\n\n"
-                 . "👉 *Domain health checkup ke liye sampark karein:*"
-    ],
-    'btn_demo' => [
-        'title' => "📞 *Book Live Demo*",
-        'text'  => "📞 *Book Live Product Demo with Gautam*\n\n"
-                 . "Hamari team aapke business requirements ke mutabiq live personalized screen-share demo degi:\n\n"
-                 . "👤 *Consultant:* Gautam (Digify Soft Solutions)\n"
-                 . "📱 *Direct Phone / WhatsApp:* +91 7425016636\n"
-                 . "📞 *Alternate:* +91 7017558150\n"
-                 . "📧 *Email:* webdev.digifysoft@gmail.com\n"
-                 . "🌐 *Offices:* Noida (Gaur City) | Jaipur | Bhopal\n\n"
-                 . "Aap kis time demo attend karna chahenge? Hum slot confirm kar denge!"
-    ],
-    'btn_gautam' => [
-        'title' => "💬 *Chat with Gautam*",
-        'text'  => "💬 *Connect Directly with Gautam*\n\n"
-                 . "Aap directly call ya WhatsApp par Gautam se project discussion kar sakte hain:\n\n"
-                 . "📱 *Phone / WhatsApp:* +91 7425016636\n"
-                 . "⏰ *Availability:* Mon - Sat (10:00 AM - 8:00 PM IST)\n"
-                 . "🌐 *Website:* https://digifysoft.in\n\n"
-                 . "Aap apna requirement summary ya phone number yahan type kar sakte hain, hum call kar lenge!"
+        'text'  => "📧 *Email Deliverability & BIMI Branding*\n\n"
+                 . "Corporate emails ko Spam se bacha kar direct Primary Inbox me layein:\n\n"
+                 . "• *BIMI Setup with VMC:* Gmail me company ka blue checkmark & verified logo.\n"
+                 . "• *SPF, DKIM & DMARC (p=reject):* Complete domain spoofing protection.\n"
+                 . "• *99% Inbox Delivery:* Blacklist removal & sender domain reputation recovery.\n\n"
+                 . "🔗 *Email Services & Pricing:*\n👉 https://digifysoft.in/business-email-branding-bimi.php\n\n"
+                 . "👉 *Aage badhne ke liye option select karein:*"
     ]
 ];
 
-// Check if matched service ID or direct button
+// Check if matched service ID or keyword in user message
 $matchedKey = null;
 if (!empty($interactiveId) && isset($serviceDetails[$interactiveId])) {
     $matchedKey = $interactiveId;
 } else {
-    // Check keyword matching in text
-    $msgLower = strtolower((string)$userMessage);
     if (strpos($msgLower, 'erp') !== false) $matchedKey = 'srv_erp';
     elseif (strpos($msgLower, 'pos') !== false || strpos($msgLower, 'billing') !== false) $matchedKey = 'srv_pos';
-    elseif (strpos($msgLower, 'ocr') !== false) $matchedKey = 'srv_ai_ocr';
-    elseif (strpos($msgLower, 'crm') !== false || strpos($msgLower, 'lead') !== false) $matchedKey = 'srv_crm';
+    elseif (strpos($msgLower, 'ocr') !== false || strpos($msgLower, 'bill scan') !== false || strpos($msgLower, 'invoice') !== false) $matchedKey = 'srv_ai_ocr';
+    elseif (strpos($msgLower, 'crm') !== false || strpos($msgLower, 'lead management') !== false) $matchedKey = 'srv_crm';
+    elseif (strpos($msgLower, 'lead') !== false || strpos($msgLower, 'b2b') !== false) $matchedKey = 'srv_lead_gen';
     elseif (strpos($msgLower, 'app') !== false || strpos($msgLower, 'android') !== false || strpos($msgLower, 'ios') !== false) $matchedKey = 'srv_app_dev';
-    elseif (strpos($msgLower, 'web') !== false || strpos($msgLower, 'ecommerce') !== false || strpos($msgLower, 'shopify') !== false) $matchedKey = 'srv_web_dev';
-    elseif (strpos($msgLower, 'seo') !== false || strpos($msgLower, 'ranking') !== false) $matchedKey = 'srv_seo_smo';
-    elseif (strpos($msgLower, 'email') !== false || strpos($msgLower, 'bimi') !== false || strpos($msgLower, 'dmarc') !== false) $matchedKey = 'srv_email_bimi';
-    elseif (strpos($msgLower, 'after-sales') !== false || strpos($msgLower, 'amc') !== false || strpos($msgLower, 'warranty') !== false) $matchedKey = 'srv_after_sales';
-    elseif (strpos($msgLower, 'demo') !== false) $matchedKey = 'btn_demo';
-    elseif (strpos($msgLower, 'gautam') !== false) $matchedKey = 'btn_gautam';
+    elseif (strpos($msgLower, 'web') !== false || strpos($msgLower, 'website') !== false || strpos($msgLower, 'ecommerce') !== false || strpos($msgLower, 'shopify') !== false) $matchedKey = 'srv_web_dev';
+    elseif (strpos($msgLower, 'seo') !== false || strpos($msgLower, 'ranking') !== false || strpos($msgLower, 'marketing') !== false) $matchedKey = 'srv_seo_smo';
+    elseif (strpos($msgLower, 'email') !== false || strpos($msgLower, 'bimi') !== false || strpos($msgLower, 'dmarc') !== false || strpos($msgLower, 'inbox') !== false) $matchedKey = 'srv_email_bimi';
+    elseif (strpos($msgLower, 'after-sales') !== false || strpos($msgLower, 'amc') !== false || strpos($msgLower, 'warranty') !== false || strpos($msgLower, 'service ticket') !== false) $matchedKey = 'srv_after_sales';
 }
 
 if ($matchedKey && isset($serviceDetails[$matchedKey])) {
+    // Buttons under service detail: Strictly [Book Free Demo, Chat with Gautam]
+    // "Explore Services" is intentionally removed as user is already viewing the service!
+    $serviceActionButtons = [$btnDemo, $btnGautam];
+
     $btnResult = send_whatsapp_interactive_buttons(
         $targetPhone,
         $serviceDetails[$matchedKey]['text'],
-        $standardButtons,
+        $serviceActionButtons,
         "Digify Soft Solutions",
         "Select next step 👇"
     );
@@ -542,9 +640,11 @@ if ($matchedKey && isset($serviceDetails[$matchedKey])) {
     exit;
 }
 
+// =========================================================================
+// FLOW 6: FREE-FORM CONSULTATIVE INQUIRY VIA GROQ AI (openai/gpt-oss-120b)
+// =========================================================================
 $apiKey = getenv('GROQ_API_KEY') ?: (getenv('CHAT_API_KEY') ?: (defined('GROQ_API_KEY') ? GROQ_API_KEY : (defined('CHAT_API_KEY') ? CHAT_API_KEY : '')));
 
-// Prepare System Prompt for Digify Saathi WhatsApp Assistant
 $systemPromptContent = <<<PROMPT
 You are Digify Saathi, official WhatsApp AI Assistant for Digify Soft Solutions (+91 7425016636).
 You are responding directly on WhatsApp. Your tone is warm, polite, consultative, ultra-smart, and engaging.
@@ -553,21 +653,24 @@ LANGUAGE:
 - If customer writes in Hindi/Hinglish, reply in natural, polished Hinglish. If in English, reply in crisp English.
 - Use emojis elegantly, bullet points, and WhatsApp bold with single asterisks (*word*).
 
-COMPLETE SOLUTIONS CATALOG:
-1. Cloud ERP: Multi-warehouse inventory, factory BOM manufacturing, GST e-invoicing & accounts, ZATCA Phase 2.
-2. Smart Cloud POS: 3-sec offline billing, thermal printer, barcode, weighing scale, dual pricing.
-3. Custom Mobile Apps: Android (Kotlin), iOS (Swift), Flutter cross-platform, Tablet POS apps.
-4. Web & E-Commerce: High-speed corporate websites, Shopify/WooCommerce, full-stack portals.
-5. AI OCR Bill Scanner: Automated purchase bill data extraction directly into ERP/Tally.
-6. B2B Lead Gen & CRM: Target corporate leads, WhatsApp automated campaigns, deal pipelines.
-7. SEO & Digital Marketing: Google Top #1 ranking, technical audits, social media management.
-8. Email Deliverability & BIMI: Verified VMC logos in Gmail, 100% DMARC, SPF, spam blacklist recovery.
-9. After-Sales & Warranty: Serial/IMEI tracking, AMC contracts, service ticket dispatching.
+OFFICIAL WEBSITE REFERENCE LINKS:
+- Main Website: https://digifysoft.in
+- Demo / Contact Form: https://digifysoft.in/contact-us.php
+- Cloud ERP: https://digifysoft.in/erp.php
+- Smart Cloud POS: https://digifysoft.in/pos.php
+- AI OCR Bill Scanner: https://digifysoft.in/ai-ocr.php
+- Custom CRM & Leads: https://digifysoft.in/custom-crm-solutions.php
+- Mobile App Dev: https://digifysoft.in/android-application.php
+- Web & E-Commerce: https://digifysoft.in/web-development-services.php
+- SEO & Digital Marketing: https://digifysoft.in/digital-marketing-services.php
+- Email Deliverability & BIMI: https://digifysoft.in/business-email-branding-bimi.php
+- After-Sales & Warranty (AMC): https://digifysoft.in/After-Sale-Service.php
 
 CRITICAL META LENGTH RULES:
 - Keep answers self-contained and punchy (100 to 200 words).
+- Embed the relevant website link from above so the customer can check full details on the site.
 - NEVER cut off mid-sentence. Always finish your thoughts completely.
-- Conclude with an invitation to book a free demo with Gautam (+91 7425016636).
+- Conclude with an invitation to book a free demo or connect with Gautam (+91 7425016636).
 PROMPT;
 
 $messages = [
@@ -637,7 +740,7 @@ if ($rawReply && trim($rawReply) !== '') {
 $btnResult = send_whatsapp_interactive_buttons(
     $targetPhone,
     $replyText,
-    $standardButtons,
+    $allThreeButtons,
     "Digify Soft Solutions",
     "Select an option 👇"
 );
