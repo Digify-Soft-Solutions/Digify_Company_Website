@@ -248,6 +248,10 @@ $sendResults = [];
 $msgTrimmed = trim((string)$userMessage);
 $msgLower   = strtolower($msgTrimmed);
 
+// Strip emojis and non-alphanumeric characters for 100% reliable button matching
+$msgClean = preg_replace('/[^\p{L}\p{N}\s]/u', '', (string)$userMessage);
+$msgClean = strtolower(trim(preg_replace('/\s+/', ' ', (string)$msgClean)));
+
 // =========================================================================
 // 10-ITEM SERVICES CATALOGUE (Interactive List)
 // =========================================================================
@@ -294,7 +298,7 @@ $digitalSubSections = [
 // =========================================================================
 $isInitialGreeting = (
     empty($interactiveId) &&
-    preg_match('/^\s*(hi+|hello+|hey+|namaste|namaskar|start|hola|hy|hii+|helo|hai|good\s*(morning|afternoon|evening)|help)[\s!.]*$/iu', $msgTrimmed)
+    preg_match('/^(hi+|hello+|hey+|namaste|namaskar|start|hola|hy|hii+|helo|hai|good\s*(morning|afternoon|evening)|help)$/i', $msgClean)
 );
 
 if ($isInitialGreeting) {
@@ -313,7 +317,11 @@ if ($isInitialGreeting) {
 // =========================================================================
 $isMenuRequested = (
     in_array($interactiveId, ['btn_menu', 'btn_services', 'btn_explore']) ||
-    preg_match('/^\s*(menu|services|all services|explore|explore services|options|catalog|catalogue|solutions|products)\s*$/i', $msgTrimmed)
+    strpos($msgClean, 'explore') !== false ||
+    strpos($msgClean, 'service') !== false ||
+    strpos($msgClean, 'menu') !== false ||
+    strpos($msgClean, 'catalog') !== false ||
+    strpos($msgClean, 'solution') !== false
 );
 
 if ($isMenuRequested) {
@@ -329,7 +337,7 @@ if ($isMenuRequested) {
 // =========================================================================
 // FLOW 3: DIGITAL SERVICES SUB-MENU
 // =========================================================================
-if ($interactiveId === 'digital_services') {
+if ($interactiveId === 'digital_services' || strpos($msgClean, 'digital service') !== false) {
     $dsBody = "💻 *Digital Services*\n\n"
             . "We craft end-to-end digital experiences tailored for your business growth.\n\n"
             . "Please select a digital service to view details and live links:";
@@ -345,7 +353,9 @@ if ($interactiveId === 'digital_services') {
 // =========================================================================
 $isDemoRequested = (
     $interactiveId === 'btn_demo' ||
-    preg_match('/\b(book demo|free demo|book a demo|trial|schedule demo|book meeting|demo)\b/i', $msgTrimmed)
+    strpos($msgClean, 'demo') !== false ||
+    strpos($msgClean, 'trial') !== false ||
+    strpos($msgClean, 'book') !== false
 );
 
 if ($isDemoRequested) {
@@ -364,7 +374,7 @@ if ($isDemoRequested) {
 // =========================================================================
 // FLOW 5: PRICING QUERY
 // =========================================================================
-if (preg_match('/\b(price|pricing|cost|kitna|how much|rate|charges|fees|paisa|budget|quote|quotation)\b/i', $msgLower)) {
+if (preg_match('/\b(price|pricing|cost|kitna|how much|rate|charges|fees|paisa|budget|quote|quotation)\b/i', $msgClean)) {
     $pricingText = "💰 *Pricing is Requirement-Based*\n\n"
                  . "Digify software pricing depends on:\n"
                  . "• Modules required (POS, ERP, CRM, etc.)\n"
@@ -421,22 +431,22 @@ $matchedKey = null;
 if (!empty($interactiveId) && isset($serviceDetails[$interactiveId])) {
     $matchedKey = $interactiveId;
 } else {
-    if      (preg_match('/\b(smart pos|pos|retail billing|kirana|supermarket|barcode billing|dukan)\b/i', $msgLower))      $matchedKey = 'pos';
-    elseif  (preg_match('/\b(cloud erp|enterprise resource|multi.store erp|accounts erp|tally)\b/i', $msgLower))          $matchedKey = 'erp';
-    elseif  (preg_match('/\b(inventory|stock|warehouse|godown|stock management|maal)\b/i', $msgLower))                    $matchedKey = 'inventory';
-    elseif  (preg_match('/\b(crm|customer management|loyalty program|customer database)\b/i', $msgLower))                 $matchedKey = 'crm';
-    elseif  (preg_match('/\b(omnichannel|omni.channel|online.*offline|shopify.*erp)\b/i', $msgLower))                     $matchedKey = 'omnichannel';
-    elseif  (preg_match('/\b(smart retail|ai.*retail|self.?checkout|footfall|ai checkout)\b/i', $msgLower))               $matchedKey = 'smart_retail';
-    elseif  (preg_match('/\b(restaurant|hotel|food|kitchen|kot|kds|recipe|dhaba|cafe)\b/i', $msgLower))                   $matchedKey = 'restaurant';
-    elseif  (preg_match('/\b(manufacturing|factory|production|bom|mrp|shop.floor|udyog)\b/i', $msgLower))                 $matchedKey = 'manufacturing';
-    elseif  (preg_match('/\b(education|school|college|institution|student|fees management|institute)\b/i', $msgLower))    $matchedKey = 'education';
-    elseif  (preg_match('/\b(ecommerce|e-commerce|online store|shopify|woocommerce|online shop)\b/i', $msgLower))         $matchedKey = 'ds_ecomm';
-    elseif  (preg_match('/\b(mobile app|android app|ios app|flutter|app development|app banao)\b/i', $msgLower))          $matchedKey = 'ds_mobile';
-    elseif  (preg_match('/\b(seo|google ranking|search engine|google ads|digital marketing)\b/i', $msgLower))             $matchedKey = 'ds_seo';
-    elseif  (preg_match('/\b(social media|instagram|facebook|linkedin|smm|social marketing)\b/i', $msgLower))             $matchedKey = 'ds_social';
-    elseif  (preg_match('/\b(website|web development|web portal|landing page|site banao)\b/i', $msgLower))                $matchedKey = 'ds_web';
-    elseif  (preg_match('/\b(custom software|custom erp|custom crm|tailored software|software banana)\b/i', $msgLower))   $matchedKey = 'ds_custom';
-    elseif  (preg_match('/\b(digital service|digital solution|web.*app.*seo)\b/i', $msgLower))                            $matchedKey = 'digital_services';
+    if      (strpos($msgClean, 'pos') !== false || strpos($msgClean, 'billing') !== false)              $matchedKey = 'pos';
+    elseif  (strpos($msgClean, 'erp') !== false)                                                        $matchedKey = 'erp';
+    elseif  (strpos($msgClean, 'inventory') !== false || strpos($msgClean, 'stock') !== false)        $matchedKey = 'inventory';
+    elseif  (strpos($msgClean, 'crm') !== false || strpos($msgClean, 'customer') !== false)           $matchedKey = 'crm';
+    elseif  (strpos($msgClean, 'omnichannel') !== false || strpos($msgClean, 'omni') !== false)       $matchedKey = 'omnichannel';
+    elseif  (strpos($msgClean, 'retail') !== false || strpos($msgClean, 'smart retail') !== false)    $matchedKey = 'smart_retail';
+    elseif  (strpos($msgClean, 'restaurant') !== false || strpos($msgClean, 'food') !== false)        $matchedKey = 'restaurant';
+    elseif  (strpos($msgClean, 'manufacturing') !== false || strpos($msgClean, 'factory') !== false)  $matchedKey = 'manufacturing';
+    elseif  (strpos($msgClean, 'education') !== false || strpos($msgClean, 'school') !== false)       $matchedKey = 'education';
+    // Digital Sub-services
+    elseif  (strpos($msgClean, 'web') !== false || strpos($msgClean, 'website') !== false)            $matchedKey = 'ds_web';
+    elseif  (strpos($msgClean, 'ecomm') !== false || strpos($msgClean, 'commerce') !== false || strpos($msgClean, 'store') !== false) $matchedKey = 'ds_ecomm';
+    elseif  (strpos($msgClean, 'mobile') !== false || strpos($msgClean, 'app') !== false)            $matchedKey = 'ds_mobile';
+    elseif  (strpos($msgClean, 'seo') !== false || strpos($msgClean, 'marketing') !== false)          $matchedKey = 'ds_seo';
+    elseif  (strpos($msgClean, 'social') !== false)                                                     $matchedKey = 'ds_social';
+    elseif  (strpos($msgClean, 'custom') !== false || strpos($msgClean, 'software') !== false)        $matchedKey = 'ds_custom';
 }
 
 if ($matchedKey === 'digital_services') {
