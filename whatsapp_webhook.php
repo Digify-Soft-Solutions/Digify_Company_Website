@@ -246,69 +246,341 @@ function formatForWhatsApp($text) {
     return trim($text);
 }
 
-// Prepare System Prompt for Digify Saathi WhatsApp Assistant
-$systemPromptContent = <<<PROMPT
-You are Digify Saathi, the official, highly intelligent, consultative AI Assistant for Digify Soft Solutions (+91 7425016636).
-You are conversing directly with customers on WhatsApp. Your tone is warm, polite, confident, ultra-smart, engaging, and premium ("smart & sexy").
+// Extract interactive button or list reply if clicked
+$interactiveId = '';
+$interactiveTitle = '';
+if (isset($input['interactive']['button_reply'])) {
+    $interactiveId = $input['interactive']['button_reply']['id'] ?? '';
+    $interactiveTitle = $input['interactive']['button_reply']['title'] ?? '';
+} elseif (isset($input['interactive']['list_reply'])) {
+    $interactiveId = $input['interactive']['list_reply']['id'] ?? '';
+    $interactiveTitle = $input['interactive']['list_reply']['title'] ?? '';
+} elseif (isset($input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'])) {
+    $inter = $input['entry'][0]['changes'][0]['value']['messages'][0]['interactive'];
+    if (isset($inter['button_reply'])) {
+        $interactiveId = $inter['button_reply']['id'] ?? '';
+        $interactiveTitle = $inter['button_reply']['title'] ?? '';
+    } elseif (isset($inter['list_reply'])) {
+        $interactiveId = $inter['list_reply']['id'] ?? '';
+        $interactiveTitle = $inter['list_reply']['title'] ?? '';
+    }
+}
 
-LANGUAGE & TONE:
-- Adapt to the user's language: If the user texts in Hindi or Hinglish, reply in natural, polished, conversational Hinglish. If in English, reply in clean, executive-level English.
-- Be consultative and helpful: Understand their business (e.g. Retail, Supermarket, Restaurant, Garments, Manufacturing, E-Commerce, Mobile App) and give tailored solutions.
-- Formatting: Use emojis elegantly (⚡, 🛒, 📦, 📊, 📱, 🚀, 📞), short paragraphs, and clean bullet points.
-- Use single asterisks for bold (e.g. *Feature Name*) as per WhatsApp formatting standards.
+if (!empty($interactiveTitle) && empty($userMessage)) {
+    $userMessage = $interactiveTitle;
+}
 
-ABOUT DIGIFY SOFT SOLUTIONS:
-- Global deployments across 13+ countries, 100+ happy retailers, 10M+ bills generated, 99.9% uptime.
-- Offices: Noida / Greater Noida (Gaur City Mall / Knowledge Park), Jaipur (Civil Lines), Bhopal (Avadhpuri).
-- Key Contact Person: Gautam (+91 7425016636 / +91 7017558150).
-- Email: webdev.digifysoft@gmail.com, support@digifysoft.in | Website: digifysoft.in
-
-CORE PRODUCTS & CAPABILITIES:
-1. Digify Smart POS Software (3-Second Billing):
-   - Ultra-fast 3-sec billing, offline-first billing mode (bills without internet & syncs automatically).
-   - Hardware integration: Thermal receipt printers, electronic weighing scales, barcode & QR scanners, cash drawers.
-   - Dual pricing (MRP / Wholesale rate), customer loyalty points, store credit & customer ledger.
-   - AI Smart Visual POS for rapid item recognition on touch screens.
-2. Digify AI Cloud ERP Suite:
-   - Unified platform for Retail, Wholesale, Distribution, and Factories.
-   - Modules: Sales & Invoicing, Purchasing (PO/GRN), Multi-Warehouse Inventory (Batch/Expiry, Reorder alerts), BOM Manufacturing (raw materials, production scheduling, costing), GST / Accounting (automated e-invoicing, e-way bills, Tally sync), CRM & Sales Pipelines, HR & Payroll (attendance, salary slips).
-   - International Compliance: Saudi Arabia ZATCA Phase 2, UAE FTA VAT, India GST.
-3. Custom Mobile Application Development:
-   - Native Android (Kotlin), iOS (Swift), and Cross-Platform (Flutter).
-   - Tablet POS apps, B2B dealer/ordering apps, delivery tracking, customer storefronts, Play Store & App Store deployment.
-4. Custom Web & E-Commerce:
-   - High-performance business websites, Shopify / WooCommerce integration, custom CRM pipelines, email deliverability (BIMI, DMARC, Cloudflare).
-5. Industry Verticals:
-   - Supermarkets & Kirana, Garments & Boutiques, Footwear, Restaurants & Cafés (KOT, table billing), Hardware & Sanitary, Pharmacy & Cosmetics, Schools, Religious/Temple trusts.
-
-CRITICAL COMPLETION & LENGTH RULES (NEVER CUT OFF):
-1. Keep replies concise, punchy, and complete (between 120 and 220 words, under 1200 characters).
-2. NEVER stop mid-sentence. Always finish your thoughts, bullet points, and sentences completely.
-3. For pricing or custom requirements, mention that pricing depends on required modules/counters and invite them for a live interactive demo with Gautam.
-4. Always conclude with a clean, attractive Call to Action:
-   👉 *Live Demo ya Best Quote ke liye direct sampark karein:*
-   📞 Call / WhatsApp: *+91 7425016636* (Gautam)
-   🌐 Website: *digifysoft.in*
-PROMPT;
-
-$messages = [
+// 1. Full 10-Service Catalogue Definition (Meta 24-character title compliant)
+$catalogueSections = [
     [
-        "role"    => "system",
-        "content" => $systemPromptContent
+        'title' => 'Business Software',
+        'rows'  => [
+            [
+                'id'          => 'srv_erp',
+                'title'       => 'Cloud ERP Suite 🏭',
+                'description' => 'Multi-warehouse inventory, BOM, GST & accounts'
+            ],
+            [
+                'id'          => 'srv_pos',
+                'title'       => 'Smart Cloud POS ⚡',
+                'description' => '3-sec offline billing, barcode & thermal printer'
+            ],
+            [
+                'id'          => 'srv_crm',
+                'title'       => 'Custom CRM Suite 🎯',
+                'description' => 'Automated sales pipelines, leads & WhatsApp CRM'
+            ],
+            [
+                'id'          => 'srv_after_sales',
+                'title'       => 'After-Sales & AMC 🛠️',
+                'description' => 'Service tickets, warranty & technician tracking'
+            ]
+        ]
     ],
     [
-        "role"    => "user",
-        "content" => (string)$userMessage
+        'title' => 'AI & Lead Generation',
+        'rows'  => [
+            [
+                'id'          => 'srv_ai_ocr',
+                'title'       => 'AI OCR Bill Scanner 🤖',
+                'description' => 'Auto purchase bill extraction & ERP posting'
+            ],
+            [
+                'id'          => 'srv_lead_gen',
+                'title'       => 'B2B Lead Generation 🚀',
+                'description' => 'Verified corporate leads & automated campaigns'
+            ]
+        ]
+    ],
+    [
+        'title' => 'Development & SEO',
+        'rows'  => [
+            [
+                'id'          => 'srv_app_dev',
+                'title'       => 'Mobile App Dev 📱',
+                'description' => 'Native Android Kotlin, iOS & Flutter apps'
+            ],
+            [
+                'id'          => 'srv_web_dev',
+                'title'       => 'Web & E-Commerce 🌐',
+                'description' => 'High-speed business sites, Shopify & portals'
+            ],
+            [
+                'id'          => 'srv_seo_smo',
+                'title'       => 'SEO & Growth 📈',
+                'description' => 'Google #1 ranking, technical SEO & SMO'
+            ],
+            [
+                'id'          => 'srv_email_bimi',
+                'title'       => 'Email Deliverability 📧',
+                'description' => 'BIMI branding, DMARC, SPF & inbox placement'
+            ]
+        ]
     ]
 ];
 
-// Query Groq AI API with robust model fallback
+// Standard follow-up quick reply buttons
+$standardButtons = [
+    ['id' => 'btn_demo',   'title' => 'Book Free Demo 📞'],
+    ['id' => 'btn_menu',   'title' => 'Explore Services 📋'],
+    ['id' => 'btn_gautam', 'title' => 'Chat with Gautam 💬']
+];
+
+$targetPhone = preg_replace('/\D/', '', (string)$sender);
+$sendResults = [];
+
+// CHECK 1: If Greeting or Main Menu requested -> Send 10-Solution Interactive Menu
+$isGreetingOrMenu = preg_match('/^(hi|hello|hey|namaste|menu|services|start|help|options)$/i', trim((string)$userMessage)) || in_array($interactiveId, ['btn_menu', 'btn_services']);
+
+if ($isGreetingOrMenu) {
+    $menuBody = "Namaste! 🙏 Welcome to *Digify Soft Solutions*.\n\n"
+              . "Hum provide karte hain complete Enterprise Software, AI Automation, Mobile App & Web Development services.\n\n"
+              . "Niche diye gaye button par click karke hamari poori services list dekhein 👇";
+
+    $listResult = send_whatsapp_interactive_list(
+        $targetPhone,
+        "Digify Soft Solutions",
+        $menuBody,
+        "Explore Services 📋",
+        $catalogueSections,
+        "Official Digify Saathi Menu"
+    );
+
+    $sendResults[$targetPhone] = [
+        "method"      => "interactive_list_menu",
+        "send_status" => $listResult['success'] ? 'success' : 'failed',
+        "details"     => $listResult['response']
+    ];
+
+    echo json_encode(["status" => "success", "mode" => "interactive_menu", "deliveries" => $sendResults]);
+    exit;
+}
+
+// CHECK 2: Specific Service Details by ID or Keyword
+$serviceDetails = [
+    'srv_erp' => [
+        'title' => "🏭 *Digify Cloud ERP Suite*",
+        'text'  => "🏭 *Digify AI Cloud ERP Platform*\n\n"
+                 . "Complete operations suite for Retail, Wholesale, Distribution & Factories:\n\n"
+                 . "• *Multi-Warehouse Inventory:* Real-time stock alerts, batch & expiry tracking.\n"
+                 . "• *BOM & Manufacturing:* Raw material planning, production orders & unit costing.\n"
+                 . "• *GST, E-Invoicing & Tally Sync:* Automated compliance, E-Way bills & ZATCA Phase 2.\n"
+                 . "• *Sales & Purchasing:* PO/GRN, vendor portal, customer ledger.\n"
+                 . "• *HR & Payroll:* Biometric sync, salary slips, attendance management.\n\n"
+                 . "👉 *Live Demo dekhna chahte hain?*"
+    ],
+    'srv_pos' => [
+        'title' => "⚡ *Digify Smart Cloud POS*",
+        'text'  => "⚡ *Digify Smart Cloud POS Software*\n\n"
+                 . "Lightning-fast billing system for Supermarkets, Garments, Kirana & Retail:\n\n"
+                 . "• *3-Second Billing:* Ultra-fast barcode/QR scanning.\n"
+                 . "• *Offline-First Mode:* Internet band hone par bhi non-stop billing, automatic sync.\n"
+                 . "• *Hardware Sync:* Thermal printer, weighing scale, barcode scanner, cash drawer.\n"
+                 . "• *Dual Pricing:* MRP vs Wholesale price, customer loyalty reward points.\n"
+                 . "• *AI Visual POS:* Touchscreen product image recognition.\n\n"
+                 . "👉 *POS Demo counter schedule karein?*"
+    ],
+    'srv_crm' => [
+        'title' => "🎯 *Digify Custom CRM Suite*",
+        'text'  => "🎯 *Digify Custom CRM & Sales Automation*\n\n"
+                 . "Inbound aur outbound sales pipelines ko automate karein:\n\n"
+                 . "• *Lead Capture:* Website, WhatsApp, IndiaMART, Facebook leads ka auto sync.\n"
+                 . "• *Auto Follow-ups:* WhatsApp & Email drip campaigns.\n"
+                 . "• *Quotation & Deal Pipeline:* Stage-wise deal tracking, team performance.\n"
+                 . "• *WhatsApp Chatbots:* AI bots jo 24/7 leads qualify karein.\n\n"
+                 . "👉 *CRM demo ke liye niche button dabayein:*"
+    ],
+    'srv_after_sales' => [
+        'title' => "🛠️ *Digify After-Sales & Warranty*",
+        'text'  => "🛠️ *After-Sales, AMC & Warranty Management*\n\n"
+                 . "Electronics, machinery aur equipment brands ke service operations automate karein:\n\n"
+                 . "• *Serial / IMEI Tracking:* Product purchase date & warranty status check.\n"
+                 . "• *Service Tickets:* Complaint booking, automated job-sheet creation.\n"
+                 . "• *Technician App:* Field engineers ke liye real-time job update.\n"
+                 . "• *AMC Contracts:* Annual Maintenance Contract renewals & auto-reminders.\n\n"
+                 . "👉 *Free consultation ke liye connect karein:*"
+    ],
+    'srv_ai_ocr' => [
+        'title' => "🤖 *AI OCR Bill Scanner*",
+        'text'  => "🤖 *Digify AI OCR Bill & Invoice Scanner*\n\n"
+                 . "Purchase invoices aur bills ki manual entry hamesha ke liye khatam karein:\n\n"
+                 . "• *Instant Extraction:* PDF ya photo upload karte hi item name, qty, rate, GST auto-read.\n"
+                 . "• *Zero Manual Error:* 99.8% extraction accuracy.\n"
+                 . "• *Direct ERP / Tally Sync:* Direct purchase voucher create ho jata hai bina typing ke.\n"
+                 . "• *Multi-Format Support:* Hand-written ya printed sabhi bills support karta hai.\n\n"
+                 . "👉 *AI OCR ka live trial dekhna chahte hain?*"
+    ],
+    'srv_lead_gen' => [
+        'title' => "🚀 *B2B Lead Generation*",
+        'text'  => "🚀 *Digify B2B Lead Generation & Outreach*\n\n"
+                 . "Apne business ke liye high-intent corporate B2B clients generate karein:\n\n"
+                 . "• *Targeted Industry Leads:* Verified business owners, directors & purchase heads.\n"
+                 . "• *City & Sector Filtering:* Pan-India ya export markets ke database.\n"
+                 . "• *Automated WhatsApp Outreach:* 1-click broadcast campaigns with templates.\n"
+                 . "• *High Conversion Pipelines:* Direct leads aapke CRM me connect hoti hain.\n\n"
+                 . "👉 *Lead sample dekhne ke liye tap karein:*"
+    ],
+    'srv_app_dev' => [
+        'title' => "📱 *Custom Mobile App Development*",
+        'text'  => "📱 *Mobile Application Development (iOS & Android)*\n\n"
+                 . "High-performance enterprise aur consumer mobile applications:\n\n"
+                 . "• *Native Android:* Kotlin & Java, offline DB, high-speed execution.\n"
+                 . "• *iOS Apps:* Swift & SwiftUI, Apple App Store compliance.\n"
+                 . "• *Cross-Platform:* Flutter & React Native for cost-effective multi-platform apps.\n"
+                 . "• *Solutions:* Tablet POS Apps, B2B Dealer Ordering, Delivery Apps, E-Commerce.\n\n"
+                 . "👉 *Apna app idea discuss karne ke liye connect karein:*"
+    ],
+    'srv_web_dev' => [
+        'title' => "🌐 *Web & E-Commerce Development*",
+        'text'  => "🌐 *Modern Web & E-Commerce Development*\n\n"
+                 . "Modern, ultra-fast aur high-converting business websites:\n\n"
+                 . "• *Corporate Websites:* Lightning-fast loading, sleek animations, premium UI.\n"
+                 . "• *E-Commerce Portals:* Custom Shopify, WooCommerce ya Full-Stack MERN/PHP.\n"
+                 . "• *ERP / POS Sync:* Website par live inventory aur auto order billing.\n"
+                 . "• *Global Infrastructure:* Cloudflare CDN, AWS, Render deployment.\n\n"
+                 . "👉 *Free website audit ya quotation ke liye tap karein:*"
+    ],
+    'srv_seo_smo' => [
+        'title' => "📈 *SEO & Digital Growth*",
+        'text'  => "📈 *SEO & Digital Marketing Services*\n\n"
+                 . "Google par Top #1 Ranking aur organic customer growth:\n\n"
+                 . "• *Technical & On-Page SEO:* Core Web Vitals, speed optimization, schema markup.\n"
+                 . "• *High-Authority Backlinks:* Off-page SEO aur brand authority building.\n"
+                 . "• *Local SEO & Google Maps:* Local city commercial hubs me top ranking.\n"
+                 . "• *Social Media (SMO):* LinkedIn, Instagram aur Facebook brand management.\n\n"
+                 . "👉 *Apni website ka Free SEO Audit report chahiye?*"
+    ],
+    'srv_email_bimi' => [
+        'title' => "📧 *Email Deliverability & BIMI*",
+        'text'  => "📧 *Email Deliverability & BIMI Branding Suite*\n\n"
+                 . "Apni corporate emails ko Spam folder se bacha kar direct Primary Inbox me layein:\n\n"
+                 . "• *BIMI Setup with VMC:* Gmail me company ka blue checkmark aur verified logo.\n"
+                 . "• *SPF, DKIM & DMARC (p=reject):* 100% email authentication against spoofing.\n"
+                 . "• *Spam Blacklist Removal:* Domain aur IP reputation recovery.\n"
+                 . "• *99% Inbox Delivery:* Cold email aur transactional email delivery assurance.\n\n"
+                 . "👉 *Domain health checkup ke liye sampark karein:*"
+    ],
+    'btn_demo' => [
+        'title' => "📞 *Book Live Demo*",
+        'text'  => "📞 *Book Live Product Demo with Gautam*\n\n"
+                 . "Hamari team aapke business requirements ke mutabiq live personalized screen-share demo degi:\n\n"
+                 . "👤 *Consultant:* Gautam (Digify Soft Solutions)\n"
+                 . "📱 *Direct Phone / WhatsApp:* +91 7425016636\n"
+                 . "📞 *Alternate:* +91 7017558150\n"
+                 . "📧 *Email:* webdev.digifysoft@gmail.com\n"
+                 . "🌐 *Offices:* Noida (Gaur City) | Jaipur | Bhopal\n\n"
+                 . "Aap kis time demo attend karna chahenge? Hum slot confirm kar denge!"
+    ],
+    'btn_gautam' => [
+        'title' => "💬 *Chat with Gautam*",
+        'text'  => "💬 *Connect Directly with Gautam*\n\n"
+                 . "Aap directly call ya WhatsApp par Gautam se project discussion kar sakte hain:\n\n"
+                 . "📱 *Phone / WhatsApp:* +91 7425016636\n"
+                 . "⏰ *Availability:* Mon - Sat (10:00 AM - 8:00 PM IST)\n"
+                 . "🌐 *Website:* https://digifysoft.in\n\n"
+                 . "Aap apna requirement summary ya phone number yahan type kar sakte hain, hum call kar lenge!"
+    ]
+];
+
+// Check if matched service ID or direct button
+$matchedKey = null;
+if (!empty($interactiveId) && isset($serviceDetails[$interactiveId])) {
+    $matchedKey = $interactiveId;
+} else {
+    // Check keyword matching in text
+    $msgLower = strtolower((string)$userMessage);
+    if (strpos($msgLower, 'erp') !== false) $matchedKey = 'srv_erp';
+    elseif (strpos($msgLower, 'pos') !== false || strpos($msgLower, 'billing') !== false) $matchedKey = 'srv_pos';
+    elseif (strpos($msgLower, 'ocr') !== false) $matchedKey = 'srv_ai_ocr';
+    elseif (strpos($msgLower, 'crm') !== false || strpos($msgLower, 'lead') !== false) $matchedKey = 'srv_crm';
+    elseif (strpos($msgLower, 'app') !== false || strpos($msgLower, 'android') !== false || strpos($msgLower, 'ios') !== false) $matchedKey = 'srv_app_dev';
+    elseif (strpos($msgLower, 'web') !== false || strpos($msgLower, 'ecommerce') !== false || strpos($msgLower, 'shopify') !== false) $matchedKey = 'srv_web_dev';
+    elseif (strpos($msgLower, 'seo') !== false || strpos($msgLower, 'ranking') !== false) $matchedKey = 'srv_seo_smo';
+    elseif (strpos($msgLower, 'email') !== false || strpos($msgLower, 'bimi') !== false || strpos($msgLower, 'dmarc') !== false) $matchedKey = 'srv_email_bimi';
+    elseif (strpos($msgLower, 'after-sales') !== false || strpos($msgLower, 'amc') !== false || strpos($msgLower, 'warranty') !== false) $matchedKey = 'srv_after_sales';
+    elseif (strpos($msgLower, 'demo') !== false) $matchedKey = 'btn_demo';
+    elseif (strpos($msgLower, 'gautam') !== false) $matchedKey = 'btn_gautam';
+}
+
+if ($matchedKey && isset($serviceDetails[$matchedKey])) {
+    $btnResult = send_whatsapp_interactive_buttons(
+        $targetPhone,
+        $serviceDetails[$matchedKey]['text'],
+        $standardButtons,
+        "Digify Soft Solutions",
+        "Select next step 👇"
+    );
+
+    $sendResults[$targetPhone] = [
+        "method"      => "interactive_buttons_service",
+        "service"     => $matchedKey,
+        "send_status" => $btnResult['success'] ? 'success' : 'failed',
+        "details"     => $btnResult['response']
+    ];
+
+    echo json_encode(["status" => "success", "mode" => "service_buttons", "deliveries" => $sendResults]);
+    exit;
+}
+
+$apiKey = getenv('GROQ_API_KEY') ?: (getenv('CHAT_API_KEY') ?: (defined('GROQ_API_KEY') ? GROQ_API_KEY : (defined('CHAT_API_KEY') ? CHAT_API_KEY : '')));
+
+// Prepare System Prompt for Digify Saathi WhatsApp Assistant
+$systemPromptContent = <<<PROMPT
+You are Digify Saathi, official WhatsApp AI Assistant for Digify Soft Solutions (+91 7425016636).
+You are responding directly on WhatsApp. Your tone is warm, polite, consultative, ultra-smart, and engaging.
+
+LANGUAGE:
+- If customer writes in Hindi/Hinglish, reply in natural, polished Hinglish. If in English, reply in crisp English.
+- Use emojis elegantly, bullet points, and WhatsApp bold with single asterisks (*word*).
+
+COMPLETE SOLUTIONS CATALOG:
+1. Cloud ERP: Multi-warehouse inventory, factory BOM manufacturing, GST e-invoicing & accounts, ZATCA Phase 2.
+2. Smart Cloud POS: 3-sec offline billing, thermal printer, barcode, weighing scale, dual pricing.
+3. Custom Mobile Apps: Android (Kotlin), iOS (Swift), Flutter cross-platform, Tablet POS apps.
+4. Web & E-Commerce: High-speed corporate websites, Shopify/WooCommerce, full-stack portals.
+5. AI OCR Bill Scanner: Automated purchase bill data extraction directly into ERP/Tally.
+6. B2B Lead Gen & CRM: Target corporate leads, WhatsApp automated campaigns, deal pipelines.
+7. SEO & Digital Marketing: Google Top #1 ranking, technical audits, social media management.
+8. Email Deliverability & BIMI: Verified VMC logos in Gmail, 100% DMARC, SPF, spam blacklist recovery.
+9. After-Sales & Warranty: Serial/IMEI tracking, AMC contracts, service ticket dispatching.
+
+CRITICAL META LENGTH RULES:
+- Keep answers self-contained and punchy (100 to 200 words).
+- NEVER cut off mid-sentence. Always finish your thoughts completely.
+- Conclude with an invitation to book a free demo with Gautam (+91 7425016636).
+PROMPT;
+
+$messages = [
+    ["role" => "system", "content" => $systemPromptContent],
+    ["role" => "user",   "content" => (string)$userMessage]
+];
+
 function queryGroqAI($apiKey, $messages) {
     if (empty($apiKey)) return null;
 
     $models = [
-        "llama-3.3-70b-versatile",
-        "llama-3.1-8b-instant"
+        "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b"
     ];
     $groqUrl = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -317,7 +589,7 @@ function queryGroqAI($apiKey, $messages) {
             "model"       => $model,
             "messages"    => $messages,
             "temperature" => 0.6,
-            "max_tokens"  => 1024
+            "max_tokens"  => 800
         ];
 
         $ch = curl_init($groqUrl);
@@ -348,46 +620,42 @@ function queryGroqAI($apiKey, $messages) {
 }
 
 $rawReply = queryGroqAI($apiKey, $messages);
-
 if ($rawReply && trim($rawReply) !== '') {
     $replyText = formatForWhatsApp($rawReply);
 } else {
-    // Intelligent, complete fallback response
-    $replyText = "🙏 *Namaste! Main Digify Saathi hoon, Digify Soft Solutions ka official AI Assistant.*\n\n"
-               . "Hum provide karte hain:\n"
-               . "⚡ *Digify Smart POS:* Ultra-fast 3-sec billing, offline mode, thermal printer & barcode scan.\n"
-               . "🏭 *Cloud ERP:* Multi-warehouse inventory, factory BOM manufacturing, GST e-invoicing & accounts.\n"
-               . "📱 *Custom Mobile Apps:* Android (Kotlin), iOS & Flutter cross-platform apps.\n\n"
-               . "👉 *Live Product Demo ya pricing ke liye Gautam se connect karein:*\n"
-               . "📞 Call / WhatsApp: *+91 7425016636*\n"
-               . "🌐 Website: *digifysoft.in*";
+    $replyText = "🙏 *Namaste! Main Digify Saathi hoon.*\n\n"
+               . "Digify Soft Solutions ke complete enterprise products:\n"
+               . "• *Cloud ERP & Smart POS:* Inventory, BOM, 3-sec offline billing\n"
+               . "• *AI OCR Bill Scanner:* Auto invoice data extraction\n"
+               . "• *Mobile & Web Apps:* Native Android, iOS, Shopify & portals\n"
+               . "• *Email BIMI & SEO:* 100% Inbox placement & Google #1 ranking\n\n"
+               . "👉 *Demo ke liye sampark karein:*\n"
+               . "📞 Call/WhatsApp: *+91 7425016636* (Gautam)";
 }
 
-// --- Send Outbound Reply via AutoBotChat WhatsApp API ---
-$sendResults = [];
-$targetPhone = preg_replace('/\D/', '', (string)$sender);
+// Send AI reply with Quick Reply Buttons so the customer can continue exploring!
+$btnResult = send_whatsapp_interactive_buttons(
+    $targetPhone,
+    $replyText,
+    $standardButtons,
+    "Digify Soft Solutions",
+    "Select an option 👇"
+);
 
-if (!empty($targetPhone) && strlen($targetPhone) >= 10) {
-    // First attempt v6 session message (direct text reply to active conversation)
+if ($btnResult['success']) {
+    $sendResults[$targetPhone] = [
+        "method"      => "v6_interactive_buttons",
+        "send_status" => "success",
+        "details"     => $btnResult['response']
+    ];
+} else {
+    // Fallback to text session message
     $v6Result = send_whatsapp_session_message($targetPhone, $replyText);
-
-    if ($v6Result['success']) {
-        $sendResults[$targetPhone] = [
-            "method"      => "v6_session",
-            "send_status" => "success",
-            "details"     => $v6Result['response']
-        ];
-    } else {
-        // Fallback: send approved lead template via v5 broadcast
-        $v5Result = send_whatsapp_template_broadcast($targetPhone, 'lmsnewlead', 'Webhook Reply to ' . $targetPhone);
-        $sendResults[$targetPhone] = [
-            "method"      => "v5_broadcast_fallback",
-            "v6_error"    => $v6Result['error'] ?? ($v6Result['response'] ?? 'Session message failed'),
-            "send_status" => $v5Result['success'] ? 'success' : 'failed',
-            "details"     => $v5Result['response'],
-            "error"       => $v5Result['error']
-        ];
-    }
+    $sendResults[$targetPhone] = [
+        "method"      => "v6_session_fallback",
+        "send_status" => $v6Result['success'] ? 'success' : 'failed',
+        "details"     => $v6Result['response']
+    ];
 }
 
 $resultData = [

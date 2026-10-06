@@ -168,3 +168,161 @@ function send_whatsapp_session_message($toPhone, $messageText) {
         'error'     => $curlErr ?: null
     ];
 }
+
+/**
+ * Send WhatsApp Interactive Quick Reply Buttons (v6 Session API)
+ * Meta limit: 1 to 3 buttons. Button title max 20 chars.
+ */
+function send_whatsapp_interactive_buttons($toPhone, $bodyText, $buttons, $headerText = null, $footerText = null) {
+    $cleanPhone = preg_replace('/\D/', '', (string)$toPhone);
+    if (empty($cleanPhone) || empty($bodyText) || empty($buttons)) {
+        return ['success' => false, 'error' => 'Missing phone, body, or buttons'];
+    }
+
+    $formattedButtons = [];
+    foreach (array_slice($buttons, 0, 3) as $btn) {
+        $btnTitle = mb_substr($btn['title'], 0, 20, 'UTF-8');
+        $btnId    = $btn['id'] ?? ('btn_' . substr(md5($btnTitle), 0, 8));
+        $formattedButtons[] = [
+            'type' => 'reply',
+            'reply' => [
+                'id'    => (string)$btnId,
+                'title' => (string)$btnTitle
+            ]
+        ];
+    }
+
+    $interactiveObj = [
+        'type'   => 'button',
+        'body'   => ['text' => mb_substr($bodyText, 0, 1024, 'UTF-8')],
+        'action' => ['buttons' => $formattedButtons]
+    ];
+
+    if (!empty($headerText)) {
+        $interactiveObj['header'] = ['type' => 'text', 'text' => mb_substr($headerText, 0, 60, 'UTF-8')];
+    }
+    if (!empty($footerText)) {
+        $interactiveObj['footer'] = ['text' => mb_substr($footerText, 0, 60, 'UTF-8')];
+    }
+
+    $payload = [
+        'messaging_product' => 'whatsapp',
+        'recipient_type'    => 'individual',
+        'to'                => $cleanPhone,
+        'type'              => 'interactive',
+        'interactive'       => $interactiveObj
+    ];
+
+    $ch = curl_init(AUTOBOTCHAT_V6_SESSION_API);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . AUTOBOTCHAT_JWT_TOKEN,
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
+
+    $raw = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    $json = json_decode($raw, true);
+    return [
+        'success'   => ($httpCode === 200),
+        'http_code' => $httpCode,
+        'response'  => $json ?: $raw,
+        'error'     => $curlErr ?: null
+    ];
+}
+
+/**
+ * Send WhatsApp Interactive List Menu (v6 Session API)
+ * Meta limits: Max 10 rows across sections.
+ * Section title: max 24 chars.
+ * Row title: max 24 chars.
+ * Row description: max 72 chars.
+ */
+function send_whatsapp_interactive_list($toPhone, $headerText, $bodyText, $buttonText, $sections, $footerText = null) {
+    $cleanPhone = preg_replace('/\D/', '', (string)$toPhone);
+    if (empty($cleanPhone) || empty($bodyText) || empty($sections)) {
+        return ['success' => false, 'error' => 'Missing phone, body, or sections'];
+    }
+
+    $cleanSections = [];
+    $totalRows = 0;
+    foreach ($sections as $sec) {
+        if ($totalRows >= 10) break;
+        $secTitle = mb_substr($sec['title'] ?? 'Menu', 0, 24, 'UTF-8');
+        $cleanRows = [];
+        foreach ($sec['rows'] ?? [] as $r) {
+            if ($totalRows >= 10) break;
+            $rowTitle = mb_substr($r['title'], 0, 24, 'UTF-8');
+            $rowDesc  = !empty($r['description']) ? mb_substr($r['description'], 0, 72, 'UTF-8') : null;
+            $rowId    = (string)($r['id'] ?? ('row_' . $totalRows));
+            $rowObj = ['id' => $rowId, 'title' => $rowTitle];
+            if ($rowDesc) $rowObj['description'] = $rowDesc;
+            $cleanRows[] = $rowObj;
+            $totalRows++;
+        }
+        if (!empty($cleanRows)) {
+            $cleanSections[] = [
+                'title' => $secTitle,
+                'rows'  => $cleanRows
+            ];
+        }
+    }
+
+    $interactiveObj = [
+        'type'   => 'list',
+        'body'   => ['text' => mb_substr($bodyText, 0, 1024, 'UTF-8')],
+        'action' => [
+            'button'   => mb_substr($buttonText, 0, 20, 'UTF-8'),
+            'sections' => $cleanSections
+        ]
+    ];
+
+    if (!empty($headerText)) {
+        $interactiveObj['header'] = ['type' => 'text', 'text' => mb_substr($headerText, 0, 60, 'UTF-8')];
+    }
+    if (!empty($footerText)) {
+        $interactiveObj['footer'] = ['text' => mb_substr($footerText, 0, 60, 'UTF-8')];
+    }
+
+    $payload = [
+        'messaging_product' => 'whatsapp',
+        'recipient_type'    => 'individual',
+        'to'                => $cleanPhone,
+        'type'              => 'interactive',
+        'interactive'       => $interactiveObj
+    ];
+
+    $ch = curl_init(AUTOBOTCHAT_V6_SESSION_API);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . AUTOBOTCHAT_JWT_TOKEN,
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload, JSON_UNESCAPED_UNICODE));
+
+    $raw = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    $json = json_decode($raw, true);
+    return [
+        'success'   => ($httpCode === 200),
+        'http_code' => $httpCode,
+        'response'  => $json ?: $raw,
+        'error'     => $curlErr ?: null
+    ];
+}
+
