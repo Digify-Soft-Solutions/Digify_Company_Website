@@ -590,7 +590,7 @@ function queryGroqAI($apiKey, $messages) {
     $groqUrl = 'https://api.groq.com/openai/v1/chat/completions';
 
     foreach ($models as $model) {
-        $payload = ['model' => $model, 'messages' => $messages, 'temperature' => 0.65, 'max_tokens' => 650];
+        $payload = ['model' => $model, 'messages' => $messages, 'temperature' => 0.65, 'max_tokens' => 4020];
         $ch = curl_init($groqUrl);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
